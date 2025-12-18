@@ -1,36 +1,131 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RadTools
 
-## Getting Started
+A Webflow-like visual editing dev tools system for Next.js + Tailwind v4 projects.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Variables Tab** - Manage design tokens (brand colors, semantic tokens, color modes, border radius)
+- **Components Tab** - Auto-discover components from `/components/` directory with prop information
+- **Assets Tab** - Upload, organize, and optimize images in `public/assets/`
+- **Comments Tab** - Pin comments to DOM elements for feedback
+- **Mock States Tab** - Simulate auth, wallet, subscription states during development
+- **Changelog Tab** - Track project changes with categorized entries
+
+## Quick Start
+
+1. Press `⇧⌘K` (Mac) or `⇧Ctrl+K` (Windows/Linux) to toggle the dev tools panel
+2. The panel is draggable - move it wherever you like
+3. Switch between tabs to access different features
+
+## Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| `⇧⌘K` / `⇧Ctrl+K` | Toggle dev tools panel |
+| `Esc` | Exit comment mode / close modals |
+
+## Tab Guide
+
+### Variables Tab
+Edit your design tokens visually:
+- Add/edit/delete brand colors and neutrals
+- Create semantic tokens that reference brand colors
+- Toggle color modes (dark mode preview)
+- Adjust border radius values
+- Click "Save to CSS" to write changes to `app/globals.css`
+
+### Components Tab
+Discover all components in your `/components/` directory:
+- Auto-scans for default exports
+- Displays prop types, required status, and default values
+- Click "Refresh" to rescan after adding new components
+
+### Assets Tab
+Manage files in `public/assets/`:
+- Drag and drop to upload images
+- Organize into folders (icons, images, logos, backgrounds)
+- Select images and click "Optimize" for Sharp-based compression
+- Delete assets directly from the UI
+
+### Comments Tab
+Add feedback comments pinned to DOM elements:
+- Click "Add Comment" to enter comment mode
+- Click any element on the page to add a comment
+- View all comments in a filterable list
+- Toggle pins on/off
+- Reply to and resolve comments
+
+### Mock States Tab
+Simulate different app states:
+- Pre-configured presets for auth, wallet, and subscription states
+- Create custom mock states with JSON values
+- Use `useMockState('category')` hook in components to consume mock data
+- Only one state per category can be active at a time
+
+### Changelog Tab
+Track project changes:
+- Add entries with type (feature, fix, refactor, style, chore)
+- List affected files
+- Entries persist across sessions
+- Export or clear the changelog
+
+## Using Mock States in Components
+
+```tsx
+import { useMockState } from '@/devtools';
+
+function UserProfile() {
+  const mockAuth = useMockState('auth');
+  const realAuth = useRealAuthHook();
+  
+  // In development with mock active: use mock
+  // In development without mock: use real
+  // In production: mock is undefined, use real
+  const auth = mockAuth ?? realAuth;
+  
+  if (!auth?.isAuthenticated) return <LoginPrompt />;
+  return <Profile user={auth.user} />;
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Adding Changelog Entries Programmatically
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```tsx
+import { useDevToolsStore } from '@/devtools';
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+// After completing a feature
+useDevToolsStore.getState().addChangelogEntry({
+  type: 'feature',
+  description: 'Added responsive navigation menu',
+  files: ['components/layout/Nav.tsx', 'app/globals.css'],
+  author: 'Your Name',
+});
+```
 
-## Learn More
+## Production Safety
 
-To learn more about Next.js, take a look at the following resources:
+- Dev tools are automatically excluded from production builds
+- `NODE_ENV === 'production'` check prevents rendering
+- API routes return 403 in production
+- `useMockState()` returns `undefined` in production
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## File Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+/devtools/
+├── index.ts              # Public exports
+├── DevToolsProvider.tsx  # Main provider
+├── DevToolsPanel.tsx     # Panel with tabs
+├── store/                # Zustand store
+├── tabs/                 # Tab components
+├── components/           # Shared UI components
+├── hooks/                # Custom hooks
+├── lib/                  # Utilities
+└── types/                # TypeScript types
+```
 
-## Deploy on Vercel
+## Dependencies
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `zustand` - State management
+- `react-draggable` - Draggable panel
+- `sharp` - Image optimization (API routes)

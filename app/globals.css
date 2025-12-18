@@ -1,26 +1,105 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* ============================================
+     BRAND COLORS (internal reference only)
+     These don't generate utilities — they're 
+     referenced by semantic tokens below.
+     ============================================ */
+  
+  --brand-sun-yellow: #fce184;
+  --brand-sky-blue: #95bad2;
+  --brand-warm-cloud: #fef8e2;
+  --brand-sunset-fuzz: #fcc383;
+  --brand-sun-red: #ff6b63;
+  --brand-green: #cef5ca;
+  --brand-cream: #fef8e2;
+  
+  /* Neutrals */
+  --neutral-white: #ffffff;
+  --neutral-lightest: #fef8e2;
+  --neutral-lighter: #cccccc;
+  --neutral-light: #aaaaaa;
+  --neutral: #666666;
+  --neutral-dark: #444444;
+  --neutral-darker: #222222;
+  --neutral-darkest: #000000;
+  
+  /* Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@theme {
+  /* ============================================
+     SEMANTIC COLORS (generate utilities)
+     These reference brand colors and generate
+     utility classes like bg-primary, text-muted
+     ============================================ */
+  
+  /* Backgrounds → bg-primary, bg-secondary, etc. */
+  --color-primary: var(--brand-warm-cloud);
+  --color-secondary: var(--neutral-darkest);
+  --color-tertiary: var(--brand-sun-yellow);
+  --color-alternate: var(--neutral-white);
+  --color-success: var(--brand-green);
+  --color-warning: var(--brand-sun-yellow);
+  --color-error: var(--brand-sun-red);
+  --color-muted: var(--neutral-light);
+  
+  /* Text-specific → text-heading, text-body */
+  --color-heading: var(--neutral-darkest);
+  --color-body: var(--neutral-dark);
+  --color-caption: var(--neutral);
+  --color-link: var(--brand-sky-blue);
+  --color-link-hover: var(--brand-sky-blue);
+  
+  /* Borders → border-default, border-strong */
+  --color-border: var(--neutral-lighter);
+  --color-border-strong: var(--neutral-darkest);
+  --color-border-accent: var(--brand-sun-yellow);
+  
+  /* Focus/Interactive */
+  --color-focus: var(--brand-sky-blue);
+  --color-focus-ring: var(--brand-sky-blue);
+  
+  /* Panel-specific tokens for devtools */
+  --color-panel: var(--neutral-white);
+  --color-panel-hover: var(--neutral-lightest);
+  --color-panel-active: var(--brand-sun-yellow);
+  
+  /* Border Radius → rounded-sm, rounded-md, etc. */
+  --radius-none: 0;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+}
+
+/* ============================================
+   COLOR MODES
+   Defined as class overrides, outside @theme.
+   Apply via <html class="dark"> or toggle.
+   ============================================ */
+
+.dark {
+  --color-primary: var(--neutral-darkest);
+  --color-secondary: var(--neutral-darker);
+  --color-heading: var(--neutral-white);
+  --color-body: var(--neutral-lighter);
+  --color-caption: var(--neutral-light);
+  --color-muted: var(--neutral-dark);
+  --color-border: var(--neutral-dark);
+  --color-border-strong: var(--neutral-light);
+  --color-panel: var(--neutral-darker);
+  --color-panel-hover: var(--neutral-dark);
+  --color-panel-active: var(--brand-sun-yellow);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-primary);
+  color: var(--color-body);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
