@@ -1,6 +1,6 @@
 {
   "name": "radtools",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Visual dev tools for Next.js + Tailwind v4 projects",
   "keywords": [
     "nextjs",
