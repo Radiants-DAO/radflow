@@ -63,10 +63,10 @@ export function UploadDropzone({ onUpload, isUploading }: UploadDropzoneProps) {
         className="cursor-pointer block"
       >
         <div className="text-2xl mb-2">📤</div>
-        <p className="text-xs text-black mb-1">
+        <p className="text-xs text-content-primary mb-1">
           {isUploading ? 'Uploading...' : 'Drop files here or click to upload'}
         </p>
-        <p className="text-xs text-black/60">
+        <p className="text-xs text-content-primary/60">
           Images & videos only
         </p>
       </label>

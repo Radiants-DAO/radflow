@@ -13,7 +13,7 @@ interface ComponentListProps {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="mb-6">
-      <h3 className="font-joystix text-xs uppercase text-black mb-3 border-b border-black/20 pb-2">
+      <h3 className="font-joystix text-xs uppercase text-content-primary mb-3 border-b border-edge-primary/20 pb-2">
         {title}
       </h3>
       <div className="space-y-3">
@@ -26,7 +26,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 // Props display component matching DesignSystemTab style
 function PropsDisplay({ props }: { props: string }) {
   return (
-    <code className="font-mono text-xs text-black/60 bg-black/5 px-2 py-1 rounded-sm block mt-2">
+    <code className="font-mono text-xs text-content-primary/60 bg-surface-secondary/5 px-2 py-1 rounded-sm block mt-2">
       {props}
     </code>
   );
@@ -82,13 +82,13 @@ If the preview file doesn't exist, create it with the necessary imports.`;
     : 'No props';
 
   return (
-    <div className="border border-black bg-warm-cloud -mt-px first:mt-0">
+    <div className="border border-edge-primary bg-surface-primary -mt-px first:mt-0">
       <div className="overflow-hidden transition-[height] duration-200 ease-out">
         <div className="px-4 pb-4">
           <div className="space-y-6">
             <div className="mb-6">
               <div className="flex items-center justify-between mb-3">
-                <h4 className="font-joystix text-xs uppercase text-black">{component.name}</h4>
+                <h4 className="font-joystix text-xs uppercase text-content-primary">{component.name}</h4>
                 <Button
                   variant="outline"
                   size="sm"
@@ -99,7 +99,7 @@ If the preview file doesn't exist, create it with the necessary imports.`;
                 </Button>
               </div>
               <div className="space-y-2">
-                <div className="font-mondwest text-sm text-black/60 font-mono">
+                <div className="font-mondwest text-sm text-content-primary/60 font-mono">
                   {component.path}
                 </div>
                 {component.props.length > 0 && (
@@ -142,7 +142,7 @@ export function ComponentList({ components, folderName }: ComponentListProps) {
             <ComponentRow key={component.path} component={component} folderName={folderName} />
           ))
         ) : (
-          <div className="text-center py-8 text-black/60 font-mondwest text-base">
+          <div className="text-center py-8 text-content-primary/60 font-mondwest text-base">
             {search ? `No components match "${search}"` : 'No components found'}
           </div>
         )}

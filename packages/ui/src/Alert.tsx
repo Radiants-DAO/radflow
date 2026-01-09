@@ -30,10 +30,10 @@ interface AlertProps {
 
 const variantStyles: Record<AlertVariant, string> = {
   default: 'bg-surface-primary border-edge-primary text-content-primary',
-  success: 'bg-surface-primary border-green text-content-primary',
-  warning: 'bg-surface-primary border-sun-yellow text-content-primary',
-  error: 'bg-surface-primary border-sun-red text-content-primary',
-  info: 'bg-surface-primary border-sky-blue text-content-primary',
+  success: 'bg-surface-primary border-edge-success text-content-primary',
+  warning: 'bg-surface-primary border-edge-warning text-content-primary',
+  error: 'bg-surface-primary border-edge-error text-content-primary',
+  info: 'bg-surface-primary border-edge-focus text-content-primary',
 };
 
 const variantIconMap: Record<AlertVariant, string> = {

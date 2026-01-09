@@ -169,7 +169,7 @@ export function SheetContent({ className = '', children }: SheetContentProps) {
       {/* Overlay */}
       <div
         className={`
-          absolute inset-0 bg-black/50
+          absolute inset-0 bg-surface-secondary/50
           transition-opacity duration-200
           ${open ? 'opacity-100' : 'opacity-0'}
         `.trim()}
@@ -184,8 +184,8 @@ export function SheetContent({ className = '', children }: SheetContentProps) {
         className={`
           fixed
           ${styles.container}
-          bg-warm-cloud
-          border-black
+          bg-surface-primary
+          border-edge-primary
           ${side === 'left' ? 'border-r-2' : ''}
           ${side === 'right' ? 'border-l-2' : ''}
           ${side === 'top' ? 'border-b-2' : ''}
@@ -216,7 +216,7 @@ interface SheetHeaderProps {
 
 export function SheetHeader({ className = '', children }: SheetHeaderProps) {
   return (
-    <div className={`px-6 pt-6 pb-4 border-b border-black/20 ${className}`.trim()}>
+    <div className={`px-6 pt-6 pb-4 border-b border-edge-primary/20 ${className}`.trim()}>
       {children}
     </div>
   );
@@ -231,7 +231,7 @@ interface SheetTitleProps {
 
 export function SheetTitle({ className = '', children }: SheetTitleProps) {
   return (
-    <h2 className={`font-joystix text-base uppercase text-black ${className}`.trim()}>
+    <h2 className={`font-joystix text-base uppercase text-content-primary ${className}`.trim()}>
       {children}
     </h2>
   );
@@ -246,7 +246,7 @@ interface SheetDescriptionProps {
 
 export function SheetDescription({ className = '', children }: SheetDescriptionProps) {
   return (
-    <p className={`font-mondwest text-base text-black/70 mt-2 ${className}`.trim()}>
+    <p className={`font-mondwest text-base text-content-primary/70 mt-2 ${className}`.trim()}>
       {children}
     </p>
   );
@@ -280,7 +280,7 @@ interface SheetFooterProps {
 
 export function SheetFooter({ className = '', children }: SheetFooterProps) {
   return (
-    <div className={`px-6 pb-6 pt-4 border-t border-black/20 flex justify-end gap-2 ${className}`.trim()}>
+    <div className={`px-6 pb-6 pt-4 border-t border-edge-primary/20 flex justify-end gap-2 ${className}`.trim()}>
       {children}
     </div>
   );

@@ -1,0 +1,133 @@
+{
+  "categories": {
+    "Button": {
+      "section": "buttons",
+      "interactive": true,
+      "variants": ["primary", "secondary", "outline", "ghost"],
+      "sizes": ["sm", "md", "lg"]
+    },
+    "Card": {
+      "section": "cards",
+      "compound": ["CardHeader", "CardBody", "CardFooter"],
+      "variants": ["default", "dark", "raised"]
+    },
+    "Input": {
+      "section": "forms",
+      "sizes": ["sm", "md", "lg"]
+    },
+    "TextArea": {
+      "section": "forms"
+    },
+    "Label": {
+      "section": "forms"
+    },
+    "Select": {
+      "section": "forms"
+    },
+    "Checkbox": {
+      "section": "forms"
+    },
+    "Radio": {
+      "section": "forms"
+    },
+    "RadioGroup": {
+      "section": "forms",
+      "interactive": true
+    },
+    "Switch": {
+      "section": "forms",
+      "interactive": true,
+      "sizes": ["sm", "md", "lg"]
+    },
+    "Slider": {
+      "section": "forms",
+      "interactive": true,
+      "sizes": ["sm", "md", "lg"]
+    },
+    "Alert": {
+      "section": "feedback",
+      "variants": ["default", "success", "warning", "error", "info"]
+    },
+    "Badge": {
+      "section": "feedback",
+      "variants": ["default", "success", "warning", "error", "info"],
+      "sizes": ["sm", "md"]
+    },
+    "Progress": {
+      "section": "feedback",
+      "variants": ["default", "success", "warning", "error"],
+      "sizes": ["sm", "md", "lg"]
+    },
+    "Spinner": {
+      "section": "feedback"
+    },
+    "Skeleton": {
+      "section": "feedback",
+      "variants": ["text", "circular", "rectangular"]
+    },
+    "Tooltip": {
+      "section": "feedback",
+      "sizes": ["sm", "md", "lg"]
+    },
+    "Toast": {
+      "section": "feedback",
+      "interactive": true,
+      "variants": ["default", "success", "warning", "error", "info"]
+    },
+    "Avatar": {
+      "section": "data-display",
+      "sizes": ["sm", "md", "lg", "xl"],
+      "variants": ["circle", "square"]
+    },
+    "Table": {
+      "section": "data-display",
+      "compound": ["TableHeader", "TableBody", "TableRow", "TableHead", "TableCell"]
+    },
+    "Tabs": {
+      "section": "navigation",
+      "variants": ["pill", "line"],
+      "compound": ["TabList", "TabTrigger", "TabContent"]
+    },
+    "Accordion": {
+      "section": "navigation",
+      "compound": ["AccordionItem", "AccordionTrigger", "AccordionContent"]
+    },
+    "Breadcrumbs": {
+      "section": "navigation"
+    },
+    "Divider": {
+      "section": "navigation",
+      "variants": ["solid", "dashed", "decorated"],
+      "orientations": ["horizontal", "vertical"]
+    },
+    "Dialog": {
+      "section": "overlays",
+      "triggerComponent": "DialogTrigger",
+      "compound": ["DialogTrigger", "DialogContent", "DialogHeader", "DialogTitle", "DialogDescription", "DialogBody", "DialogFooter", "DialogClose"]
+    },
+    "Sheet": {
+      "section": "overlays",
+      "triggerComponent": "SheetTrigger",
+      "compound": ["SheetTrigger", "SheetContent", "SheetHeader", "SheetTitle", "SheetDescription", "SheetBody", "SheetFooter", "SheetClose"]
+    },
+    "Popover": {
+      "section": "overlays",
+      "triggerComponent": "PopoverTrigger",
+      "compound": ["PopoverTrigger", "PopoverContent"]
+    },
+    "DropdownMenu": {
+      "section": "overlays",
+      "triggerComponent": "DropdownMenuTrigger",
+      "compound": ["DropdownMenuTrigger", "DropdownMenuContent", "DropdownMenuItem", "DropdownMenuSeparator", "DropdownMenuLabel"]
+    },
+    "ContextMenu": {
+      "section": "overlays",
+      "triggerComponent": "ContextMenuTrigger",
+      "compound": ["ContextMenuTrigger", "ContextMenuContent", "ContextMenuItem", "ContextMenuSeparator"]
+    },
+    "HelpPanel": {
+      "section": "overlays",
+      "interactive": true
+    }
+  }
+}

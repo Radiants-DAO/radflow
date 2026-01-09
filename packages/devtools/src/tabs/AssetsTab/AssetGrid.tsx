@@ -19,7 +19,7 @@ function formatSize(bytes: number): string {
 export function AssetGrid({ files, selectedFiles, onSelect, onDelete }: AssetGridProps) {
   if (files.length === 0) {
     return (
-      <div className="text-center py-8 text-black/60 text-xs">
+      <div className="text-center py-8 text-content-primary/60 text-xs">
         No files in this folder
       </div>
     );
@@ -38,7 +38,7 @@ export function AssetGrid({ files, selectedFiles, onSelect, onDelete }: AssetGri
           }`}
         >
           {/* Preview */}
-          <div className="aspect-square bg-sun-yellow/20 flex items-center justify-center">
+          <div className="aspect-square bg-surface-tertiary/20 flex items-center justify-center">
             {file.type === 'image' ? (
               <img
                 src={file.path}
@@ -53,9 +53,9 @@ export function AssetGrid({ files, selectedFiles, onSelect, onDelete }: AssetGri
           </div>
 
           {/* Info */}
-          <div className="p-2 bg-warm-cloud">
-            <p className="text-xs font-medium text-black truncate">{file.name}</p>
-            <p className="text-xs text-black/60">{formatSize(file.size)}</p>
+          <div className="p-2 bg-surface-primary">
+            <p className="text-xs font-medium text-content-primary truncate">{file.name}</p>
+            <p className="text-xs text-content-primary/60">{formatSize(file.size)}</p>
           </div>
 
           {/* Delete button */}

@@ -33,8 +33,8 @@ export type { DividerOrientation, DividerVariant, DividerProps } from './Divider
 export { Select } from './Select';
 export type { SelectOption, SelectProps } from './Select';
 
-export { Checkbox, Radio } from './Checkbox';
-export type { CheckboxProps, RadioProps } from './Checkbox';
+export { Checkbox, Radio, RadioGroup } from './Checkbox';
+export type { CheckboxProps, RadioProps, RadioGroupProps } from './Checkbox';
 
 export { Switch } from './Switch';
 export type { SwitchSize, SwitchProps } from './Switch';
@@ -47,6 +47,29 @@ export type { SliderSize, SliderProps } from './Slider';
 // ============================================================================
 
 export { Progress, Spinner } from './Progress';
+
+export { Avatar } from './Avatar';
+export type { AvatarProps, AvatarSize } from './Avatar';
+
+export { Skeleton } from './Skeleton';
+export type { SkeletonProps } from './Skeleton';
+
+export {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from './Table';
+export type {
+  TableProps,
+  TableHeaderProps,
+  TableBodyProps,
+  TableRowProps,
+  TableHeadProps,
+  TableCellProps,
+} from './Table';
 
 export { Tooltip } from './Tooltip';
 export type { TooltipPosition, TooltipSize, TooltipProps } from './Tooltip';

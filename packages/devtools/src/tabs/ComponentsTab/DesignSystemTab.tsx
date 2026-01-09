@@ -17,6 +17,7 @@ import {
   Select,
   Checkbox,
   Radio,
+  RadioGroup,
   Badge,
   Progress,
   Spinner,
@@ -33,6 +34,14 @@ import {
   ToastProvider,
   useToast,
   HelpPanel,
+  Avatar,
+  Skeleton,
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
 } from '@radflow/ui';
 import {
   Dialog,
@@ -95,7 +104,7 @@ function Section({
   const HeadingTag = variant === 'h4' ? 'h4' : 'h3';
   const hasMarginOverride = className?.includes('mb-');
   const isSubsection = variant === 'h4';
-  const subsectionClasses = isSubsection ? 'p-4 border border-black bg-[var(--color-cream)]' : '';
+  const subsectionClasses = isSubsection ? 'p-4 border border-edge-primary bg-[var(--color-cream)]' : '';
   const baseClasses = `${hasMarginOverride ? '' : 'mb-4'} ${subsectionClasses} rounded flex flex-col gap-4`.trim();
   return (
     <div 
@@ -117,7 +126,7 @@ function Section({
 
 function PropsDisplay({ props }: { props: string }) {
   return (
-    <code className="bg-black/5 px-2 py-1 rounded-sm block mt-2">
+    <code className="bg-surface-secondary/5 px-2 py-1 rounded-sm block mt-2">
       {props}
     </code>
   );
@@ -439,6 +448,35 @@ function FormsContent() {
             data-component="Radio"
           />
         </Row>
+        <Row props='RadioGroup: value={string} onChange={fn} name={string} orientation="horizontal" | "vertical"'>
+          <RadioGroup
+            value={radioValue}
+            onChange={setRadioValue}
+            name="radio-group-controlled"
+            orientation="vertical"
+            data-edit-scope="component-definition"
+            data-component="RadioGroup"
+          >
+            <Radio value="option1" label="Option 1" />
+            <Radio value="option2" label="Option 2" />
+            <Radio value="option3" label="Option 3" />
+          </RadioGroup>
+        </Row>
+        <Row props='orientation="horizontal"'>
+          <RadioGroup
+            value={radioValue}
+            onChange={setRadioValue}
+            name="radio-group-horizontal"
+            orientation="horizontal"
+            data-edit-scope="component-definition"
+            data-component="RadioGroup"
+            data-edit-variant="horizontal"
+          >
+            <Radio value="option1" label="Option 1" />
+            <Radio value="option2" label="Option 2" />
+            <Radio value="option3" label="Option 3" />
+          </RadioGroup>
+        </Row>
       </Section>
 
       <Section title="Switch" variant="h4" subsectionId="switch">
@@ -665,6 +703,21 @@ function FeedbackContent() {
         </Row>
       </Section>
 
+      <Section title="Skeleton" variant="h4" subsectionId="skeleton">
+        <Row props='variant="text" | "circular" | "rectangular" width={string|number} height={string|number}'>
+          <Skeleton variant="text" width="200px" height="1rem" data-edit-scope="component-definition" data-component="Skeleton" />
+          <Skeleton variant="text" width="150px" height="1rem" data-edit-scope="component-definition" data-component="Skeleton" />
+          <Skeleton variant="text" width="180px" height="1rem" data-edit-scope="component-definition" data-component="Skeleton" />
+        </Row>
+        <Row props='variant="circular"'>
+          <Skeleton variant="circular" width={40} height={40} data-edit-scope="component-definition" data-component="Skeleton" data-edit-variant="circular" />
+          <Skeleton variant="circular" width={60} height={60} data-edit-scope="component-definition" data-component="Skeleton" data-edit-variant="circular" />
+        </Row>
+        <Row props='variant="rectangular"'>
+          <Skeleton variant="rectangular" width="200px" height="100px" data-edit-scope="component-definition" data-component="Skeleton" data-edit-variant="rectangular" />
+        </Row>
+      </Section>
+
       <Section title="Toast" variant="h4" subsectionId="toast">
         <Row props='useToast() hook - addToast({ title, description?, variant?, duration? })'>
           <div className="flex flex-wrap gap-2">
@@ -736,6 +789,56 @@ function FeedbackContent() {
           <Tooltip content="Right tooltip" position="right" size="sm" data-edit-scope="component-definition" data-component="Tooltip">
             <Button variant="primary" size="md" fullWidth={false} iconOnly={false}>Right</Button>
           </Tooltip>
+        </Row>
+      </Section>
+    </div>
+  );
+}
+
+function DataDisplayContent() {
+  return (
+    <div className="space-y-6">
+      <Section title="Avatar" variant="h4" subsectionId="avatar">
+        <Row props='src={string} alt={string} fallback={string} size="sm" | "md" | "lg" | "xl" variant="circle" | "square"'>
+          <Avatar fallback="JD" size="sm" data-edit-scope="component-definition" data-component="Avatar" />
+          <Avatar fallback="AB" size="md" data-edit-scope="component-definition" data-component="Avatar" />
+          <Avatar fallback="CD" size="lg" data-edit-scope="component-definition" data-component="Avatar" />
+          <Avatar fallback="EF" size="xl" data-edit-scope="component-definition" data-component="Avatar" />
+        </Row>
+        <Row props='variant="square"'>
+          <Avatar fallback="JD" size="md" variant="square" data-edit-scope="component-definition" data-component="Avatar" data-edit-variant="square" />
+          <Avatar fallback="AB" size="lg" variant="square" data-edit-scope="component-definition" data-component="Avatar" data-edit-variant="square" />
+        </Row>
+      </Section>
+
+      <Section title="Table" variant="h4" subsectionId="table">
+        <Row props='Table, TableHeader, TableBody, TableRow, TableHead, TableCell'>
+          <Table data-edit-scope="component-definition" data-component="Table">
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Role</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>John Doe</TableCell>
+                <TableCell>Active</TableCell>
+                <TableCell>Admin</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Jane Smith</TableCell>
+                <TableCell>Active</TableCell>
+                <TableCell>User</TableCell>
+              </TableRow>
+              <TableRow selected>
+                <TableCell>Bob Johnson</TableCell>
+                <TableCell>Inactive</TableCell>
+                <TableCell>User</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
         </Row>
       </Section>
     </div>
@@ -948,7 +1051,7 @@ function OverlaysContent() {
             </PopoverTrigger>
             <PopoverContent>
               <p className="font-joystix text-xs uppercase mb-2">Popover Title</p>
-              <p className="font-mondwest text-base text-black/70">
+              <p className="font-mondwest text-base text-content-primary/70">
                 This is popover content. It can contain any elements.
               </p>
             </PopoverContent>
@@ -1024,7 +1127,7 @@ function OverlaysContent() {
 
       <Section title="Help Panel" variant="h4" subsectionId="help-panel">
         <Row props='isOpen={boolean} onClose={fn} title={string}'>
-          <div className="relative w-full max-w-md h-64 border border-black rounded-sm bg-warm-cloud overflow-hidden">
+          <div className="relative w-full max-w-md h-64 border border-edge-primary rounded-sm bg-surface-primary overflow-hidden">
             <div className="p-4">
               <Button
                 variant="primary"
@@ -1066,7 +1169,7 @@ function OverlaysContent() {
           <ContextMenu data-edit-scope="component-definition" data-component="ContextMenu">
             <Card variant="default" noPadding={false} className="max-w-xs cursor-context-menu">
               <p className="font-joystix text-xs mb-2">Right-click me!</p>
-              <p className="font-mondwest text-base text-black/70">
+              <p className="font-mondwest text-base text-content-primary/70">
                 This card has a context menu attached.
               </p>
             </Card>
@@ -1139,6 +1242,7 @@ export const SEARCH_INDEX: SearchableItem[] = [
   { text: 'TextArea', sectionId: 'forms', subsectionTitle: 'TextArea', type: 'subsection' },
   { text: 'Select', sectionId: 'forms', subsectionTitle: 'Select', type: 'subsection' },
   { text: 'Checkbox & Radio', sectionId: 'forms', subsectionTitle: 'Checkbox & Radio', type: 'subsection' },
+  { text: 'RadioGroup', sectionId: 'forms', type: 'radio' },
   { text: 'Switch', sectionId: 'forms', subsectionTitle: 'Switch', type: 'subsection' },
   { text: 'Slider', sectionId: 'forms', subsectionTitle: 'Slider', type: 'subsection' },
   { text: 'Default Input', sectionId: 'forms', type: 'label' },
@@ -1165,6 +1269,7 @@ export const SEARCH_INDEX: SearchableItem[] = [
   { text: 'Progress', sectionId: 'feedback', subsectionTitle: 'Progress', type: 'subsection' },
   { text: 'Progress Sizes', sectionId: 'feedback', subsectionTitle: 'Progress Sizes', type: 'subsection' },
   { text: 'Spinner', sectionId: 'feedback', subsectionTitle: 'Spinner', type: 'subsection' },
+  { text: 'Skeleton', sectionId: 'feedback', subsectionTitle: 'Skeleton', type: 'subsection' },
   { text: 'Toast', sectionId: 'feedback', subsectionTitle: 'Toast', type: 'subsection' },
   { text: 'Tooltip', sectionId: 'feedback', subsectionTitle: 'Tooltip', type: 'subsection' },
   { text: 'Default Alert', sectionId: 'feedback', type: 'alert' },
@@ -1184,6 +1289,9 @@ export const SEARCH_INDEX: SearchableItem[] = [
   { text: 'Right', sectionId: 'feedback', type: 'tooltip' },
   
   // Navigation section
+  { text: 'Data Display', sectionId: 'data-display', type: 'section' },
+  { text: 'Avatar', sectionId: 'data-display', subsectionTitle: 'Avatar', type: 'subsection' },
+  { text: 'Table', sectionId: 'data-display', subsectionTitle: 'Table', type: 'subsection' },
   { text: 'Navigation', sectionId: 'navigation', type: 'section' },
   { text: 'Breadcrumbs', sectionId: 'navigation', subsectionTitle: 'Breadcrumbs', type: 'subsection' },
   { text: 'Tabs - Pill Variant', sectionId: 'navigation', subsectionTitle: 'Tabs - Pill Variant', type: 'subsection' },
@@ -1238,6 +1346,7 @@ const SECTION_TITLES: Record<string, string> = {
   cards: 'Cards',
   forms: 'Forms',
   feedback: 'Feedback',
+  'data-display': 'Data Display',
   navigation: 'Navigation',
   overlays: 'Overlays',
 };
@@ -1261,8 +1370,11 @@ const SUBSECTION_ID_MAP: Record<string, string> = {
   'Progress': 'progress',
   'Progress Sizes': 'progress-sizes',
   'Spinner': 'spinner',
+  'Skeleton': 'skeleton',
   'Toast': 'toast',
   'Tooltip': 'tooltip',
+  'Avatar': 'avatar',
+  'Table': 'table',
   'Breadcrumbs': 'breadcrumbs',
   'Tabs - Pill Variant': 'tabs-pill-variant',
   'Tabs - Line Variant': 'tabs-line-variant',
@@ -1310,7 +1422,7 @@ function Autocomplete({ query, suggestions, selectedIndex, onSelect, onClose }: 
     return (
       <>
         {text.substring(0, index)}
-        <span className="bg-sun-yellow">{text.substring(index, index + query.length)}</span>
+        <span className="bg-surface-tertiary">{text.substring(index, index + query.length)}</span>
         {text.substring(index + query.length)}
       </>
     );
@@ -1319,7 +1431,7 @@ function Autocomplete({ query, suggestions, selectedIndex, onSelect, onClose }: 
   return (
     <div
       ref={listRef}
-      className="absolute z-50 w-full mt-1 bg-warm-cloud border border-black rounded-sm shadow-[4px_4px_0_0_var(--color-black)] max-h-64 overflow-y-auto"
+      className="absolute z-50 w-full mt-1 bg-surface-primary border border-edge-primary rounded-sm shadow-[4px_4px_0_0_var(--color-black)] max-h-64 overflow-y-auto"
     >
       {suggestions.map((item, index) => {
         const sectionTitle = SECTION_TITLES[item.sectionId];
@@ -1333,20 +1445,20 @@ function Autocomplete({ query, suggestions, selectedIndex, onSelect, onClose }: 
             onClick={() => onSelect(item)}
             className={`w-full text-left px-3 py-2 font-mondwest text-sm transition-colors ${
               index === selectedIndex
-                ? 'bg-sun-yellow text-black'
-                : 'bg-warm-cloud text-black hover:bg-black/5'
+                ? 'bg-surface-tertiary text-content-primary'
+                : 'bg-surface-primary text-content-primary hover:bg-surface-secondary/5'
             } ${isSubsection ? 'pl-6' : ''}`}
           >
             <div className="flex items-center justify-between">
               <div className="flex flex-col gap-0.5">
                 {displayTitle && (
-                  <span className="font-joystix text-xs font-bold text-black/60 uppercase">
+                  <span className="font-joystix text-xs font-bold text-content-primary/60 uppercase">
                     {displayTitle}
                   </span>
                 )}
                 <span>{highlightText(item.text, query)}</span>
               </div>
-              <span className="text-xs text-black/40 uppercase">{item.type}</span>
+              <span className="text-xs text-content-primary/40 uppercase">{item.type}</span>
             </div>
           </button>
         );
@@ -1365,6 +1477,7 @@ const COMPONENT_SECTIONS = [
   { id: 'cards', title: 'Cards', content: <CardsContent /> },
   { id: 'forms', title: 'Forms', content: <FormsContent /> },
   { id: 'feedback', title: 'Feedback', content: <FeedbackContent /> },
+  { id: 'data-display', title: 'Data Display', content: <DataDisplayContent /> },
   { id: 'navigation', title: 'Navigation', content: <NavigationContent /> },
   { id: 'overlays', title: 'Overlays', content: <OverlaysContent /> },
 ];
@@ -1487,7 +1600,7 @@ export function DesignSystemTab({ searchQuery: propSearchQuery = '' }: DesignSys
 
   return (
     <ToastProvider>
-      <div className="flex flex-col h-full overflow-auto pt-4 pb-4 pl-4 pr-2 bg-[var(--color-white)] border border-black rounded">
+      <div className="flex flex-col h-full overflow-auto pt-4 pb-4 pl-4 pr-2 bg-[var(--color-white)] border border-edge-primary rounded">
         {/* Component Sections */}
         {activeSubsectionId && (
           <style>{`
@@ -1504,7 +1617,7 @@ export function DesignSystemTab({ searchQuery: propSearchQuery = '' }: DesignSys
               </div>
             ))
           ) : (
-            <div className="text-center py-8 text-black/60 font-mondwest text-base">
+            <div className="text-center py-8 text-content-primary/60 font-mondwest text-base">
               No components match "{searchQuery}"
             </div>
           )}

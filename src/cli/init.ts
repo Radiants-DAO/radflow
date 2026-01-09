@@ -209,12 +209,12 @@ export async function init() {
   log(`${colors.dim}Installing dependencies...${colors.reset}`);
   try {
     await installDependencies(packageManager, cwd);
-    success('Installed zustand, react-draggable');
+    success('Installed zustand, sharp');
   } catch (err) {
     warn(`Could not auto-install dependencies: ${(err as Error).message}`);
     log('');
     log('Please install manually:');
-    log(`  ${packageManager} ${packageManager === 'npm' ? 'install' : 'add'} zustand react-draggable`);
+    log(`  ${packageManager} ${packageManager === 'npm' ? 'install' : 'add'} zustand sharp`);
   }
 
   // Success message

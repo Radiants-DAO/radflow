@@ -26,9 +26,10 @@
     "scripts"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "pnpm generate:ui-tab && tsup",
     "dev": "tsup --watch",
-    "postinstall": "node scripts/postinstall.js"
+    "postinstall": "node scripts/postinstall.js",
+    "generate:ui-tab": "tsx scripts/generate-ui-tab.ts"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
@@ -36,15 +37,17 @@
     "next": "^14.0.0 || ^15.0.0 || ^16.0.0"
   },
   "dependencies": {
-    "react-draggable": "^4.4.6",
     "zustand": "^5.0.0"
   },
   "devDependencies": {
     "@radflow/ui": "workspace:*",
     "@radflow/theme-rad-os": "workspace:*",
+    "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "ts-morph": "^23.0.0",
     "tsup": "^8.3.0",
+    "tsx": "^4.7.0",
     "typescript": "^5"
   },
   "keywords": [

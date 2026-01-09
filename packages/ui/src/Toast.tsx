@@ -109,10 +109,10 @@ function ToastViewport({ toasts, removeToast }: ToastViewportProps) {
 
 const variantStyles: Record<ToastVariant, string> = {
   default: 'bg-surface-primary border-edge-primary',
-  success: 'bg-surface-primary border-green',
-  warning: 'bg-surface-primary border-sun-yellow',
-  error: 'bg-surface-primary border-sun-red',
-  info: 'bg-surface-primary border-sky-blue',
+  success: 'bg-surface-primary border-edge-success',
+  warning: 'bg-surface-primary border-edge-warning',
+  error: 'bg-surface-primary border-edge-error',
+  info: 'bg-surface-primary border-edge-focus',
 };
 
 const variantIconMap: Record<ToastVariant, string | null> = {

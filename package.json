@@ -43,7 +43,6 @@
     "next": "16.0.10",
     "react": "19.2.1",
     "react-dom": "19.2.1",
-    "react-draggable": "^4.5.0",
     "sharp": "^0.34.5",
     "zustand": "^5.0.9"
   },
@@ -56,6 +55,7 @@
     "eslint-config-next": "16.0.10",
     "tailwindcss": "^4",
     "tsup": "^8.3.0",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

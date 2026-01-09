@@ -74,7 +74,7 @@ export function HelpPanel({
     <div 
       className={`
         absolute inset-0 z-50 
-        bg-black/20 
+        bg-surface-secondary/20 
         flex justify-end
       `}
     >
@@ -82,8 +82,8 @@ export function HelpPanel({
         ref={panelRef}
         className={`
           h-full w-72 max-w-[80%]
-          bg-warm-cloud
-          border-l border-black
+          bg-surface-primary
+          border-l border-edge-primary
           shadow-[-4px_0_0_0_var(--color-black)]
           flex flex-col
           animate-slide-in-right
@@ -91,8 +91,8 @@ export function HelpPanel({
         `}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-black">
-          <span className="font-joystix text-xs text-black uppercase">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-edge-primary">
+          <span className="font-joystix text-xs text-content-primary uppercase">
             {title}
           </span>
           <Button
@@ -106,7 +106,7 @@ export function HelpPanel({
 
         {/* Content */}
         <div className="flex-1 overflow-auto p-4">
-          <div className="font-mondwest text-base text-black space-y-4">
+          <div className="font-mondwest text-base text-content-primary space-y-4">
             {children}
           </div>
         </div>

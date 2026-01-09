@@ -3,9 +3,11 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Tabs, TabList, TabTrigger, TabContent, useToast } from '@radflow/ui';
 import { DesignSystemTab } from './DesignSystemTab';
+import { UITab } from './UITab';
 import { DynamicFolderTab } from './DynamicFolderTab';
 import { AddTabButton } from './AddTabButton';
 import { COMPONENT_TABS, type ComponentTabConfig } from './tabConfig';
+import { ComponentsSecondaryNav } from '../../components/ComponentsSecondaryNav';
 
 const STORAGE_KEY = 'devtools-dynamic-component-tabs';
 
@@ -36,16 +38,18 @@ function saveDynamicTabs(tabs: ComponentTabConfig[]) {
 
 interface ComponentsTabProps {
   activeSubTab?: string;
-  searchQuery?: string;
   onTabsChange?: (tabs: Array<{ id: string; label: string }>) => void;
   onAddFolder?: (folderName: string) => void;
+  componentTabs?: Array<{ id: string; label: string }>;
+  onComponentSubTabChange?: (tab: string) => void;
 }
 
 export function ComponentsTab({
   activeSubTab = 'design-system',
-  searchQuery = '',
   onTabsChange,
   onAddFolder,
+  componentTabs = [],
+  onComponentSubTabChange,
 }: ComponentsTabProps) {
   const [dynamicTabs, setDynamicTabs] = useState<ComponentTabConfig[]>([]);
   const { addToast } = useToast();
@@ -137,14 +141,35 @@ export function ComponentsTab({
 
   return (
     <div className="flex flex-col h-full">
-      {/* Tab Content - no internal navigation */}
+      {/* Secondary Navigation Tabs at Top */}
+      <ComponentsSecondaryNav
+        activeSubTab={activeSubTab}
+        onSubTabChange={(tabId) => {
+          if (onComponentSubTabChange) {
+            onComponentSubTabChange(tabId);
+          }
+        }}
+        tabs={componentTabs.length > 0 ? componentTabs : tabsForParent}
+        onAddFolder={onAddFolder || (() => {})}
+      />
+
+      {/* Tab Content */}
       <div className="flex-1 overflow-hidden">
         {allTabs.map((tab: ComponentTabConfig) => {
+          // UI tab
+          if (tab.id === 'ui' && activeSubTab === 'ui') {
+            return (
+              <div key={tab.id} className="h-full pr-2 pl-2 pb-2 rounded overflow-auto">
+                <UITab />
+              </div>
+            );
+          }
+
           // Design system tab
           if (tab.id === 'design-system' && activeSubTab === 'design-system') {
             return (
-              <div key={tab.id} className="h-full pr-2 pl-2 pb-2 rounded">
-                <DesignSystemTab searchQuery={searchQuery} />
+              <div key={tab.id} className="h-full pr-2 pl-2 pb-2 rounded overflow-auto">
+                <DesignSystemTab />
               </div>
             );
           }
@@ -153,7 +178,7 @@ export function ComponentsTab({
           if (tab.id.startsWith('folder-') && activeSubTab === tab.id) {
             const folderName = tab.id.replace('folder-', '');
             return (
-              <div key={tab.id} className="h-full pr-2 pl-2 pb-2 rounded">
+              <div key={tab.id} className="h-full pr-2 pl-2 pb-2 rounded overflow-auto">
                 <DynamicFolderTab folderName={folderName} />
               </div>
             );

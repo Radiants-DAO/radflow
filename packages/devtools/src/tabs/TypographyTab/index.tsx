@@ -47,7 +47,7 @@ export function TypographyTab({ searchQuery = '' }: TypographyTabProps) {
   }, [message]);
 
   return (
-    <div className="flex flex-col h-full overflow-auto pt-4 pb-4 pl-4 pr-2 bg-[var(--color-white)] border border-black rounded space-y-4">
+    <div className="flex flex-col h-full overflow-auto pt-4 pb-4 pl-4 pr-2 bg-[var(--color-white)] border border-edge-primary rounded space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2>
@@ -71,8 +71,8 @@ export function TypographyTab({ searchQuery = '' }: TypographyTabProps) {
         <div
           className={`px-4 py-2 text-sm font-mondwest ${
             message.type === 'success'
-              ? 'bg-success-green/30 text-black'
-              : 'bg-error-red/30 text-black'
+              ? 'bg-success-green/30 text-content-primary'
+              : 'bg-error-red/30 text-content-primary'
           }`}
         >
           {message.text}
@@ -85,32 +85,32 @@ export function TypographyTab({ searchQuery = '' }: TypographyTabProps) {
         <FontManager />
 
         {/* Fluid Typography Info */}
-        <div className="border border-black rounded-sm bg-white p-4 space-y-3">
+        <div className="border border-edge-primary rounded-sm bg-surface-elevated p-4 space-y-3">
           <h3>Proportional Fluid Scaling</h3>
-          <p className="font-mondwest text-sm text-black/70">
-            Everything scales proportionally using a single <code className="bg-black/10 px-1 py-0.5 rounded">clamp()</code> on the root HTML element. All rem-based measurements scale together, maintaining design ratios.
+          <p className="font-mondwest text-sm text-content-primary/70">
+            Everything scales proportionally using a single <code className="bg-surface-tertiary text-content-primary px-1 py-0.5 rounded" style={{ fontFamily: 'PixelCode' }}>clamp()</code> on the root HTML element. All rem-based measurements scale together, maintaining design ratios.
           </p>
           <div className="space-y-3 font-mondwest text-xs">
             <div>
-              <div className="font-mono text-black/60 mb-1">Root Scale (html):</div>
-              <code className="font-mono bg-black/5 p-2 rounded block">font-size: clamp(16px, 0.95rem + 0.25vw, 18px)</code>
-              <div className="text-black/50 mt-1">Scales from 16px (mobile) to 18px (large screens)</div>
+              <div className="font-mono text-content-primary/60 mb-1">Root Scale (html):</div>
+              <code className="bg-surface-tertiary text-content-primary p-2 rounded block" style={{ fontFamily: 'PixelCode' }}>font-size: clamp(16px, 0.95rem + 0.25vw, 18px)</code>
+              <div className="text-content-primary/50 mt-1">Scales from 16px (mobile) to 18px (large screens)</div>
             </div>
             <div>
-              <div className="font-mono text-black/60 mb-1">Typography Scale (rem units):</div>
+              <div className="font-mono text-content-primary/60 mb-1">Typography Scale (rem units):</div>
               <div className="grid grid-cols-[7rem_1fr] gap-1">
-                <span className="font-mono text-black/60">--font-size-xs:</span><span className="font-mono">0.75rem</span>
-                <span className="font-mono text-black/60">--font-size-sm:</span><span className="font-mono">0.875rem</span>
-                <span className="font-mono text-black/60">--font-size-base:</span><span className="font-mono">1rem</span>
-                <span className="font-mono text-black/60">--font-size-lg:</span><span className="font-mono">1.125rem</span>
-                <span className="font-mono text-black/60">--font-size-xl:</span><span className="font-mono">1.25rem</span>
-                <span className="font-mono text-black/60">--font-size-2xl:</span><span className="font-mono">1.5rem</span>
-                <span className="font-mono text-black/60">--font-size-3xl:</span><span className="font-mono">2rem</span>
-                <span className="font-mono text-black/60">--font-size-4xl:</span><span className="font-mono">2.5rem</span>
-                <span className="font-mono text-black/60">--font-size-5xl:</span><span className="font-mono">3.75rem</span>
-                <span className="font-mono text-black/60">--font-size-hero:</span><span className="font-mono">4rem</span>
+                <span className="font-mono text-content-primary/60">--font-size-xs:</span><span className="font-mono">0.75rem</span>
+                <span className="font-mono text-content-primary/60">--font-size-sm:</span><span className="font-mono">0.875rem</span>
+                <span className="font-mono text-content-primary/60">--font-size-base:</span><span className="font-mono">1rem</span>
+                <span className="font-mono text-content-primary/60">--font-size-lg:</span><span className="font-mono">1.125rem</span>
+                <span className="font-mono text-content-primary/60">--font-size-xl:</span><span className="font-mono">1.25rem</span>
+                <span className="font-mono text-content-primary/60">--font-size-2xl:</span><span className="font-mono">1.5rem</span>
+                <span className="font-mono text-content-primary/60">--font-size-3xl:</span><span className="font-mono">2rem</span>
+                <span className="font-mono text-content-primary/60">--font-size-4xl:</span><span className="font-mono">2.5rem</span>
+                <span className="font-mono text-content-primary/60">--font-size-5xl:</span><span className="font-mono">3.75rem</span>
+                <span className="font-mono text-content-primary/60">--font-size-hero:</span><span className="font-mono">4rem</span>
               </div>
-              <div className="text-black/50 mt-2">
+              <div className="text-content-primary/50 mt-2">
                 Use rem units for spacing, padding, margins — they scale proportionally with the root.
               </div>
             </div>

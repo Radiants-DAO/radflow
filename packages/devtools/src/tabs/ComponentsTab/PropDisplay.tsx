@@ -11,34 +11,34 @@ export function PropDisplay({ component }: PropDisplayProps) {
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="font-joystix text-sm uppercase text-black">{component.name}</h3>
-        <span className="font-mondwest text-base text-black/60 font-mono">{component.path}</span>
+        <h3 className="font-joystix text-sm uppercase text-content-primary">{component.name}</h3>
+        <span className="font-mondwest text-base text-content-primary/60 font-mono">{component.path}</span>
       </div>
 
       {component.props.length > 0 ? (
-        <div className="border border-black rounded-md overflow-hidden">
+        <div className="border border-edge-primary rounded-md overflow-hidden">
           <table className="w-full font-mondwest text-base">
-            <thead className="bg-black/10">
+            <thead className="bg-surface-secondary/10">
               <tr>
-                <th className="text-left px-3 py-2 text-black/60 font-joystix text-xs uppercase">Prop</th>
-                <th className="text-left px-3 py-2 text-black/60 font-joystix text-xs uppercase">Type</th>
-                <th className="text-left px-3 py-2 text-black/60 font-joystix text-xs uppercase">Required</th>
-                <th className="text-left px-3 py-2 text-black/60 font-joystix text-xs uppercase">Default</th>
+                <th className="text-left px-3 py-2 text-content-primary/60 font-joystix text-xs uppercase">Prop</th>
+                <th className="text-left px-3 py-2 text-content-primary/60 font-joystix text-xs uppercase">Type</th>
+                <th className="text-left px-3 py-2 text-content-primary/60 font-joystix text-xs uppercase">Required</th>
+                <th className="text-left px-3 py-2 text-content-primary/60 font-joystix text-xs uppercase">Default</th>
               </tr>
             </thead>
             <tbody>
               {component.props.map((prop) => (
-                <tr key={prop.name} className="border-t border-black" style={{ borderTopColor: 'var(--border-black-20)' }}>
-                  <td className="px-3 py-2 font-mono text-black">{prop.name}</td>
-                  <td className="px-3 py-2 font-mono text-black/60">{prop.type}</td>
+                <tr key={prop.name} className="border-t border-edge-primary" style={{ borderTopColor: 'var(--border-edge-primary-20)' }}>
+                  <td className="px-3 py-2 font-mono text-content-primary">{prop.name}</td>
+                  <td className="px-3 py-2 font-mono text-content-primary/60">{prop.type}</td>
                   <td className="px-3 py-2">
                     {prop.required ? (
-                      <Icon name="checkmark-filled" size={14} className="text-error-red" />
+                      <Icon name="checkmark-filled" size={14} className="text-content-error" />
                     ) : (
-                      <span className="text-black/60">—</span>
+                      <span className="text-content-primary/60">—</span>
                     )}
                   </td>
-                  <td className="px-3 py-2 font-mono text-black/60">
+                  <td className="px-3 py-2 font-mono text-content-primary/60">
                     {prop.defaultValue || '—'}
                   </td>
                 </tr>
@@ -47,7 +47,7 @@ export function PropDisplay({ component }: PropDisplayProps) {
           </table>
         </div>
       ) : (
-        <p className="font-mondwest text-base text-black/60 italic">No props defined for this component</p>
+        <p className="font-mondwest text-base text-content-primary/60 italic">No props defined for this component</p>
       )}
     </div>
   );

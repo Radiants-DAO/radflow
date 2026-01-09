@@ -185,8 +185,8 @@ export function DropdownMenuContent({ className = '', children }: DropdownMenuCo
       className={`
         fixed z-50
         min-w-[8rem]
-        bg-warm-cloud
-        border-2 border-black
+        bg-surface-primary
+        border-2 border-edge-primary
         rounded-sm
         shadow-[2px_2px_0_0_var(--color-black)]
         py-1
@@ -243,8 +243,8 @@ export function DropdownMenuItem({
         w-full px-4 py-2
         text-left
         font-mondwest text-base
-        ${destructive ? 'text-error-red' : 'text-black'}
-        ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-black/5 cursor-pointer'}
+        ${destructive ? 'text-content-error' : 'text-content-primary'}
+        ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-surface-secondary/5 cursor-pointer'}
         transition-colors
         ${className}
       `.trim()}
@@ -267,7 +267,7 @@ export function DropdownMenuSeparator({ className = '' }: DropdownMenuSeparatorP
   return (
     <div
       role="separator"
-      className={`h-px bg-warm-cloud/20 my-1 ${className}`.trim()}
+      className={`h-px bg-surface-primary/20 my-1 ${className}`.trim()}
     />
   );
 }
@@ -289,7 +289,7 @@ export function DropdownMenuLabel({ children, className = '' }: DropdownMenuLabe
       className={`
         px-4 py-1
         font-joystix text-2xs uppercase
-        text-black/50
+        text-content-primary/50
         ${className}
       `.trim()}
     >

@@ -85,17 +85,17 @@ export function TypographyStylesDisplay() {
         {/* Element name and preview */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-2">
-            <code className="px-2 py-0.5 bg-black/10 rounded">
+            <code className="px-2 py-0.5 bg-surface-tertiary text-content-primary rounded" style={{ fontFamily: 'PixelCode' }}>
               {`<${style.element}>`}
             </code>
-            <span className="font-mondwest text-sm text-black/60">
+            <span className="font-mondwest text-sm text-content-primary/60">
               {style.displayName}
             </span>
           </div>
         </div>
 
         {/* Live Preview - each element has data-edit-scope directly */}
-        <div className="py-2 px-3 bg-warm-cloud rounded-sm">
+        <div className="py-2 px-3 bg-surface-primary rounded-sm">
           {style.element === 'h1' && <h1 data-edit-scope="layer-base">{SAMPLE_TEXT.h1}</h1>}
           {style.element === 'h2' && <h2 data-edit-scope="layer-base">{SAMPLE_TEXT.h2}</h2>}
           {style.element === 'h3' && <h3 data-edit-scope="layer-base">{SAMPLE_TEXT.h3}</h3>}
@@ -118,7 +118,7 @@ export function TypographyStylesDisplay() {
           {style.element === 'small' && <small data-edit-scope="layer-base">{SAMPLE_TEXT.small}</small>}
           {style.element === 'strong' && <strong data-edit-scope="layer-base">{SAMPLE_TEXT.strong}</strong>}
           {style.element === 'em' && <em data-edit-scope="layer-base">{SAMPLE_TEXT.em}</em>}
-          {style.element === 'code' && <code data-edit-scope="layer-base">{SAMPLE_TEXT.code}</code>}
+          {style.element === 'code' && <code data-edit-scope="layer-base" className="bg-surface-tertiary text-content-primary" style={{ fontFamily: 'PixelCode' }}>{SAMPLE_TEXT.code}</code>}
           {style.element === 'pre' && <pre data-edit-scope="layer-base">{SAMPLE_TEXT.pre}</pre>}
           {style.element === 'kbd' && <kbd data-edit-scope="layer-base">{SAMPLE_TEXT.kbd}</kbd>}
           {style.element === 'mark' && <mark data-edit-scope="layer-base">{SAMPLE_TEXT.mark}</mark>}
@@ -139,44 +139,44 @@ export function TypographyStylesDisplay() {
         {/* Style Properties (read-only) */}
         <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
           <div className="flex items-center gap-2">
-            <span className="text-black/50">Font:</span>
-            <span className="text-black font-mono">{fontFamily}</span>
+            <span className="text-content-primary/50">Font:</span>
+            <span className="text-content-primary font-mono">{fontFamily}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-black/50">Size:</span>
-            <span className="text-black font-mono">{style.fontSize}</span>
+            <span className="text-content-primary/50">Size:</span>
+            <span className="text-content-primary font-mono">{style.fontSize}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-black/50">Weight:</span>
-            <span className="text-black font-mono">{style.fontWeight}</span>
+            <span className="text-content-primary/50">Weight:</span>
+            <span className="text-content-primary font-mono">{style.fontWeight}</span>
           </div>
           {style.lineHeight && (
             <div className="flex items-center gap-2">
-              <span className="text-black/50">Line Height:</span>
-              <span className="text-black font-mono">{style.lineHeight}</span>
+              <span className="text-content-primary/50">Line Height:</span>
+              <span className="text-content-primary font-mono">{style.lineHeight}</span>
             </div>
           )}
           {style.letterSpacing && (
             <div className="flex items-center gap-2">
-              <span className="text-black/50">Tracking:</span>
-              <span className="text-black font-mono">{style.letterSpacing}</span>
+              <span className="text-content-primary/50">Tracking:</span>
+              <span className="text-content-primary font-mono">{style.letterSpacing}</span>
             </div>
           )}
           <div className="flex items-center gap-2">
-            <span className="text-black/50">Color:</span>
-            <span className="text-black font-mono">{style.baseColorId}</span>
+            <span className="text-content-primary/50">Color:</span>
+            <span className="text-content-primary font-mono">{style.baseColorId}</span>
           </div>
           {style.utilities && style.utilities.length > 0 && (
             <div className="flex items-center gap-2 col-span-2">
-              <span className="text-black/50">Utilities:</span>
-              <span className="text-black font-mono">{style.utilities.join(' ')}</span>
+              <span className="text-content-primary/50">Utilities:</span>
+              <span className="text-content-primary font-mono">{style.utilities.join(' ')}</span>
             </div>
           )}
         </div>
 
         {/* @apply classes (what will be written to CSS) */}
-        <div className="pt-2 border-t border-black/10">
-          <code>
+        <div className="pt-2 border-t border-edge-primary/10">
+          <code className="bg-surface-tertiary text-content-primary px-2 py-1 rounded-sm" style={{ fontFamily: 'PixelCode' }}>
             @apply {classes}
           </code>
         </div>
@@ -277,7 +277,7 @@ export function TypographyStylesDisplay() {
       )}
 
       {/* Note about editing */}
-      <div className="p-3 bg-sun-yellow/20 border border-tertiary rounded-sm">
+      <div className="p-3 bg-surface-tertiary/20 border border-tertiary rounded-sm">
         <p>
           Typography styles are display-only. Use the Cursor visual editor to modify these styles directly in your CSS.
         </p>

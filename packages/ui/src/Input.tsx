@@ -54,7 +54,7 @@ const sizeStyles: Record<InputSize, string> = {
 };
 
 const errorStyles = `
-  border-sun-red
+  border-edge-error
   focus:ring-destructive
 `;
 

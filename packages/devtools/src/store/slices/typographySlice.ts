@@ -209,7 +209,7 @@ const defaultTypographyStyles: TypographyStyle[] = [
     fontWeight: 'font-normal',
     baseColorId: 'black',
     displayName: 'Inline Code',
-    utilities: ['bg-black/10', 'px-1', 'py-0.5', 'rounded-sm'],
+    utilities: ['bg-surface-secondary/10', 'px-1', 'py-0.5', 'rounded-sm'],
   },
   {
     id: 'pre',
@@ -220,7 +220,7 @@ const defaultTypographyStyles: TypographyStyle[] = [
     fontWeight: 'font-normal',
     baseColorId: 'black',
     displayName: 'Code Block',
-    utilities: ['bg-black/10', 'p-4', 'rounded-sm', 'overflow-x-auto'],
+    utilities: ['bg-surface-secondary/10', 'p-4', 'rounded-sm', 'overflow-x-auto'],
   },
   {
     id: 'kbd',
@@ -231,7 +231,7 @@ const defaultTypographyStyles: TypographyStyle[] = [
     fontWeight: 'font-normal',
     baseColorId: 'cream',
     displayName: 'Keyboard Input',
-    utilities: ['bg-black', 'px-1', 'py-0.5', 'rounded-sm'],
+    utilities: ['bg-surface-secondary', 'px-1', 'py-0.5', 'rounded-sm'],
   },
   {
     id: 'mark',
@@ -242,7 +242,7 @@ const defaultTypographyStyles: TypographyStyle[] = [
     fontWeight: 'font-normal',
     baseColorId: 'black',
     displayName: 'Highlighted Text',
-    utilities: ['bg-sun-yellow'],
+    utilities: ['bg-surface-tertiary'],
   },
   {
     id: 'blockquote',
@@ -253,7 +253,7 @@ const defaultTypographyStyles: TypographyStyle[] = [
     fontWeight: 'font-normal',
     baseColorId: 'black',
     displayName: 'Block Quote',
-    utilities: ['border-l-4', 'border-black', 'pl-4', 'italic'],
+    utilities: ['border-l-4', 'border-edge-primary', 'pl-4', 'italic'],
   },
   {
     id: 'cite',

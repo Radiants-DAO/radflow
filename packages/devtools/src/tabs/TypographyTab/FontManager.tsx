@@ -203,11 +203,11 @@ export function FontManager() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-joystix text-sm text-black uppercase">Fonts</h3>
+        <h3 className="font-joystix text-sm text-content-primary uppercase">Fonts</h3>
         <button
           onClick={handleReload}
           disabled={isReloading}
-          className="flex items-center gap-1 px-2 py-1 text-xs font-mondwest text-black/60 hover:text-black border border-black/20 rounded-sm hover:bg-black/5 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-1 px-2 py-1 text-xs font-mondwest text-content-primary/60 hover:text-content-primary border border-edge-primary/20 rounded-sm hover:bg-surface-secondary/5 disabled:opacity-50 disabled:cursor-not-allowed"
           title="Reload fonts from CSS"
         >
           <Icon name="refresh" size={12} />
@@ -220,11 +220,11 @@ export function FontManager() {
         {fonts.map((font) => (
           <div
             key={font.id}
-            className="border border-black rounded-sm bg-warm-cloud overflow-hidden"
+            className="border border-edge-primary rounded-sm bg-surface-primary overflow-hidden"
           >
             {/* Font Header */}
             <div
-              className="flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-black/5"
+              className="flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-surface-secondary/5"
               onClick={() => setExpandedFont(expandedFont === font.id ? null : font.id)}
             >
               <div className="flex items-center gap-3">
@@ -235,10 +235,10 @@ export function FontManager() {
                   Aa
                 </span>
                 <div>
-                  <div className="font-mondwest text-base text-black">
+                  <div className="font-mondwest text-base text-content-primary">
                     {font.name}
                   </div>
-                  <div className="font-mondwest text-sm text-black/60">
+                  <div className="font-mondwest text-sm text-content-primary/60">
                     {font.weights.length} weight{font.weights.length !== 1 ? 's' : ''} • {font.styles.join(', ')}
                   </div>
                 </div>
@@ -249,33 +249,38 @@ export function FontManager() {
                     e.stopPropagation();
                     handleDeleteFont(font.id);
                   }}
-                  className="text-black/50 hover:text-error-red flex items-center"
+                  className="text-content-primary/50 hover:text-content-error flex items-center"
                   title="Delete font"
                 >
                   <Icon name="close" size={16} />
                 </button>
-                <span className="text-black/40">{expandedFont === font.id ? '▼' : '▶'}</span>
+                <Icon
+                  name="chevron-down"
+                  size={16}
+                  className={`text-content-primary/40 transition-transform ${expandedFont === font.id ? '' : '-rotate-90'}`}
+                  aria-hidden="true"
+                />
               </div>
             </div>
 
             {/* Font Files (expanded) */}
             {expandedFont === font.id && (
-              <div className="border-t border-black/20 px-3 py-2 space-y-1 bg-black/5">
+              <div className="border-t border-edge-primary/20 px-3 py-2 space-y-1 bg-surface-secondary/5">
                 {font.files.map((file) => (
                   <div key={file.id} className="flex items-center justify-between py-1">
-                    <div className="font-mondwest text-sm text-black/70">
+                    <div className="font-mondwest text-sm text-content-primary/70">
                       {getWeightLabel(file.weight)} {file.style !== 'normal' ? `(${file.style})` : ''} • {file.format}
                     </div>
                     <button
                       onClick={() => handleDeleteFontFile(font.id, file.id)}
-                      className="text-black/40 hover:text-error-red flex items-center"
+                      className="text-content-primary/40 hover:text-content-error flex items-center"
                       title="Remove file"
                     >
                       <Icon name="close" size={14} />
                     </button>
                   </div>
                 ))}
-                <div className="text-xs text-black/40 font-mono pt-1 border-t border-black/10">
+                <div className="text-xs text-content-primary/40 font-mono pt-1 border-t border-edge-primary/10">
                   {font.files[0]?.path}
                 </div>
               </div>
@@ -284,7 +289,7 @@ export function FontManager() {
         ))}
 
         {fonts.length === 0 && (
-          <div className="text-center py-4 text-black/50 font-mondwest text-base">
+          <div className="text-center py-4 text-content-primary/50 font-mondwest text-base">
             No fonts installed
           </div>
         )}
@@ -294,7 +299,7 @@ export function FontManager() {
       <div
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
-        className="border-2 border-dashed border-black/30 rounded-md p-4 text-center hover:border-black/50 transition-colors"
+        className="border-2 border-dashed border-edge-primary/30 rounded-md p-4 text-center hover:border-edge-primary/50 transition-colors"
       >
         <input
           type="file"
@@ -307,10 +312,10 @@ export function FontManager() {
           htmlFor="font-upload"
           className="cursor-pointer block"
         >
-          <div className="font-mondwest text-base text-black/60">
+          <div className="font-mondwest text-base text-content-primary/60">
             Drop font file here or click to upload
           </div>
-          <div className="font-mondwest text-xs text-black/40 mt-1">
+          <div className="font-mondwest text-xs text-content-primary/40 mt-1">
             Supports woff2, woff, ttf, otf
           </div>
         </label>
@@ -318,48 +323,48 @@ export function FontManager() {
 
       {/* Upload Modal */}
       {uploadingFont && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-warm-cloud border-2 border-black rounded-md p-4 max-w-md w-full mx-4 shadow-[4px_4px_0_0_var(--color-black)]">
-            <h4 className="font-joystix text-sm text-black uppercase mb-4">
+        <div className="fixed inset-0 bg-surface-secondary/50 flex items-center justify-center z-50">
+          <div className="bg-surface-primary border-2 border-edge-primary rounded-md p-4 max-w-md w-full mx-4 shadow-[4px_4px_0_0_var(--color-black)]">
+            <h4 className="font-joystix text-sm text-content-primary uppercase mb-4">
               Configure Font
             </h4>
 
             <div className="space-y-3">
               {/* Font Name */}
               <div>
-                <label className="font-mondwest text-sm text-black/60 block mb-1">
+                <label className="font-mondwest text-sm text-content-primary/60 block mb-1">
                   Font Name
                 </label>
                 <input
                   type="text"
                   value={uploadingFont.name}
                   onChange={(e) => setUploadingFont({ ...uploadingFont, name: e.target.value })}
-                  className="w-full px-3 py-2 border border-black rounded-sm font-mondwest text-base bg-white"
+                  className="w-full px-3 py-2 border border-edge-primary rounded-sm font-mondwest text-base bg-surface-elevated"
                 />
               </div>
 
               {/* Font Family */}
               <div>
-                <label className="font-mondwest text-sm text-black/60 block mb-1">
+                <label className="font-mondwest text-sm text-content-primary/60 block mb-1">
                   CSS Font Family
                 </label>
                 <input
                   type="text"
                   value={uploadingFont.family}
                   onChange={(e) => setUploadingFont({ ...uploadingFont, family: e.target.value })}
-                  className="w-full px-3 py-2 border border-black rounded-sm font-mondwest text-base bg-white"
+                  className="w-full px-3 py-2 border border-edge-primary rounded-sm font-mondwest text-base bg-surface-elevated"
                 />
               </div>
 
               {/* Weight */}
               <div>
-                <label className="font-mondwest text-sm text-black/60 block mb-1">
+                <label className="font-mondwest text-sm text-content-primary/60 block mb-1">
                   Weight
                 </label>
                 <select
                   value={uploadingFont.weight}
                   onChange={(e) => setUploadingFont({ ...uploadingFont, weight: parseInt(e.target.value, 10) })}
-                  className="w-full px-3 py-2 border border-black rounded-sm font-mondwest text-base bg-white"
+                  className="w-full px-3 py-2 border border-edge-primary rounded-sm font-mondwest text-base bg-surface-elevated"
                 >
                   <option value={100}>100 - Thin</option>
                   <option value={200}>200 - Extra Light</option>
@@ -375,13 +380,13 @@ export function FontManager() {
 
               {/* Style */}
               <div>
-                <label className="font-mondwest text-sm text-black/60 block mb-1">
+                <label className="font-mondwest text-sm text-content-primary/60 block mb-1">
                   Style
                 </label>
                 <select
                   value={uploadingFont.style}
                   onChange={(e) => setUploadingFont({ ...uploadingFont, style: e.target.value })}
-                  className="w-full px-3 py-2 border border-black rounded-sm font-mondwest text-base bg-white"
+                  className="w-full px-3 py-2 border border-edge-primary rounded-sm font-mondwest text-base bg-surface-elevated"
                 >
                   <option value="normal">Normal</option>
                   <option value="italic">Italic</option>
@@ -389,7 +394,7 @@ export function FontManager() {
               </div>
 
               {/* File Info */}
-              <div className="text-xs text-black/40 font-mono">
+              <div className="text-xs text-content-primary/40 font-mono">
                 File: {uploadingFont.file.name}
               </div>
             </div>
@@ -398,14 +403,14 @@ export function FontManager() {
             <div className="flex justify-end gap-2 mt-4">
               <button
                 onClick={() => setUploadingFont(null)}
-                className="px-4 py-2 font-mondwest text-base text-black border border-black rounded-sm hover:bg-black/5"
+                className="px-4 py-2 font-mondwest text-base text-content-primary border border-edge-primary rounded-sm hover:bg-surface-secondary/5"
               >
                 Cancel
               </button>
               <button
                 onClick={handleUpload}
                 disabled={isUploading}
-                className="px-4 py-2 font-mondwest text-base text-black bg-sun-yellow border border-black rounded-sm hover:bg-sun-yellow/80 disabled:opacity-50"
+                className="px-4 py-2 font-mondwest text-base text-content-primary bg-surface-tertiary border border-edge-primary rounded-sm hover:bg-surface-tertiary/80 disabled:opacity-50"
               >
                 {isUploading ? 'Uploading...' : 'Upload'}
               </button>

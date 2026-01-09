@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process';
 import type { PackageManager } from './detect-package-manager.js';
 
-const DEPENDENCIES = ['zustand', 'react-draggable', 'sharp'];
+const DEPENDENCIES = ['zustand', 'sharp'];
 
 export function installDependencies(
   packageManager: PackageManager,

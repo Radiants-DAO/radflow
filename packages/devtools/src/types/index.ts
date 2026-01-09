@@ -12,6 +12,26 @@ export interface BaseColor {
 // Legacy alias for backwards compatibility
 export type BrandColor = BaseColor;
 
+// Semantic Token (references a base color)
+export interface SemanticToken {
+  id: string;
+  name: string;        // e.g., "surface-primary", "content-secondary"
+  displayName: string; // e.g., "Surface Primary", "Content Secondary"
+  cssVar: string;      // e.g., "--color-surface-primary"
+  value: string;       // Resolved hex value
+  reference: string;   // e.g., "var(--color-warm-cloud)" or the raw reference
+  category: 'surface' | 'content' | 'edge';
+}
+
+// Shadow Token
+export interface ShadowToken {
+  id: string;
+  name: string;        // e.g., "btn", "card"
+  displayName: string; // e.g., "Button", "Card"
+  cssVar: string;      // e.g., "--shadow-btn"
+  value: string;       // The shadow value
+}
+
 export interface ColorMode {
   id: string;
   name: string;        // e.g., "dark"
@@ -95,5 +115,47 @@ export interface TypographyStyle {
   baseColorId: string;       // References BaseColor.id for text color
   displayName: string;       // "Heading 1", "Heading 2", "Paragraph", etc.
   utilities?: string[];      // Additional Tailwind utilities: ["underline"], ["hover:text-link-hover"]
+}
+
+// Tool Types
+export type Tool = 'componentId' | 'textEdit' | 'help';
+
+// Dock Position Types
+export type DockPosition = 'right' | 'left' | 'undocked';
+
+// Text Edit Types
+export interface TextChange {
+  id: string;
+  selector: string;
+  originalText: string;
+  newText: string;
+  originalTag?: string;
+  newTag?: string;
+  reactComponent?: string; // Component name if found
+  isRadToolsChange: boolean;
+  radToolsType: 'color' | 'component' | 'icon' | null;
+}
+
+// Search Types
+export interface SearchResult {
+  text: string;
+  type: 'component' | 'icon' | 'token' | 'typography' | 'asset';
+  tabId: Tab;
+  sectionId?: string;
+  metadata?: Record<string, unknown>;
+}
+
+// Component ID Types
+export interface ComponentInfo {
+  name: string;
+  path: string;
+}
+
+// Help Types
+export interface HelpItem {
+  title: string;
+  description: string;
+  shortcut?: string;
+  tips?: string[];
 }
 

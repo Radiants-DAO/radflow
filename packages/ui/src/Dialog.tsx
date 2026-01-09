@@ -112,7 +112,7 @@ export function DialogContent({ className = '', children }: DialogContentProps) 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black/50 animate-fadeIn" onClick={() => setOpen(false)} aria-hidden="true" />
+      <div className="absolute inset-0 bg-surface-secondary/50 animate-fadeIn" onClick={() => setOpen(false)} aria-hidden="true" />
 
       {/* Content */}
       <div

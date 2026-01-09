@@ -44,7 +44,7 @@ export function AddTabButton({ onAdd }: AddTabButtonProps) {
           }
         }}
         placeholder="Folder name..."
-        className="flex items-center justify-center px-4 py-2 font-joystix text-xs uppercase cursor-text select-none text-black transition-all duration-200 ease-out relative border border-black rounded-sm bg-warm-cloud focus:outline-none focus:ring-2 focus:ring-sun-yellow"
+        className="flex items-center justify-center px-4 py-2 font-joystix text-xs uppercase cursor-text select-none text-content-primary transition-all duration-200 ease-out relative border border-edge-primary rounded-sm bg-surface-primary focus:outline-none focus:ring-2 focus:ring-sun-yellow"
         style={{ minWidth: '120px' }}
       />
     );

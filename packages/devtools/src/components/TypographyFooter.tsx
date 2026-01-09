@@ -92,14 +92,14 @@ export function TypographyFooter({
     return (
       <>
         {text.substring(0, index)}
-        <span className="bg-sun-yellow">{text.substring(index, index + query.length)}</span>
+        <span className="bg-surface-tertiary">{text.substring(index, index + query.length)}</span>
         {text.substring(index + query.length)}
       </>
     );
   };
 
   return (
-    <div className="flex items-center justify-end px-4 py-2 bg-warm-cloud border-t border-black">
+    <div className="flex items-center justify-end px-4 py-2 bg-surface-primary border-t border-edge-primary">
       <div className="relative w-80" ref={containerRef}>
         <Input
           ref={inputRef}
@@ -111,7 +111,7 @@ export function TypographyFooter({
           onFocus={() => setShowAutocomplete(true)}
         />
         {showAutocomplete && suggestions.length > 0 && (
-          <div className="absolute z-50 w-full mt-1 bg-warm-cloud border border-black rounded-sm shadow-[4px_4px_0_0_var(--color-black)] max-h-64 overflow-y-auto bottom-full mb-1">
+          <div className="absolute z-50 w-full mt-1 bg-surface-primary border border-edge-primary rounded-sm shadow-[4px_4px_0_0_var(--color-black)] max-h-64 overflow-y-auto bottom-full mb-1">
             {suggestions.map((item, index) => (
               <button
                 key={`${item.sectionId}-${item.text}-${index}`}
@@ -119,18 +119,18 @@ export function TypographyFooter({
                 onClick={() => handleSelectSuggestion(item)}
                 className={`w-full text-left px-3 py-2 font-mondwest text-sm transition-colors ${
                   index === selectedSuggestionIndex
-                    ? 'bg-sun-yellow text-black'
-                    : 'bg-warm-cloud text-black hover:bg-black/5'
+                    ? 'bg-surface-tertiary text-content-primary'
+                    : 'bg-surface-primary text-content-primary hover:bg-surface-secondary/5'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col gap-0.5">
-                    <span className="font-joystix text-xs font-bold text-black/60 uppercase">
+                    <span className="font-joystix text-xs font-bold text-content-primary/60 uppercase">
                       {item.sectionId}
                     </span>
                     <span>{highlightText(item.text, searchQuery)}</span>
                   </div>
-                  <span className="text-xs text-black/40 uppercase font-mono">
+                  <span className="text-xs text-content-primary/40 uppercase font-mono">
                     {`<${item.element}>`}
                   </span>
                 </div>

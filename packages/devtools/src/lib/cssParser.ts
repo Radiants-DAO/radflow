@@ -1,4 +1,4 @@
-import type { BaseColor, ColorMode, FontDefinition, FontFile, TypographyStyle } from '../types';
+import type { BaseColor, ColorMode, FontDefinition, FontFile, TypographyStyle, SemanticToken, ShadowToken } from '../types';
 
 export interface ParsedCSS {
   themeInline: Record<string, string>;
@@ -128,6 +128,12 @@ function toDisplayName(name: string): string {
     .join(' ');
 }
 
+// Semantic token prefixes (these reference base colors)
+const SEMANTIC_TOKEN_PREFIXES = ['surface-', 'content-', 'edge-'];
+
+// Shadow token prefix
+const SHADOW_PREFIX = '--shadow-';
+
 /**
  * Convert parsed CSS to store-friendly structures (new data model)
  */
@@ -135,8 +141,12 @@ export function parsedCSSToStoreState(parsed: ParsedCSS): {
   baseColors: BaseColor[];
   colorModes: ColorMode[];
   borderRadius: Record<string, string>;
+  semanticTokens: SemanticToken[];
+  shadows: ShadowToken[];
 } {
   const baseColors: BaseColor[] = [];
+  const semanticTokens: SemanticToken[] = [];
+  const shadows: ShadowToken[] = [];
   const borderRadius: Record<string, string> = {};
 
   // Build a map to track color IDs for reference resolution
@@ -145,10 +155,13 @@ export function parsedCSSToStoreState(parsed: ParsedCSS): {
   // Merge theme and themeInline to get all variables
   const themeVars = { ...parsed.themeInline, ...parsed.theme };
 
-  // Extract base colors from merged theme
+  // First pass: Extract base colors from merged theme
   for (const [key, value] of Object.entries(themeVars)) {
-    // Skip non-color variables (like fonts)
-    if (key.startsWith('--font-')) continue;
+    // Skip non-color variables (like fonts, shadows, radius)
+    if (key.startsWith('--font-') || key.startsWith('--shadow-') || key.startsWith('--radius-')) continue;
+    
+    // Skip semantic tokens (they reference base colors)
+    if (key.startsWith('--color-') && SEMANTIC_TOKEN_PREFIXES.some(p => key.includes(p))) continue;
 
     // System colors (--color-success-green, --color-error-red, etc.)
     if (key.startsWith('--color-') && SYSTEM_COLOR_PREFIXES.some(p => key.includes(p))) {
@@ -195,6 +208,45 @@ export function parsedCSSToStoreState(parsed: ParsedCSS): {
     }
   }
 
+  // Second pass: Extract semantic tokens
+  for (const [key, value] of Object.entries(themeVars)) {
+    if (!key.startsWith('--color-')) continue;
+    
+    const name = key.replace('--color-', '');
+    
+    // Check if it's a semantic token (surface-, content-, edge-)
+    let category: 'surface' | 'content' | 'edge' | null = null;
+    if (name.startsWith('surface-')) category = 'surface';
+    else if (name.startsWith('content-')) category = 'content';
+    else if (name.startsWith('edge-')) category = 'edge';
+    
+    if (category) {
+      semanticTokens.push({
+        id: name,
+        name,
+        displayName: toDisplayName(name),
+        cssVar: key,
+        value: resolveVariable(key, parsed) || value,
+        reference: value,
+        category,
+      });
+    }
+  }
+
+  // Extract shadows from @theme
+  for (const [key, value] of Object.entries(parsed.theme)) {
+    if (key.startsWith(SHADOW_PREFIX)) {
+      const name = key.replace(SHADOW_PREFIX, '');
+      shadows.push({
+        id: name,
+        name,
+        displayName: toShadowDisplayName(name),
+        cssVar: key,
+        value,
+      });
+    }
+  }
+
   // Extract border radius from @theme
   for (const [key, value] of Object.entries(parsed.theme)) {
     if (key.startsWith('--radius-')) {
@@ -228,7 +280,28 @@ export function parsedCSSToStoreState(parsed: ParsedCSS): {
     baseColors,
     colorModes,
     borderRadius,
+    semanticTokens,
+    shadows,
   };
+}
+
+/**
+ * Create display name for shadow variable
+ * e.g., "btn-hover" -> "Button Hover", "card-lg" -> "Card Large"
+ */
+function toShadowDisplayName(name: string): string {
+  const replacements: Record<string, string> = {
+    'btn': 'Button',
+    'lg': 'Large',
+    'sm': 'Small',
+    'md': 'Medium',
+    'xl': 'Extra Large',
+  };
+  
+  return name
+    .split('-')
+    .map(word => replacements[word] || word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
 }
 
 
@@ -420,7 +493,7 @@ export function parseLayerBase(css: string): TypographyStyle[] {
       else if (TRACKING_CLASSES.includes(cls)) {
         style.letterSpacing = cls;
       }
-      // Text color (text-black, text-cream, etc.) - extract base color name
+      // Text color (text-content-primary, text-cream, etc.) - extract base color name
       else if (cls.startsWith('text-') && !SIZE_CLASSES.includes(cls)) {
         const colorName = cls.replace('text-', '');
         // Map common color names to base color IDs

@@ -1,11 +1,13 @@
 import { StateCreator } from 'zustand';
-import type { BaseColor, ColorMode } from '../../types';
+import type { BaseColor, ColorMode, SemanticToken, ShadowToken } from '../../types';
 
 export interface VariablesSlice {
   baseColors: BaseColor[];
   colorModes: ColorMode[];
   activeColorMode: string | null;
   borderRadius: Record<string, string>;
+  semanticTokens: SemanticToken[];
+  shadows: ShadowToken[];
   
   setActiveColorMode: (id: string | null) => void;
   loadFromCSS: () => Promise<void>;
@@ -40,6 +42,8 @@ export const createVariablesSlice: StateCreator<VariablesSlice, [], [], Variable
     lg: '1rem',
     full: '9999px',
   },
+  semanticTokens: [],
+  shadows: [],
 
   setActiveColorMode: (id) => set({ activeColorMode: id }),
 
@@ -57,6 +61,8 @@ export const createVariablesSlice: StateCreator<VariablesSlice, [], [], Variable
         baseColors: state.baseColors,
         colorModes: state.colorModes,
         borderRadius: state.borderRadius,
+        semanticTokens: state.semanticTokens,
+        shadows: state.shadows,
       });
     } catch {
       // Failed to load CSS - keep defaults

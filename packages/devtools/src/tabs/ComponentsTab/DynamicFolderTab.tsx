@@ -29,32 +29,14 @@ export function DynamicFolderTab({ folderName }: DynamicFolderTabProps) {
     scanFolder();
   }, [folderName]);
 
-  // Try to import preview file if it exists
-  const [PreviewContent, setPreviewContent] = useState<React.ComponentType | null>(null);
-  const [previewError, setPreviewError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const loadPreview = async () => {
-      try {
-        // Dynamic import of preview file
-        const previewModule = await import(`./previews/${folderName}.tsx`);
-        setPreviewContent(() => previewModule.default || previewModule.Preview);
-        setPreviewError(null);
-      } catch (error) {
-        // Preview file doesn't exist yet - that's fine
-        setPreviewContent(null);
-        setPreviewError(null);
-      }
-    };
-
-    loadPreview();
-  }, [folderName]);
+  // Preview content is not dynamically loaded - previews are handled by specific tab components
+  // like DesignSystemTab or UITab. DynamicFolderTab shows discovered components without previews.
 
   return (
-    <div className="flex flex-col h-full overflow-auto pt-4 pb-4 pl-4 pr-2 bg-[var(--color-white)] border border-black rounded space-y-4">
+    <div className="flex flex-col h-full overflow-auto pt-4 pb-4 pl-4 pr-2 bg-[var(--color-white)] border border-edge-primary rounded space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="font-joystix text-sm uppercase text-black">{folderName}</h2>
+        <h2 className="font-joystix text-sm uppercase text-content-primary">{folderName}</h2>
         <Button
           variant="outline"
           size="sm"
@@ -75,30 +57,23 @@ export function DynamicFolderTab({ folderName }: DynamicFolderTabProps) {
       </div>
 
       {/* Stats */}
-      <div className="flex gap-4 font-mondwest text-base text-black/60">
+      <div className="flex gap-4 font-mondwest text-base text-content-primary/60">
         <span>{folderComponents.length} components found</span>
         <span>in /components/{folderName}/</span>
       </div>
 
       {/* Loading State */}
       {isLoading && folderComponents.length === 0 && (
-        <div className="text-center py-8 text-black/60 font-mondwest text-base">
+        <div className="text-center py-8 text-content-primary/60 font-mondwest text-base">
           Scanning components...
-        </div>
-      )}
-
-      {/* Preview Content (if exists) */}
-      {PreviewContent && (
-        <div className="mb-6">
-          <PreviewContent />
         </div>
       )}
 
       {/* Component List */}
       {!isLoading && folderComponents.length === 0 && (
         <div className="text-center py-8">
-          <p className="text-black/60 font-mondwest text-base mb-2">No components found</p>
-          <p className="font-mondwest text-sm text-black/60">
+          <p className="text-content-primary/60 font-mondwest text-base mb-2">No components found</p>
+          <p className="font-mondwest text-sm text-content-primary/60">
             Create components with default exports in /components/{folderName}/
           </p>
         </div>

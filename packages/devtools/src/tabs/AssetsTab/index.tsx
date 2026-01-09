@@ -109,10 +109,10 @@ export function AssetsTab() {
   };
 
   return (
-    <div className="flex flex-col h-full overflow-auto pt-4 pb-4 pl-4 pr-2 bg-[var(--color-white)] border border-black rounded space-y-4">
+    <div className="flex flex-col h-full overflow-auto pt-4 pb-4 pl-4 pr-2 bg-[var(--color-white)] border border-edge-primary rounded space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="font-joystix text-sm uppercase text-black">Assets</h2>
+        <h2 className="font-joystix text-sm uppercase text-content-primary">Assets</h2>
         <div className="flex gap-2">
           {selectedFiles.length > 0 && (
             <Button
@@ -142,7 +142,7 @@ export function AssetsTab() {
         <div
           className={`px-3 py-2 font-mondwest text-base rounded-sm ${
             message.type === 'success'
-              ? 'bg-success-green text-black'
+              ? 'bg-success-green text-content-primary'
               : 'bg-error-red text-cream'
           }`}
         >
@@ -157,7 +157,7 @@ export function AssetsTab() {
       <div className="flex gap-4">
         {/* Folder Tree */}
         {assets && (
-          <div className="w-1/3 border border-black rounded-md p-2 max-h-[300px] overflow-y-auto">
+          <div className="w-1/3 border border-edge-primary rounded-md p-2 max-h-[300px] overflow-y-auto">
             <FolderTree
               folder={assets}
               selectedFolder={selectedFolder || assets.path}
@@ -167,7 +167,7 @@ export function AssetsTab() {
         )}
 
         {/* Asset Grid */}
-        <div className="flex-1 border border-black rounded-md p-2 max-h-[300px] overflow-y-auto">
+        <div className="flex-1 border border-edge-primary rounded-md p-2 max-h-[300px] overflow-y-auto">
           <AssetGrid
             files={currentFiles}
             selectedFiles={selectedFiles}

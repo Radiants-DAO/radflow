@@ -9,9 +9,7 @@ interface ContextualFooterProps {
   onTabChange: (tab: Tab) => void;
   // Components tab props
   componentSubTab?: string;
-  componentSearchQuery?: string;
   onComponentSubTabChange?: (tab: string) => void;
-  onComponentSearchChange?: (query: string) => void;
   componentTabs?: Array<{ id: string; label: string }>;
   onAddComponentFolder?: (folderName: string) => void;
   // Typography tab props
@@ -23,9 +21,7 @@ export function ContextualFooter({
   activeTab,
   onTabChange,
   componentSubTab,
-  componentSearchQuery,
   onComponentSubTabChange,
-  onComponentSearchChange,
   componentTabs,
   onAddComponentFolder,
   typographySearchQuery,
@@ -33,20 +29,9 @@ export function ContextualFooter({
 }: ContextualFooterProps) {
   return (
     <>
-      {/* Secondary Navigation (above footer) */}
-      <SecondaryNavigation
-        activeTab={activeTab}
-        componentSubTab={componentSubTab}
-        onComponentSubTabChange={onComponentSubTabChange}
-        componentTabs={componentTabs}
-        onAddComponentFolder={onAddComponentFolder}
-      />
       {/* Primary Navigation Footer (always visible) */}
       <PrimaryNavigationFooter
         activeTab={activeTab}
-        onTabChange={onTabChange}
-        componentSearchQuery={componentSearchQuery}
-        onComponentSearchChange={onComponentSearchChange}
         typographySearchQuery={typographySearchQuery}
         onTypographySearchChange={onTypographySearchChange}
       />

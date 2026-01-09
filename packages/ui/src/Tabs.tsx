@@ -145,7 +145,7 @@ export function TabTrigger({ value, children, iconName, tooltip, className = '' 
 
   if (variant === 'manila') {
     const manilaBaseClasses = 'flex-1 px-3 py-1.5 text-xs font-joystix rounded-t-sm cursor-pointer outline-none border border-edge-primary -mr-px last:mr-0';
-    const manilaActiveClasses = 'bg-white border-b-white relative z-20';
+    const manilaActiveClasses = 'bg-surface-elevated border-b-surface-elevated relative z-20';
     const manilaInactiveClasses = 'bg-surface-primary hover:bg-surface-primary/80 border-b-edge-primary z-10';
 
     const manilaButton = (

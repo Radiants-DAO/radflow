@@ -25,13 +25,13 @@ export function FolderTree({ folder, selectedFolder, onSelectFolder, depth = 0 }
         }}
         className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-xs text-left transition-colors ${
           selectedFolder === folder.path
-            ? 'bg-sun-yellow text-black'
-            : 'hover:bg-sun-yellow/20 text-black'
+            ? 'bg-surface-tertiary text-content-primary'
+            : 'hover:bg-surface-tertiary/20 text-content-primary'
         }`}
       >
         <span>{expanded ? '📂' : '📁'}</span>
         <span className="flex-1">{folder.name}</span>
-        <span className="text-black/60">{files.length}</span>
+        <span className="text-content-primary/60">{files.length}</span>
       </button>
 
       {expanded && subfolders.length > 0 && (

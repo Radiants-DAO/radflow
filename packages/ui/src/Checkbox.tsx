@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, createContext, useContext } from 'react';
 import { Icon } from './Icon';
 
 // ============================================================================
@@ -16,6 +16,27 @@ interface RadioProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, '
   /** Label text */
   label?: string;
   /** Additional classes for container */
+  className?: string;
+}
+
+interface RadioGroupContextValue {
+  name: string;
+  value?: string;
+  onChange?: (value: string) => void;
+}
+
+interface RadioGroupProps {
+  /** Controlled value */
+  value?: string;
+  /** Change handler */
+  onChange?: (value: string) => void;
+  /** Name attribute for radio inputs */
+  name: string;
+  /** Radio children */
+  children: React.ReactNode;
+  /** Layout orientation */
+  orientation?: 'horizontal' | 'vertical';
+  /** Additional className */
   className?: string;
 }
 
@@ -63,10 +84,27 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
 // Radio Component
 // ============================================================================
 
+const RadioGroupContext = createContext<RadioGroupContextValue | null>(null);
+
 /**
  * Retro-styled radio button
  */
-export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio({ label, className = '', disabled, ...props }, ref) {
+export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio({ label, className = '', disabled, name, value, checked, onChange, ...props }, ref) {
+  const groupContext = useContext(RadioGroupContext);
+  
+  // Use group context if available
+  const effectiveName = groupContext?.name || name;
+  const effectiveChecked = groupContext
+    ? groupContext.value === value
+    : checked;
+  const effectiveOnChange = groupContext?.onChange
+    ? (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.checked && value) {
+          groupContext.onChange?.(value);
+        }
+      }
+    : onChange;
+
   return (
     <label
       className={`
@@ -76,7 +114,17 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio({ l
       `}
     >
       <div className="relative">
-        <input ref={ref} type="radio" disabled={disabled} className="peer sr-only" {...props} />
+        <input
+          ref={ref}
+          type="radio"
+          disabled={disabled}
+          className="peer sr-only"
+          name={effectiveName}
+          value={value}
+          checked={effectiveChecked}
+          onChange={effectiveOnChange}
+          {...props}
+        />
         {/* Custom radio visual */}
         <div
           className={`
@@ -97,5 +145,41 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio({ l
   );
 });
 
+// ============================================================================
+// RadioGroup Component
+// ============================================================================
+
+/**
+ * RadioGroup wrapper for managing radio button state
+ */
+export function RadioGroup({
+  value,
+  onChange,
+  name,
+  children,
+  orientation = 'vertical',
+  className = '',
+}: RadioGroupProps) {
+  const contextValue: RadioGroupContextValue = {
+    name,
+    value,
+    onChange,
+  };
+
+  return (
+    <RadioGroupContext.Provider value={contextValue}>
+      <div
+        className={`
+          ${orientation === 'horizontal' ? 'flex flex-row gap-4' : 'flex flex-col gap-2'}
+          ${className}
+        `}
+        role="radiogroup"
+      >
+        {children}
+      </div>
+    </RadioGroupContext.Provider>
+  );
+}
+
 export default Checkbox;
-export type { CheckboxProps, RadioProps };
+export type { CheckboxProps, RadioProps, RadioGroupProps };

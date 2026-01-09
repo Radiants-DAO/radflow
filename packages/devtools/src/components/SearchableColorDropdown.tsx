@@ -104,9 +104,9 @@ export function SearchableColorDropdown({
           flex items-center justify-between gap-2
           w-full h-10 px-3
           font-mondwest text-base
-          bg-warm-cloud text-black
+          bg-surface-primary text-content-primary
           border rounded-sm
-          border-black
+          border-edge-primary
           ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
           ${isOpen ? 'shadow-[0_3px_0_0_var(--color-black)] -translate-y-0.5' : 'shadow-[0_1px_0_0_var(--color-black)]'}
         `}
@@ -114,15 +114,15 @@ export function SearchableColorDropdown({
         <div className="flex items-center gap-2 min-w-0">
           {selectedColor && (
             <div
-              className="w-4 h-4 rounded-xs border border-black flex-shrink-0"
+              className="w-4 h-4 rounded-xs border border-edge-primary flex-shrink-0"
               style={{ backgroundColor: selectedColor.value }}
             />
           )}
-          <span className={`truncate ${selectedColor ? 'text-black' : 'text-black/40'}`}>
+          <span className={`truncate ${selectedColor ? 'text-content-primary' : 'text-content-primary/40'}`}>
             {selectedColor?.displayName || placeholder}
           </span>
         </div>
-        <span className={`text-black flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}>▼</span>
+        <span className={`text-content-primary flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}>▼</span>
       </button>
 
       {/* Dropdown Menu */}
@@ -130,8 +130,8 @@ export function SearchableColorDropdown({
         <div
           className={`
             absolute z-50 top-full left-0 right-0 mt-1
-            bg-warm-cloud
-            border border-black
+            bg-surface-primary
+            border border-edge-primary
             rounded-sm
             shadow-[2px_2px_0_0_var(--color-black)]
             overflow-hidden
@@ -140,7 +140,7 @@ export function SearchableColorDropdown({
           onKeyDown={handleKeyDown}
         >
           {/* Search Input */}
-          <div className="p-2 border-b" style={{ borderColor: 'var(--border-black-20)' }}>
+          <div className="p-2 border-b border-edge-primary/20">
             <input
               ref={inputRef}
               type="text"
@@ -150,10 +150,10 @@ export function SearchableColorDropdown({
               className="
                 w-full h-8 px-2
                 font-mondwest text-sm
-                bg-white text-black
-                border border-black rounded-sm
+                bg-surface-elevated text-content-primary
+                border border-edge-primary rounded-sm
                 outline-none
-                placeholder:text-black/40
+                placeholder:text-content-primary/40
               "
             />
           </div>
@@ -161,7 +161,7 @@ export function SearchableColorDropdown({
           {/* Options List */}
           <div className="overflow-y-auto flex-1">
             {filteredColors.length === 0 ? (
-              <div className="px-3 py-2 text-black/50 font-mondwest text-base">
+              <div className="px-3 py-2 text-content-primary/50 font-mondwest text-base">
                 No colors found
               </div>
             ) : (
@@ -170,8 +170,7 @@ export function SearchableColorDropdown({
                 {groupedColors.brand.length > 0 && (
                   <div>
                     <div 
-                      className="px-3 py-1 text-black/50 font-joystix text-xs uppercase tracking-wider"
-                      style={{ backgroundColor: 'var(--border-black-10)' }}
+                      className="px-3 py-1 text-content-primary/50 font-joystix text-xs uppercase tracking-wider bg-surface-secondary/10"
                     >
                       Brand
                     </div>
@@ -190,8 +189,7 @@ export function SearchableColorDropdown({
                 {groupedColors.neutral.length > 0 && (
                   <div>
                     <div 
-                      className="px-3 py-1 text-black/50 font-joystix text-xs uppercase tracking-wider"
-                      style={{ backgroundColor: 'var(--border-black-10)' }}
+                      className="px-3 py-1 text-content-primary/50 font-joystix text-xs uppercase tracking-wider bg-surface-secondary/10"
                     >
                       Neutrals
                     </div>
@@ -232,19 +230,19 @@ function ColorOption({
         w-full px-3 py-2
         flex items-center gap-2
         font-mondwest text-base text-left
-        ${isSelected ? 'bg-sun-yellow text-black' : 'text-black hover:bg-sun-yellow'}
+        ${isSelected ? 'bg-surface-tertiary text-content-primary' : 'text-content-primary hover:bg-surface-tertiary'}
         cursor-pointer
       `}
     >
       {/* Color Swatch */}
       <div
-        className="w-4 h-4 rounded-xs border border-black flex-shrink-0"
+        className="w-4 h-4 rounded-xs border border-edge-primary flex-shrink-0"
         style={{ backgroundColor: color.value }}
       />
       {/* Name */}
       <span className="flex-1 truncate">{color.displayName}</span>
       {/* Hex Value */}
-      <span className="text-sm text-black/50 font-mono uppercase">{color.value}</span>
+      <span className="text-sm text-content-primary/50 font-mono uppercase">{color.value}</span>
     </button>
   );
 }
