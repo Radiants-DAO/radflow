@@ -187,7 +187,6 @@ RadFlow introduces 5 separate npm packages in `packages/`:
 --components   Update only components/ui
 --devtools     Update only devtools
 --agents       Update only Claude agents/skills
---vault        Update only vault documentation
 ```
 
 ### New CLI Files
@@ -319,23 +318,6 @@ body {
 | `ARCHITECTURE.md` | 23KB | Detailed architecture explanation |
 | `MIGRATION.md` | 6KB | npm package migration guide |
 | `CLAUDE.md` | 4KB | Claude AI development rules |
-| `SYNC.md` | 6.5KB | Sync philosophy documentation |
-
-### Vault Documentation (NEW)
-```
-.vault/
-├── index.md                    # Main entry
-├── components/
-│   ├── _moc.md                # Master index
-│   ├── radtools-reference.md  # Reference guide
-│   └── primitives/            # Primitive docs
-│       ├── Button.md
-│       ├── Card.md
-│       └── Tabs.md
-├── architecture/              # Architecture docs
-├── guides/                    # How-to guides
-└── _meta/                     # Meta information
-```
 
 ---
 
@@ -381,7 +363,6 @@ body {
 
 ### New Template Directories
 - `templates/.claude/` - Claude agents/skills for syncing
-- `templates/.vault/` - Obsidian vault documentation
 
 ### Removed
 - `templates/hooks/` - Removed (contained `useWindowManager.ts`)

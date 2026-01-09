@@ -281,10 +281,3 @@ if (isLoading) {
 </Dialog>
 ```
 
----
-
-## Full Documentation
-
-For complete API details, read the vault:
-- `.vault/components/_moc.md` - Component index
-- `.vault/components/primitives/` - Individual component docs
