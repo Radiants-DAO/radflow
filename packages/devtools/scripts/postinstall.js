@@ -3,8 +3,8 @@
 /**
  * RadFlow DevTools Postinstall Script
  *
- * Copies .claude/ and .vault/ directories to the consuming project's root.
- * These contain AI agent configurations and documentation.
+ * Copies .claude/ directory to the consuming project's root.
+ * Contains AI agent configurations.
  */
 
 import { existsSync, mkdirSync, cpSync, readdirSync, statSync } from 'node:fs';
@@ -105,15 +105,6 @@ function main() {
   if (existsSync(agentsSrc)) {
     copyDirMerge(agentsSrc, agentsDest);
     success('Installed RadFlow agents to .claude/');
-  }
-
-  // Copy vault documentation
-  const vaultSrc = join(packageDir, 'vault');
-  const vaultDest = join(projectRoot, '.vault');
-
-  if (existsSync(vaultSrc)) {
-    copyDirMerge(vaultSrc, vaultDest);
-    success('Installed RadFlow docs to .vault/');
   }
 
   log('RadFlow DevTools ready!');
