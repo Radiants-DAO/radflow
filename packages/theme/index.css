@@ -1,0 +1,83 @@
+/* ============================================================================
+   @radtools/theme - Base Semantic Token Interface
+
+   This file defines the semantic token contract that all RadTools themes must
+   implement. It provides CSS custom properties with fallback values that will
+   be overridden by specific theme implementations.
+
+   Usage:
+     @import "@radtools/theme";          // Base interface
+     @import "@radtools/theme-rad-os";   // Theme implementation
+   ============================================================================ */
+
+@theme {
+  /* ══════════════════════════════════════════════════════════════════════════
+     SURFACE TOKENS (backgrounds)
+     Usage: bg-surface-primary, bg-surface-secondary, etc.
+     ══════════════════════════════════════════════════════════════════════════ */
+  --color-surface-primary: #FFFFFF;
+  --color-surface-secondary: #000000;
+  --color-surface-tertiary: #CCCCCC;
+  --color-surface-elevated: #FFFFFF;
+  --color-surface-success: #00FF00;
+  --color-surface-warning: #FFFF00;
+  --color-surface-error: #FF0000;
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     CONTENT TOKENS (text/icons)
+     Usage: text-content-primary, text-content-secondary, etc.
+     ══════════════════════════════════════════════════════════════════════════ */
+  --color-content-primary: #000000;
+  --color-content-secondary: #666666;
+  --color-content-tertiary: #999999;
+  --color-content-inverted: #FFFFFF;
+  --color-content-success: #00FF00;
+  --color-content-warning: #FFFF00;
+  --color-content-error: #FF0000;
+  --color-content-link: #0066CC;
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     EDGE TOKENS (borders/dividers)
+     Usage: border-edge-primary, border-edge-secondary, etc.
+     ══════════════════════════════════════════════════════════════════════════ */
+  --color-edge-primary: #000000;
+  --color-edge-secondary: #CCCCCC;
+  --color-edge-elevated: #FFFFFF;
+  --color-edge-success: #00FF00;
+  --color-edge-warning: #FFFF00;
+  --color-edge-error: #FF0000;
+  --color-edge-focus: #0066CC;
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     BORDER RADIUS TOKENS
+     Usage: rounded-sm, rounded-md, rounded-lg, etc.
+     ══════════════════════════════════════════════════════════════════════════ */
+  --radius-none: 0;
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-full: 9999px;
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     BOX SHADOW TOKENS
+     Usage: shadow-btn, shadow-card, etc.
+     ══════════════════════════════════════════════════════════════════════════ */
+  --shadow-btn: 0 1px 0 0 #000000;
+  --shadow-btn-hover: 0 3px 0 0 #000000;
+  --shadow-card: 2px 2px 0 0 #000000;
+  --shadow-card-lg: 4px 4px 0 0 #000000;
+  --shadow-card-hover: 6px 6px 0 0 #000000;
+  --shadow-panel-left: -4px 0 0 0 #000000;
+  --shadow-inner: inset 0 0 0 1px #000000;
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     TYPOGRAPHY SCALE TOKENS
+     Usage: text-2xs, text-xs, text-sm, text-base, text-lg
+     ══════════════════════════════════════════════════════════════════════════ */
+  --font-size-2xs: 0.5rem;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 0.875rem;
+  --font-size-lg: 1rem;
+}

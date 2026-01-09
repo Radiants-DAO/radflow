@@ -1,0 +1,46 @@
+{
+  "name": "@radflow/theme-rad-os",
+  "version": "0.1.0",
+  "description": "Rad OS theme for RadFlow - retro pixel aesthetic",
+  "license": "MIT",
+  "main": "index.css",
+  "exports": {
+    ".": "./index.css",
+    "./tokens": "./tokens.css",
+    "./dark": "./dark.css",
+    "./fonts": "./fonts.css",
+    "./typography": "./typography.css",
+    "./base": "./base.css",
+    "./scrollbar": "./scrollbar.css",
+    "./animations": "./animations.css"
+  },
+  "files": [
+    "index.css",
+    "tokens.css",
+    "dark.css",
+    "fonts.css",
+    "typography.css",
+    "base.css",
+    "scrollbar.css",
+    "animations.css",
+    "agents"
+  ],
+  "peerDependencies": {
+    "@radflow/theme": "^0.1.0"
+  },
+  "devDependencies": {
+    "@radflow/theme": "workspace:*"
+  },
+  "keywords": [
+    "radflow",
+    "theme",
+    "rad-os",
+    "retro",
+    "pixel"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Radiants-DAO/radflow.git",
+    "directory": "packages/theme-rad-os"
+  }
+}

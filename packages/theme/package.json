@@ -1,0 +1,27 @@
+{
+  "name": "@radflow/theme",
+  "version": "0.1.0",
+  "description": "Base semantic token definitions for RadFlow themes",
+  "license": "MIT",
+  "main": "index.css",
+  "types": "types.d.ts",
+  "exports": {
+    ".": "./index.css",
+    "./types": "./types.d.ts"
+  },
+  "files": [
+    "index.css",
+    "types.d.ts"
+  ],
+  "keywords": [
+    "radflow",
+    "design-tokens",
+    "css-variables",
+    "tailwind"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Radiants-DAO/radflow.git",
+    "directory": "packages/theme"
+  }
+}

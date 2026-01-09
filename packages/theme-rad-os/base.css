@@ -1,0 +1,40 @@
+/* ============================================================================
+   @radtools/theme-rad-os - Base Styles
+
+   Core styles for HTML and body elements, text selection, etc.
+   ============================================================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: 'Joystix Monospace', monospace;
+  font-size: clamp(1rem, 1vw, 1.125rem);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================================
+   Text Selection
+   ============================================================================ */
+
+::selection {
+  background: var(--color-sun-yellow);
+  color: var(--color-black);
+}
+
+::-moz-selection {
+  background: var(--color-sun-yellow);
+  color: var(--color-black);
+}

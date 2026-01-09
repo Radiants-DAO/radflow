@@ -1,0 +1,131 @@
+/* ============================================================================
+   @radtools/theme-rad-os - Typography
+
+   Base typography styles using @layer base for Tailwind v4 integration.
+   These styles define the default appearance of HTML elements.
+   ============================================================================ */
+
+@layer base {
+  h1 {
+    @apply text-4xl font-bold leading-tight text-black;
+  }
+
+  h2 {
+    @apply font-joystix text-3xl font-normal leading-tight text-black;
+  }
+
+  h3 {
+    @apply font-joystix text-2xl font-semibold leading-snug text-black;
+  }
+
+  h4 {
+    @apply font-joystix text-xl font-medium leading-snug text-black;
+  }
+
+  h5 {
+    @apply font-joystix text-lg font-medium leading-normal text-black;
+  }
+
+  h6 {
+    @apply font-joystix text-base font-medium leading-normal text-black;
+  }
+
+  p {
+    @apply font-mondwest text-base font-normal leading-relaxed text-black;
+  }
+
+  a {
+    @apply font-mondwest text-base font-normal leading-normal text-sky-blue underline hover:opacity-80;
+  }
+
+  ul {
+    @apply font-joystix text-base font-normal leading-relaxed text-black pl-6;
+  }
+
+  ol {
+    @apply font-joystix text-base font-normal leading-relaxed text-black pl-6;
+  }
+
+  li {
+    @apply font-mondwest text-base font-normal leading-relaxed text-black mb-2;
+  }
+
+  small {
+    @apply font-joystix text-sm font-normal leading-normal text-black;
+  }
+
+  strong {
+    @apply font-joystix text-base font-bold leading-normal text-black;
+  }
+
+  em {
+    @apply font-joystix text-base font-normal leading-normal text-black italic;
+  }
+
+  code {
+    @apply text-sm font-normal leading-normal text-black bg-black/10 px-1 py-0.5 rounded-sm;
+    font-family: "PixelCode";
+  }
+
+  pre {
+    @apply text-sm font-normal leading-relaxed text-black bg-black/10 p-4 rounded-sm overflow-x-auto;
+    font-family: "PixelCode";
+  }
+
+  kbd {
+    @apply text-xs font-normal leading-normal text-warm-cloud bg-black px-1 py-0.5 rounded-sm;
+    font-family: "PixelCode";
+  }
+
+  mark {
+    @apply font-joystix text-base font-normal leading-normal text-black bg-sun-yellow;
+  }
+
+  blockquote {
+    @apply font-joystix text-base font-normal leading-relaxed text-black border-l-4 border-black pl-4 italic;
+  }
+
+  cite {
+    @apply font-joystix text-sm font-normal leading-normal text-black italic;
+  }
+
+  abbr {
+    @apply font-joystix text-base font-normal leading-normal text-black underline decoration-dotted;
+  }
+
+  dfn {
+    @apply font-joystix text-base font-normal leading-normal text-black italic;
+  }
+
+  q {
+    @apply font-joystix text-base font-normal leading-normal text-black italic;
+  }
+
+  sub {
+    @apply font-joystix text-xs font-normal leading-none text-black;
+  }
+
+  sup {
+    @apply font-joystix text-xs font-normal leading-none text-black;
+  }
+
+  del {
+    @apply font-joystix text-base font-normal leading-normal text-black line-through;
+  }
+
+  ins {
+    @apply font-joystix text-base font-normal leading-normal text-black underline;
+  }
+
+  caption {
+    @apply font-joystix text-xs font-normal leading-normal text-black;
+  }
+
+  label {
+    @apply font-joystix text-xs font-medium leading-normal text-black;
+  }
+
+  figcaption {
+    @apply font-joystix text-xs font-normal leading-normal text-black;
+  }
+}

@@ -50,3 +50,8 @@ next-env.d.ts
 
 # IDE
 # .cursor/ - included for agent skills/rules
+
+# monorepo packages
+packages/*/dist/
+packages/*/node_modules/
+.pnpm-store/

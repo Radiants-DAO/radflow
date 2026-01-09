@@ -1,0 +1,30 @@
+/* ============================================================================
+   @radtools/theme-rad-os - Font Face Definitions
+
+   Custom fonts for the Rad OS theme.
+   Fonts should be placed in the project's /public/fonts/ directory.
+   ============================================================================ */
+
+@font-face {
+  font-family: 'Mondwest';
+  src: url('/fonts/Mondwest-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mondwest';
+  src: url('/fonts/Mondwest-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PixelCode';
+  src: url('/fonts/PixelCode.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}

@@ -1,0 +1,23 @@
+/* ============================================================================
+   @radtools/theme-rad-os - Rad OS Theme
+
+   Retro pixel aesthetic theme with warm colors and pixel-perfect styling.
+
+   Usage:
+     @import "tailwindcss";
+     @import "@radtools/theme-rad-os";
+
+   Or import individual parts:
+     @import "@radtools/theme-rad-os/fonts";
+     @import "@radtools/theme-rad-os/tokens";
+     @import "@radtools/theme-rad-os/dark";
+     @import "@radtools/theme-rad-os/typography";
+   ============================================================================ */
+
+@import "./fonts.css";
+@import "./tokens.css";
+@import "./dark.css";
+@import "./typography.css";
+@import "./base.css";
+@import "./scrollbar.css";
+@import "./animations.css";
