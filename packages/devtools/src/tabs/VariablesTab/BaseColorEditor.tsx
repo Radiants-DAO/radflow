@@ -108,13 +108,13 @@ function ColorSection({ title, colors, category, onAdd, onUpdate, onDelete }: Co
 
       {/* Add New Row */}
       {isAdding ? (
-        <div className="flex items-center gap-2 p-2 bg-sun-yellow/30 rounded-sm border border-dashed border-black">
+        <div className="flex items-center gap-2 p-2 bg-surface-tertiary/30 rounded-sm border border-dashed border-edge-primary">
           {/* Color Picker */}
           <input
             type="color"
             value={newHex}
             onChange={(e) => setNewHex(e.target.value)}
-            className="w-6 h-6 rounded-xs border border-black cursor-pointer flex-shrink-0"
+            className="w-6 h-6 rounded-xs border border-edge-primary cursor-pointer flex-shrink-0"
           />
           {/* Name Input */}
           <input
@@ -124,7 +124,7 @@ function ColorSection({ title, colors, category, onAdd, onUpdate, onDelete }: Co
             onKeyDown={handleKeyDown}
             placeholder="Color name"
             autoFocus
-            className="flex-1 min-w-0 px-2 py-1 font-mondwest text-base bg-warm-cloud border border-black rounded-sm text-black focus:outline-none focus:ring-1 focus:ring-tertiary"
+            className="flex-1 min-w-0 px-2 py-1 font-mondwest text-base bg-surface-primary border border-edge-primary rounded-sm text-content-primary focus:outline-none focus:ring-1 focus:ring-tertiary"
           />
           {/* Hex Input */}
           <input
@@ -133,12 +133,12 @@ function ColorSection({ title, colors, category, onAdd, onUpdate, onDelete }: Co
             onChange={(e) => setNewHex(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="#000000"
-            className="w-24 px-2 py-1 font-mondwest text-sm font-mono bg-warm-cloud border border-black rounded-sm text-black uppercase focus:outline-none focus:ring-1 focus:ring-tertiary"
+            className="w-24 px-2 py-1 font-mondwest text-sm font-mono bg-surface-primary border border-edge-primary rounded-sm text-content-primary uppercase focus:outline-none focus:ring-1 focus:ring-tertiary"
           />
           {/* Actions */}
           <button
             onClick={handleAdd}
-            className="font-mondwest text-base text-black hover:text-sun-yellow px-1 flex items-center"
+            className="font-mondwest text-base text-content-primary hover:text-tertiary px-1 flex items-center"
             title="Add"
           >
             <Icon name="checkmark-filled" size={16} />
@@ -149,7 +149,7 @@ function ColorSection({ title, colors, category, onAdd, onUpdate, onDelete }: Co
               setNewName('');
               setNewHex('#000000');
             }}
-            className="font-mondwest text-base text-black/50 hover:text-black px-1 flex items-center"
+            className="font-mondwest text-base text-content-primary/50 hover:text-content-primary px-1 flex items-center"
             title="Cancel"
           >
             <Icon name="close" size={16} />
@@ -161,8 +161,8 @@ function ColorSection({ title, colors, category, onAdd, onUpdate, onDelete }: Co
           className="
             w-full py-2 px-3
             font-joystix text-xs uppercase
-            text-black/50 hover:text-black
-            border border-dashed border-black/30 hover:border-black
+            text-content-primary/50 hover:text-content-primary
+            border border-dashed border-edge-primary/30 hover:border-edge-primary
             rounded-sm
             transition-colors
           "
@@ -210,13 +210,13 @@ function ColorRow({ color, onUpdate, onDelete }: ColorRowProps) {
   };
 
   return (
-    <div className="flex items-center gap-2 p-2 rounded-sm hover:bg-black/5 group">
+    <div className="flex items-center gap-2 p-2 rounded-sm hover:bg-content-primary/5 group">
       {/* Color Picker */}
       <input
         type="color"
         value={color.value}
         onChange={(e) => handleHexChange(e.target.value)}
-        className="w-6 h-6 rounded-xs border border-black cursor-pointer flex-shrink-0"
+        className="w-6 h-6 rounded-xs border border-edge-primary cursor-pointer flex-shrink-0"
       />
 
       {/* Name (editable on click) */}
@@ -228,7 +228,7 @@ function ColorRow({ color, onUpdate, onDelete }: ColorRowProps) {
           onBlur={handleNameSubmit}
           onKeyDown={handleNameKeyDown}
           autoFocus
-          className="flex-1 min-w-0 px-2 py-1 font-mondwest text-base bg-warm-cloud border border-black rounded-sm text-black focus:outline-none focus:ring-1 focus:ring-tertiary"
+          className="flex-1 min-w-0 px-2 py-1 font-mondwest text-base bg-surface-primary border border-edge-primary rounded-sm text-content-primary focus:outline-none focus:ring-1 focus:ring-tertiary"
         />
       ) : (
         <span
@@ -236,7 +236,7 @@ function ColorRow({ color, onUpdate, onDelete }: ColorRowProps) {
             setEditedName(color.displayName);
             setIsEditingName(true);
           }}
-          className="flex-1 min-w-0 font-mondwest text-base text-black truncate cursor-text hover:bg-black/5 px-2 py-1 rounded-sm"
+          className="flex-1 min-w-0 font-mondwest text-base text-content-primary truncate cursor-text hover:bg-content-primary/5 px-2 py-1 rounded-sm"
           title="Click to edit"
         >
           {color.displayName}
@@ -248,7 +248,7 @@ function ColorRow({ color, onUpdate, onDelete }: ColorRowProps) {
         type="text"
         value={color.value}
         onChange={(e) => handleHexChange(e.target.value)}
-        className="w-24 px-2 py-1 font-mondwest text-sm font-mono bg-warm-cloud border border-black rounded-sm text-black uppercase focus:outline-none focus:ring-1 focus:ring-tertiary"
+        className="w-24 px-2 py-1 font-mondwest text-sm font-mono bg-surface-primary border border-edge-primary rounded-sm text-content-primary uppercase focus:outline-none focus:ring-1 focus:ring-tertiary"
       />
 
       {/* Delete Button */}

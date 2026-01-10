@@ -109,7 +109,7 @@ function Section({
   const HeadingTag = variant === 'h4' ? 'h4' : 'h3';
   const hasMarginOverride = className?.includes('mb-');
   const isSubsection = variant === 'h4';
-  const subsectionClasses = isSubsection ? 'p-4 border border-black bg-[var(--color-cream)]' : '';
+  const subsectionClasses = isSubsection ? 'p-4 border border-edge-primary bg-surface-secondary' : '';
   const baseClasses = `${hasMarginOverride ? '' : 'mb-4'} ${subsectionClasses} rounded flex flex-col gap-4`.trim();
   return (
     <div
@@ -127,7 +127,7 @@ function Section({
 
 function PropsDisplay({ props }: { props: string }) {
   return (
-    <code className="bg-black/5 px-2 py-1 rounded-sm block mt-2">{props}</code>
+    <code className="bg-content-primary/5 px-2 py-1 rounded-sm block mt-2">{props}</code>
   );
 }
 
@@ -400,7 +400,7 @@ export function UITab({ searchQuery: propSearchQuery = '' }: UITabProps) {
     : COMPONENT_SECTIONS;
 
   return (
-    <div className="flex flex-col h-full overflow-auto pt-4 pb-4 pl-4 pr-2 bg-[var(--color-white)] border border-black rounded">
+    <div className="flex flex-col h-full overflow-auto pt-4 pb-4 pl-4 pr-2 bg-surface-primary border border-edge-primary rounded">
       <div className="space-y-0">
         {filteredSections.length > 0 ? (
           filteredSections.map((section) => (
@@ -409,7 +409,7 @@ export function UITab({ searchQuery: propSearchQuery = '' }: UITabProps) {
             </div>
           ))
         ) : (
-          <div className="text-center py-8 text-black/60 font-mondwest text-base">
+          <div className="text-center py-8 text-content-primary/60 font-mondwest text-base">
             No components match "{searchQuery}"
           </div>
         )}

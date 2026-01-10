@@ -533,7 +533,7 @@ function generateUITab(): string {
   lines.push(`    : COMPONENT_SECTIONS;`);
   lines.push(``);
   lines.push(`  return (`);
-  lines.push(`    <div className="flex flex-col h-full overflow-auto pt-4 pb-4 pl-4 pr-2 bg-[var(--color-white)] border border-black rounded">`);
+  lines.push(`    <div className="flex flex-col h-full overflow-auto pt-4 pb-4 pl-4 pr-2 bg-surface-primary border border-edge-primary rounded">`);
   lines.push(`      <div className="space-y-0">`);
   lines.push(`        {filteredSections.length > 0 ? (`);
   lines.push(`          filteredSections.map((section) => (`);

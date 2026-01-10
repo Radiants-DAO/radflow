@@ -109,7 +109,7 @@ export function AssetsTab() {
   };
 
   return (
-    <div className="flex flex-col h-full overflow-auto pt-4 pb-4 pl-4 pr-2 bg-[var(--color-white)] border border-edge-primary rounded space-y-4">
+    <div className="flex flex-col h-full overflow-auto pt-4 pb-4 pl-4 pr-2 bg-surface-primary border border-edge-primary rounded space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="font-joystix text-sm uppercase text-content-primary">Assets</h2>

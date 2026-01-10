@@ -104,7 +104,7 @@ function Section({
   const HeadingTag = variant === 'h4' ? 'h4' : 'h3';
   const hasMarginOverride = className?.includes('mb-');
   const isSubsection = variant === 'h4';
-  const subsectionClasses = isSubsection ? 'p-4 border border-edge-primary bg-[var(--color-cream)]' : '';
+  const subsectionClasses = isSubsection ? 'p-4 border border-edge-primary bg-surface-secondary' : '';
   const baseClasses = `${hasMarginOverride ? '' : 'mb-4'} ${subsectionClasses} rounded flex flex-col gap-4`.trim();
   return (
     <div 
@@ -1600,7 +1600,7 @@ export function DesignSystemTab({ searchQuery: propSearchQuery = '' }: DesignSys
 
   return (
     <ToastProvider>
-      <div className="flex flex-col h-full overflow-auto pt-4 pb-4 pl-4 pr-2 bg-[var(--color-white)] border border-edge-primary rounded">
+      <div className="flex flex-col h-full overflow-auto pt-4 pb-4 pl-4 pr-2 bg-surface-primary border border-edge-primary rounded">
         {/* Component Sections */}
         {activeSubsectionId && (
           <style>{`
