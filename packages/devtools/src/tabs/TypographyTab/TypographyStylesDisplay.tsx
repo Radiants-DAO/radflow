@@ -80,7 +80,7 @@ export function TypographyStylesDisplay() {
     return (
       <div
         key={style.id}
-        className="p-4 bg-surface-secondary rounded flex flex-col gap-4 mb-4"
+        className="p-4 bg-surface-secondary preview-light rounded flex flex-col gap-4 mb-4"
       >
         {/* Element name and preview */}
         <div className="flex items-start justify-between gap-4">

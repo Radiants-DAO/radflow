@@ -357,6 +357,31 @@ body {
   --shadow-inner: inset 0 0 0 1px var(--color-edge-primary);
 }
 
+/* ══════════════════════════════════════════════════════════════════════════
+   PREVIEW CONTAINER
+   Forces light-mode colors inside preview/demo areas in dark mode
+   Use this for component preview sections that have cream backgrounds
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.preview-light {
+  /* Reset content tokens to light mode values */
+  --color-content-primary: var(--color-black);
+  --color-content-secondary: var(--color-sun-yellow);
+  --color-content-tertiary: var(--color-warm-cloud);
+  --color-content-inverted: var(--color-warm-cloud);
+
+  /* Reset edge tokens to light mode values */
+  --color-edge-primary: var(--color-black);
+  --color-edge-secondary: var(--color-sun-yellow);
+
+  /* Reset shadows to light mode pixel shadows */
+  --shadow-btn: 0 1px 0 0 var(--color-black);
+  --shadow-btn-hover: 0 3px 0 0 var(--color-black);
+  --shadow-card: 2px 2px 0 0 var(--color-black);
+  --shadow-card-lg: 4px 4px 0 0 var(--color-black);
+  --shadow-card-hover: 6px 6px 0 0 var(--color-black);
+}
+
 /* ============================================
    Additional CSS Custom Properties for compatibility
    ============================================ */

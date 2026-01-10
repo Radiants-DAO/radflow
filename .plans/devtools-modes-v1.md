@@ -1,8 +1,8 @@
 # DevTools Modes - Implementation Plan
 
 **Created:** 2026-01-10
+**Updated:** 2026-01-10
 **Status:** Planning
-**Branch:** claude/review-progress-docs-s2n8m
 
 ---
 
@@ -18,6 +18,46 @@ This document defines the focused feature sets for DevTools interactive modes. E
 | **Minimized Panel** | DevTools | Always-accessible tool sidebar |
 
 **Target Audience:** Figma-familiar designers (no complexity toggles)
+
+---
+
+## Keyboard Shortcuts
+
+### Design Principles
+
+1. **Modes are button-only** - No keyboard shortcuts for Component ID, Text Edit, or Help modes
+2. **ESC exits all modes** - Universal escape hatch
+3. **Avoid browser conflicts** - No Cmd+Shift+T (reopen tab), Cmd+Shift+I (devtools), Cmd+E (search bar)
+4. **Avoid Claude in Chrome conflicts** - Keep shortcuts minimal and unique
+
+### Final Shortcut Map
+
+| Shortcut | Action | Notes |
+|----------|--------|-------|
+| `Cmd+Shift+K` | Toggle panel (minimized ↔ expanded) | Unique, low conflict risk |
+| `1-5` | Switch tabs (when panel open) | Only active when panel focused |
+| `ESC` | Exit current mode | Universal |
+
+### Removed Shortcuts
+
+| Old Shortcut | Reason Removed |
+|--------------|----------------|
+| `Cmd+Shift+T` | Conflicts with Chrome "Reopen closed tab" |
+| `Cmd+Shift+I` | Conflicts with Chrome DevTools |
+| `Cmd+Shift+?` | Unnecessary - button toggle sufficient |
+| `Cmd+E` | Conflicts with Chrome address bar |
+
+### Mode Activation
+
+All modes are activated via **LeftRail buttons only**:
+
+```
+┌──┐
+│🔍│  ← Click to toggle Component ID mode
+│✏️│  ← Click to toggle Text Edit mode
+│❓│  ← Click to toggle Help mode
+└──┘
+```
 
 ---
 
@@ -45,21 +85,22 @@ Component ID Mode needs to open DevTools to show component details. A minimized 
 │🔤│  ← Typography tab
 │🧩│  ← Components tab
 │📁│  ← Assets tab
+│🤖│  ← AI tab
 │⚙️│  ← Mock States tab
 └──┘
 ```
 
-### Keyboard Shortcuts
+### Keyboard
 
 | Shortcut | Action |
 |----------|--------|
 | `Cmd+Shift+K` | Toggle minimized ↔ expanded |
-| `1-5` | Expand panel + switch to tab |
+| `ESC` | Minimize panel (if expanded) |
 
 ### Implementation
 
 **Files to modify:**
-- `DevToolsProvider.tsx` - Add `isMinimized` state
+- `DevToolsProvider.tsx` - Simplify keyboard handler
 - `DevToolsPanel.tsx` - Conditional render based on state
 - `store/slices/panelSlice.ts` - Add minimized state + toggle
 
@@ -84,6 +125,11 @@ Explain DevTools UI sections. Static info bar, not overlays.
 
 DevTools panel only (not browser page)
 
+### Activation
+
+- **Toggle:** Click Help button (❓) in LeftRail
+- **Exit:** Click button again OR press ESC
+
 ### Display
 
 Dark-themed info bar at top of panel (matches header style):
@@ -93,17 +139,16 @@ Dark-themed info bar at top of panel (matches header style):
 │ ▓ COMPONENTS TAB                                            │
 │   Browse UI components from @radflow/ui and /components.    │
 │   Click any component to see variants and props.            │
-│   Use ⌘⇧I to identify components on your page.             │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ### Behavior
 
-1. Toggle with `Cmd+Shift+?` or Help tool button
+1. Click Help button to toggle
 2. Info bar appears at top of DevTools panel
 3. Content updates based on active tab or hovered element
 4. Normal navigation still works (not blocking)
-5. ESC or toggle again to exit
+5. ESC or click button again to exit
 
 ### Content Map
 
@@ -112,13 +157,13 @@ Dark-themed info bar at top of panel (matches header style):
 | Variables tab | VARIABLES | Edit design tokens. Changes preview live. Click "Save to CSS" to persist. |
 | Typography tab | TYPOGRAPHY | Manage fonts and base HTML typography. Changes save to globals.css. |
 | Components tab | COMPONENTS | Browse available components. Click to see variants and props. |
-| Assets tab | ASSETS | Browse icons and images. Click any asset to copy its name. |
+| Assets tab | ASSETS | Browse icons, logos, and images. Click to copy or download. |
+| AI tab | AI | Prompt templates and Midjourney style references. |
 | Mock States tab | MOCK STATES | Simulate auth, wallet, and subscription states for testing. |
 | Component ID tool hover | COMPONENT ID | Click any element on your page to identify its component. |
 | Text Edit tool hover | TEXT EDIT | Click text to edit inline. Enter saves, Escape cancels. |
 | Help tool hover | HELP | You are here. Hover over tabs and tools for info. |
 | Resize handle hover | RESIZE | Drag to resize panel width. |
-| Search hover | SEARCH | Press ⌘E to search across all tabs. |
 
 ### Implementation
 
@@ -132,7 +177,6 @@ Dark-themed info bar at top of panel (matches header style):
 interface HelpItem {
   title: string;      // Short uppercase title
   description: string; // One sentence explanation
-  tip?: string;       // Optional keyboard shortcut or tip
 }
 ```
 
@@ -147,6 +191,11 @@ Identify components on the page, open them in DevTools.
 ### Scope
 
 Browser page only (not DevTools panel)
+
+### Activation
+
+- **Toggle:** Click Component ID button (🔍) in LeftRail
+- **Exit:** Click button again OR press ESC
 
 ### Behavior
 
@@ -165,6 +214,7 @@ Browser page only (not DevTools panel)
 - Opens DevTools (expands if minimized)
 - Navigates to component in Components tab
 - Component is highlighted/selected
+- Auto-scrolls to component
 
 **Right-click RadFlow component:**
 - Context menu: "Open in Components tab"
@@ -176,14 +226,13 @@ Browser page only (not DevTools panel)
 
 | Action | Result |
 |--------|--------|
-| Click | Open in Components tab |
-| Cmd+Click | Copy component name |
+| Click | Open in Components tab (auto-scroll + highlight) |
 | Right-click | Context menu |
 
 ### Implementation
 
 **Files to modify:**
-- `components/ComponentIdMode.tsx` - Add click handler
+- `components/ComponentIdMode.tsx` - Add click handler, remove keyboard listener
 - `store/slices/componentIdSlice.ts` - Add navigation action
 - `store/slices/panelSlice.ts` - Add expandAndNavigate action
 
@@ -192,7 +241,8 @@ Browser page only (not DevTools panel)
 Click component →
   panelSlice.expandPanel() →
   panelSlice.setActiveTab('components') →
-  componentsSlice.selectComponent(name)
+  componentsSlice.selectComponent(name) →
+  scroll into view + highlight
 ```
 
 ---
@@ -211,9 +261,12 @@ Text Edit Mode is already well-implemented:
 | Clipboard format for AI | ✅ |
 | Hover highlight | ✅ |
 
-### One Enhancement
+### Activation
 
-**Add change count indicator:**
+- **Toggle:** Click Text Edit button (✏️) in LeftRail
+- **Exit:** Click button again OR press ESC
+
+### Enhancement: Change Count Badge
 
 When text edit is active and changes exist, show badge on tool button:
 
@@ -227,6 +280,7 @@ When text edit is active and changes exist, show badge on tool button:
 
 **Files to modify:**
 - `components/LeftRail.tsx` - Add badge to text edit button
+- `DevToolsProvider.tsx` - Remove Cmd+Shift+T keyboard listener
 - Read from `textEditSlice.pendingChanges.length`
 
 ---
@@ -263,14 +317,20 @@ When text edit is active and changes exist, show badge on tool button:
 - **Deleted:** 2026-01-10
 - **Reason:** Outdated, replaced by in-code documentation
 
+### Mode Keyboard Shortcuts
+- **Removed:** 2026-01-10
+- **Reason:** Conflict with browser/Claude in Chrome shortcuts
+- **Replacement:** Button toggles in LeftRail
+
 ---
 
 ## Implementation Order
 
-1. **Minimized Panel State** - Foundation for Component ID click behavior
-2. **Help Mode Refactor** - Replace tooltip with static bar
-3. **Component ID Click Handler** - Navigate to Components tab
-4. **Text Edit Badge** - Show pending change count
+1. **Remove keyboard shortcuts for modes** - Clean up DevToolsProvider.tsx
+2. **Minimized Panel State** - Foundation for Component ID click behavior
+3. **Help Mode Refactor** - Replace tooltip with static bar
+4. **Component ID Click Handler** - Navigate to Components tab
+5. **Text Edit Badge** - Show pending change count
 
 ---
 
@@ -278,12 +338,12 @@ When text edit is active and changes exist, show badge on tool button:
 
 | File | Changes |
 |------|---------|
+| `DevToolsProvider.tsx` | Remove mode shortcuts, keep only Cmd+Shift+K and ESC |
 | `store/slices/panelSlice.ts` | Add `isMinimized`, `expandPanel()` |
 | `DevToolsPanel.tsx` | Conditional render for minimized state |
-| `DevToolsProvider.tsx` | Update keyboard handler for minimize toggle |
 | `components/HelpMode.tsx` | Replace tooltip with static bar |
 | `components/LeftRail.tsx` | Add badge support for text edit |
-| `components/ComponentIdMode.tsx` | Add click → navigate behavior |
+| `components/ComponentIdMode.tsx` | Add click → navigate, remove keyboard listener |
 | `lib/helpRegistry.ts` | Simplify to title + description |
 
 ---
@@ -294,3 +354,6 @@ When text edit is active and changes exist, show badge on tool button:
 2. ~~Copy code useful?~~ → No, removed
 3. ~~Help overlay style?~~ → Static bar in header
 4. ~~Non-RadFlow elements?~~ → Right-click context menu (future)
+5. ~~Mode keyboard shortcuts?~~ → Removed, button-only activation
+6. ~~Default panel state?~~ → Minimized
+7. ~~Component ID navigation?~~ → Auto-scroll + highlight

@@ -104,7 +104,7 @@ function Section({
   const HeadingTag = variant === 'h4' ? 'h4' : 'h3';
   const hasMarginOverride = className?.includes('mb-');
   const isSubsection = variant === 'h4';
-  const subsectionClasses = isSubsection ? 'p-4 border border-edge-primary bg-surface-secondary' : '';
+  const subsectionClasses = isSubsection ? 'p-4 border border-edge-primary bg-surface-secondary preview-light' : '';
   const baseClasses = `${hasMarginOverride ? '' : 'mb-4'} ${subsectionClasses} rounded flex flex-col gap-4`.trim();
   return (
     <div 
