@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
             optimizedSize: originalSize,
           });
         }
-      } catch (err) {
+      } catch {
         // Failed to optimize file - skip
       }
     }

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { readFile, writeFile, copyFile } from 'fs/promises';
 import { join } from 'path';
-import type { BaseColor, FontFile, FontDefinition, TypographyStyle, ColorMode } from '@radflow/devtools/types';
+import type { BaseColor, FontDefinition, TypographyStyle, ColorMode } from '@radflow/devtools/types';
 
 const GLOBALS_PATH = join(process.cwd(), 'app', 'globals.css');
 const BACKUP_PATH = join(process.cwd(), 'app', '.globals.css.backup');

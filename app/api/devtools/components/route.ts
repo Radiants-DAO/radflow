@@ -73,7 +73,7 @@ async function scanComponents(dir: string): Promise<DiscoveredComponent[]> {
           if (component) {
             components.push(component);
           }
-        } catch (err) {
+        } catch {
           // Failed to parse component - skip
         }
       }

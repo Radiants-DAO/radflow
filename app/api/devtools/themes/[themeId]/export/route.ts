@@ -7,11 +7,12 @@ import { promisify } from 'util';
 
 const execAsync = promisify(exec);
 
-interface ExportThemeRequest {
-  includeComponents?: boolean;
-  includeAssets?: boolean;
-  includeAgents?: boolean;
-  format?: 'tarball' | 'directory'; // Default: tarball
+interface PackageJson {
+  name: string;
+  version: string;
+  description?: string;
+  license?: string;
+  exports?: Record<string, unknown>;
 }
 
 /**
@@ -54,7 +55,7 @@ export async function GET(
     // Read and validate package.json
     const packageJsonPath = path.join(themePath, 'package.json');
     const packageJsonContent = await fs.readFile(packageJsonPath, 'utf-8');
-    const packageJson = JSON.parse(packageJsonContent);
+    const packageJson = JSON.parse(packageJsonContent) as PackageJson;
 
     // Extract theme config
     const themeConfig = {
@@ -160,13 +161,13 @@ export async function GET(
 /**
  * Extract CSS files from package.json exports
  */
-function extractCssFilesFromExports(exports?: Record<string, string>): string[] {
+function extractCssFilesFromExports(exports?: Record<string, unknown>): string[] {
   if (!exports) return [];
 
   const cssFiles: string[] = [];
 
-  for (const [key, value] of Object.entries(exports)) {
-    if (value.endsWith('.css')) {
+  for (const value of Object.values(exports)) {
+    if (typeof value === 'string' && value.endsWith('.css')) {
       cssFiles.push(value);
     }
   }
@@ -177,7 +178,7 @@ function extractCssFilesFromExports(exports?: Record<string, string>): string[] 
 /**
  * Generate README content for theme export
  */
-async function generateReadmeForExport(themePath: string, packageJson: any): Promise<string> {
+async function generateReadmeForExport(themePath: string, packageJson: PackageJson): Promise<string> {
   const themeId = packageJson.name.replace(/^@radflow\/theme-/, '');
   const themeName = themeId
     .split('-')

@@ -83,15 +83,10 @@ function getCurrentBreakpoint(breakpoints: Record<string, number>, width: number
  */
 export function BreakpointIndicator() {
   const { setPanelWidth, panelWidth } = useDevToolsStore();
-  const [breakpoints, setBreakpoints] = useState<Record<string, number>>({});
+  // Load breakpoints from CSS on mount (initialize state directly)
+  const [breakpoints] = useState<Record<string, number>>(() => getBreakpointsFromCSS());
   const [currentBreakpoint, setCurrentBreakpoint] = useState<Breakpoint>({ label: '', width: 0 });
   const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    // Load breakpoints from CSS
-    const bp = getBreakpointsFromCSS();
-    setBreakpoints(bp);
-  }, []);
 
   // Update current breakpoint based on body width (viewport minus panel)
   useEffect(() => {

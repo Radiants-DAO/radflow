@@ -36,7 +36,7 @@ export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle, onS
       {/* Top Section */}
       <div className="flex flex-col">
         {/* Tools Section */}
-        <div className="flex flex-col gap-1 mb-2">
+        <div className="flex flex-col gap-1 mb-2 bg-white p-1 border border-edge-primary rounded-sm">
           {TOOLS.map((tool) => (
             <Tooltip
               key={tool.id}
@@ -69,7 +69,7 @@ export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle, onS
         <div className="w-6 h-px bg-surface-secondary/20 mb-2" />
 
         {/* Tabs Section */}
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 bg-white p-1 border border-edge-primary rounded-sm">
           {TABS.map((tab) => (
             <Tooltip
               key={tab.id}

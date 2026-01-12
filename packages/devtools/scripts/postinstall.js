@@ -7,7 +7,7 @@
  * Contains AI agent configurations.
  */
 
-import { existsSync, mkdirSync, cpSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, mkdirSync, cpSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -28,10 +28,6 @@ function log(message) {
 
 function success(message) {
   console.log(`${colors.green}✓${colors.reset} ${message}`);
-}
-
-function warn(message) {
-  console.log(`${colors.yellow}!${colors.reset} ${message}`);
 }
 
 /**

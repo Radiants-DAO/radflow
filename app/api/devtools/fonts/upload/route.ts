@@ -17,7 +17,7 @@ export async function POST(req: Request) {
   try {
     const formData = await req.formData();
     const file = formData.get('file') as File;
-    const name = formData.get('name') as string;
+    // Note: 'name' field is extracted from formData but not used in file operations
     const family = formData.get('family') as string;
     const weight = formData.get('weight') as string;
     const style = formData.get('style') as string;

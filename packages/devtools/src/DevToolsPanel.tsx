@@ -29,7 +29,6 @@ export function DevToolsPanel() {
     isFullscreen,
     toggleFullscreen,
     isMinimized,
-    toggleMinimized,
     isTextEditActive,
     isComponentIdActive,
     isHelpActive,
@@ -43,7 +42,6 @@ export function DevToolsPanel() {
 
   // Footer state
   const [componentSubTab, setComponentSubTab] = useState<string>('design-system');
-  const [typographySearchQuery, setTypographySearchQuery] = useState<string>('');
   const [componentTabs, setComponentTabs] = useState<Array<{ id: string; label: string }>>([]);
 
   // Determine active tool
@@ -144,7 +142,7 @@ export function DevToolsPanel() {
           )}
           {activeTab === 'typography' && (
             <div className="h-full pr-2 pl-2 pb-2 rounded">
-              <TypographyTab searchQuery={typographySearchQuery} />
+              <TypographyTab searchQuery="" />
             </div>
           )}
           {activeTab === 'components' && (
@@ -155,8 +153,9 @@ export function DevToolsPanel() {
               onComponentSubTabChange={setComponentSubTab}
               onAddFolder={async (folderName) => {
                 // Trigger folder creation via ComponentsTab's exposed handler
-                if ((window as any).__componentsTabAddFolder) {
-                  (window as any).__componentsTabAddFolder(folderName);
+                const windowWithHandler = window as Window & { __componentsTabAddFolder?: (name: string) => void };
+                if (windowWithHandler.__componentsTabAddFolder) {
+                  windowWithHandler.__componentsTabAddFolder(folderName);
                   // Switch to the new tab
                   setComponentSubTab(`folder-${folderName}`);
                 }
