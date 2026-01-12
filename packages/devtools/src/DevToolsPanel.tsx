@@ -102,7 +102,7 @@ export function DevToolsPanel() {
     >
       {/* TopBar - spans full width above LeftRail */}
       {!isMinimized && (
-        <div className="p-2">
+        <div className="p-2 pb-0">
           <TopBar
             onClose={togglePanel}
             onFullscreen={toggleFullscreen}
