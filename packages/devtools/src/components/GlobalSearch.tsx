@@ -29,6 +29,7 @@ export function GlobalSearch() {
   // Build search index on mount and when components change
   useEffect(() => {
     const buildIndex = async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const folderContents: Record<string, any[]> = {};
       const index = await buildSearchIndex(components, folderContents);
       setSearchIndexData(index);
@@ -305,7 +306,7 @@ export function GlobalSearch() {
               </div>
             ) : (
               <div className="px-4 py-8 text-center text-content-secondary font-mondwest text-sm">
-                No results found for "{searchQuery}"
+                No results found for &quot;{searchQuery}&quot;
               </div>
             )}
           </div>

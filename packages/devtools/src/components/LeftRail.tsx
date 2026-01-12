@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Tooltip } from '@radflow/ui';
+import { Button, Divider, Tooltip } from '@radflow/ui';
 import { useDevToolsStore } from '../store';
 import type { Tab, Tool } from '../types';
 
@@ -13,17 +13,17 @@ interface LeftRailProps {
 }
 
 const TOOLS: Array<{ id: Tool; icon: string; label: string; shortcut: string }> = [
-  { id: 'componentId', icon: 'cursor-text', label: 'Component ID', shortcut: '⌘⇧I' },
+  { id: 'componentId', icon: 'crosshair1', label: 'Component ID', shortcut: '⌘⇧I' },
   { id: 'textEdit', icon: 'pencil', label: 'Text Edit', shortcut: '⌘⇧T' },
   { id: 'help', icon: 'question', label: 'Help', shortcut: '⌘⇧?' },
 ];
 
 const TABS: Array<{ id: Tab; icon: string; label: string; shortcut: string }> = [
-  { id: 'variables', icon: 'volume-faders', label: 'Variables', shortcut: '1' },
+  { id: 'variables', icon: 'code-file', label: 'Variables', shortcut: '1' },
   { id: 'typography', icon: 'cursor-text', label: 'Typography', shortcut: '2' },
   { id: 'components', icon: 'code-window', label: 'Components', shortcut: '3' },
   { id: 'assets', icon: 'multiple-images', label: 'Assets', shortcut: '4' },
-  { id: 'ai', icon: 'sparkles', label: 'AI', shortcut: '5' },
+  { id: 'ai', icon: 'lightbulb', label: 'AI', shortcut: '5' },
   { id: 'mockStates', icon: 'settings-cog', label: 'Mock States', shortcut: '6' },
 ];
 
@@ -32,7 +32,7 @@ export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle, onS
   const pendingChangeCount = pendingChanges.length;
 
   return (
-    <div className="flex flex-col items-center border-r border-edge-primary/10 py-2 px-1 h-full">
+    <div className="flex flex-col items-center py-2 px-0 h-full">
       {/* Top Section */}
       <div className="flex flex-col">
         {/* Tools Section */}
@@ -66,7 +66,7 @@ export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle, onS
         </div>
 
         {/* Divider */}
-        <div className="w-6 h-px bg-surface-secondary/20 mb-2" />
+        <Divider orientation="horizontal" className="w-6 mb-2" />
 
         {/* Tabs Section */}
         <div className="flex flex-col gap-1 bg-surface-elevated p-1 border border-edge-primary rounded-sm">

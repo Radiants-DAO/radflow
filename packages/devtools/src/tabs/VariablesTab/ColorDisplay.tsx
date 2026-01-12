@@ -38,7 +38,7 @@ export function ColorDisplay() {
             <span className="flex-1 min-w-0 font-mondwest text-base text-content-primary truncate">
               {color.displayName}
             </span>
-            <code className="uppercase flex-shrink-0">
+            <code className="uppercase flex-shrink-0" style={{ backgroundColor: 'unset', background: 'unset', backgroundImage: 'none' }}>
               {color.value}
             </code>
           </div>

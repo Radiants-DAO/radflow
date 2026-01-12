@@ -94,6 +94,7 @@ export function TextEditContextMenu({ element, position, onClose }: TextEditCont
       key.startsWith('__reactFiber') || key.startsWith('__reactInternalInstance')
     );
     if (fiberKey) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const fiber = (newElement as any)[fiberKey];
       if (fiber?.return?.type?.displayName || fiber?.return?.type?.name) {
         reactComponent = fiber.return.type.displayName || fiber.return.type.name;
@@ -102,6 +103,7 @@ export function TextEditContextMenu({ element, position, onClose }: TextEditCont
 
     // Create change record
     const change = {
+      // eslint-disable-next-line react-hooks/purity
       id: `${Date.now()}-${Math.random()}`,
       selector,
       originalText,

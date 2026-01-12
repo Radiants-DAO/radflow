@@ -32,6 +32,7 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleWizardComplete = async (config: any) => {
     try {
       // Call API to create theme scaffolding

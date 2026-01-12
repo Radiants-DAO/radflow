@@ -7,11 +7,14 @@ import { TextEditContextMenu } from './TextEditContextMenu';
 import { useToast } from '@radflow/ui';
 
 export function TextEditMode() {
-  const { 
-    isTextEditActive, 
+  const {
+    isTextEditActive,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     currentElement,
     pendingChanges,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     toggleTextEditMode,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     setCurrentElement,
   } = useDevToolsStore();
   

@@ -26,6 +26,7 @@ function findReactComponent(element: HTMLElement): ComponentInfo | null {
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let fiber = (element as any)[fiberKey];
   let depth = 0;
   const maxDepth = 20; // Prevent infinite loops
@@ -103,10 +104,14 @@ export function ComponentIdMode() {
 
   const [clickedComponent, setClickedComponent] = useState<ComponentInfo | null>(null);
 
+  // Reset state when mode is deactivated
   useEffect(() => {
     if (!isComponentIdActive) {
-      setHoveredComponent(null);
-      setClickedComponent(null);
+      // Use queueMicrotask to defer state updates
+      queueMicrotask(() => {
+        setHoveredComponent(null);
+        setClickedComponent(null);
+      });
       return;
     }
 
@@ -170,7 +175,7 @@ export function ComponentIdMode() {
       document.removeEventListener('keydown', handleKeyDown);
       document.body.style.cursor = '';
     };
-  }, [isComponentIdActive, setHoveredComponent, toggleComponentIdMode]);
+  }, [isComponentIdActive, setHoveredComponent, toggleComponentIdMode, navigateToComponent, expandAndNavigate]);
 
   if (!isComponentIdActive) return null;
 

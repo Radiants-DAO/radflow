@@ -33,7 +33,9 @@ export function ComponentsSecondaryNav({
         onAdd={(folderName) => {
           onAddFolder(folderName);
           // Also trigger via ComponentsTab's handler if available
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           if ((window as any).__componentsTabAddFolder) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (window as any).__componentsTabAddFolder(folderName);
           }
         }}

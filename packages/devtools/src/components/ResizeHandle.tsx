@@ -9,11 +9,12 @@ interface ResizeHandleProps {
   position?: 'left' | 'right'; // Which side of the panel the handle is on
 }
 
-export function ResizeHandle({ 
-  onResize, 
-  minWidth = 300, 
+export function ResizeHandle({
+  onResize,
+  minWidth = 300,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   maxWidth = typeof window !== 'undefined' ? window.innerWidth * 0.8 : 800,
-  position = 'left' 
+  position = 'left'
 }: ResizeHandleProps) {
   const handleRef = useRef<HTMLDivElement>(null);
 
