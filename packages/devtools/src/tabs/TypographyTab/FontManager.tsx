@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDevToolsStore } from '../../store';
-import { Icon } from '@radflow/ui';
+import { ThemeIcon as Icon } from '../../components/ThemeIcon';
 import { useToast } from '@radflow/ui/Toast';
 import { detectFontPropertiesFromFilename } from '../../lib/cssParser';
 import type { FontDefinition, FontFile } from '../../types';
@@ -207,7 +207,7 @@ export function FontManager() {
         <button
           onClick={handleReload}
           disabled={isReloading}
-          className="flex items-center gap-1 px-2 py-1 text-xs font-mondwest text-content-primary/60 hover:text-content-primary border border-edge-primary/20 rounded-sm hover:bg-surface-secondary/5 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-1 px-2 py-1 text-xs font-mondwest text-content-primary/60 hover:text-content-primary border border-edge-primary/20 rounded-sm hover:bg-surface-tertiary/30 disabled:opacity-50 disabled:cursor-not-allowed"
           title="Reload fonts from CSS"
         >
           <Icon name="refresh" size={12} />
@@ -224,7 +224,7 @@ export function FontManager() {
           >
             {/* Font Header */}
             <div
-              className="flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-surface-secondary/5"
+              className="flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-surface-tertiary/30"
               onClick={() => setExpandedFont(expandedFont === font.id ? null : font.id)}
             >
               <div className="flex items-center gap-3">
@@ -265,7 +265,7 @@ export function FontManager() {
 
             {/* Font Files (expanded) */}
             {expandedFont === font.id && (
-              <div className="border-t border-edge-primary/20 px-3 py-2 space-y-1 bg-surface-secondary/5">
+              <div className="border-t border-edge-primary/20 px-3 py-2 space-y-1 bg-surface-tertiary/20">
                 {font.files.map((file) => (
                   <div key={file.id} className="flex items-center justify-between py-1">
                     <div className="font-mondwest text-sm text-content-primary/70">
@@ -323,7 +323,7 @@ export function FontManager() {
 
       {/* Upload Modal */}
       {uploadingFont && (
-        <div className="fixed inset-0 bg-surface-secondary/50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-surface-tertiary/200 flex items-center justify-center z-50">
           <div className="bg-surface-primary border-2 border-edge-primary rounded-md p-4 max-w-md w-full mx-4 shadow-[4px_4px_0_0_var(--color-black)]">
             <h4 className="font-joystix text-sm text-content-primary uppercase mb-4">
               Configure Font
@@ -403,7 +403,7 @@ export function FontManager() {
             <div className="flex justify-end gap-2 mt-4">
               <button
                 onClick={() => setUploadingFont(null)}
-                className="px-4 py-2 font-mondwest text-base text-content-primary border border-edge-primary rounded-sm hover:bg-surface-secondary/5"
+                className="px-4 py-2 font-mondwest text-base text-content-primary border border-edge-primary rounded-sm hover:bg-surface-tertiary/30"
               >
                 Cancel
               </button>

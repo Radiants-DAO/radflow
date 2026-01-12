@@ -121,7 +121,7 @@ export function Select({
           ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
           ${isOpen ? 'shadow-[0_3px_0_0_var(--color-black)] -translate-y-0.5' : 'shadow-[0_1px_0_0_var(--color-black)]'}
           transition-all duration-100
-          focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-0
+          focus:outline-none focus:ring-2 focus:ring-edge-focus focus:ring-offset-0
           ${iconName ? 'pl-10' : ''}
         `}
       >

@@ -1,20 +1,49 @@
 import { NextResponse } from 'next/server';
 import { readFile } from 'fs/promises';
-import { join } from 'path';
+import { join, dirname } from 'path';
+import { getThemeFilePaths } from '@radflow/devtools/lib/themeUtils';
+
+/**
+ * Resolve @import statements in CSS and return the combined content.
+ */
+async function resolveImports(css: string, basePath: string): Promise<string> {
+  const importRegex = /@import\s+["']([^"']+)["']\s*;?/g;
+  let result = css;
+  const imports: { match: string; path: string }[] = [];
+
+  // Collect all imports
+  let match;
+  while ((match = importRegex.exec(css)) !== null) {
+    imports.push({ match: match[0], path: match[1] });
+  }
+
+  // Process imports in order
+  for (const imp of imports) {
+    try {
+      if (imp.path.startsWith('.') || imp.path.startsWith('/')) {
+        // Relative or absolute path
+        const importPath = join(dirname(basePath), imp.path);
+        let importedCss = await readFile(importPath, 'utf-8');
+        // Recursively resolve nested imports
+        importedCss = await resolveImports(importedCss, importPath);
+        result = result.replace(imp.match, importedCss);
+      }
+      // Skip non-relative imports (tailwindcss, etc.)
+    } catch (error) {
+      console.warn(`Failed to resolve import ${imp.path}:`, error);
+    }
+  }
+
+  return result;
+}
 
 /**
  * GET /api/devtools/themes/[themeId]/parse-css
  *
- * Reads and parses CSS files for a specific theme.
- * Returns parsed CSS data (colors, typography, tokens, etc.).
+ * Reads and returns CSS for a specific theme package.
+ * Returns raw CSS - parsing is done client-side for performance.
  *
- * Note: CSS parsing is intentionally done client-side (not here) to keep
- * the API lightweight. This endpoint is reserved for future use if we need
- * server-side parsing.
- *
- * For now, clients should:
- * 1. Fetch raw CSS from /api/devtools/themes/[themeId]/read-css
- * 2. Parse it client-side using @radflow/devtools/lib/cssParser
+ * For CSS parsing, clients should use @radflow/devtools/lib/cssParser
  */
 export async function GET(
   req: Request,
@@ -30,22 +59,33 @@ export async function GET(
   const { themeId } = await context.params;
 
   try {
-    // Read the CSS file
-    const globalsPath = join(process.cwd(), 'app', 'globals.css');
-    const css = await readFile(globalsPath, 'utf-8');
+    // Get paths for this theme package
+    const themePaths = getThemeFilePaths(themeId);
 
-    // For now, return raw CSS and let client parse it
-    // In the future, we could parse server-side if needed
+    // Read the theme's index.css
+    let css = await readFile(themePaths.indexPath, 'utf-8');
+
+    // Resolve all imports to get the full CSS content
+    css = await resolveImports(css, themePaths.indexPath);
+
     return NextResponse.json({
       themeId,
       css,
-      note: 'Parse client-side using @radflow/devtools/lib/cssParser'
+      packageDir: themePaths.packageDir,
+      files: {
+        tokens: themePaths.tokensPath,
+        typography: themePaths.typographyPath,
+        fonts: themePaths.fontsPath,
+        dark: themePaths.darkPath,
+      },
+      note: 'Parse client-side using @radflow/devtools/lib/cssParser',
     });
   } catch (error) {
     return NextResponse.json(
       {
         error: `Failed to read CSS for theme "${themeId}"`,
-        details: String(error)
+        details: String(error),
+        hint: `Ensure packages/theme-${themeId}/ exists with index.css`,
       },
       { status: 500 }
     );

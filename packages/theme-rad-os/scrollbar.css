@@ -83,7 +83,11 @@
 
 /* For elements that need a dark-themed scrollbar */
 .custom-scrollbar-dark::-webkit-scrollbar-track {
-  background: var(--color-black);
+  background-color: var(--color-surface-sunken);
+  background-image: var(--pattern-surface-sunken);
+  background-size: var(--pattern-surface-sunken-size);
+  background-position: var(--pattern-surface-sunken-position);
+  background-repeat: repeat;
 }
 
 .custom-scrollbar-dark::-webkit-scrollbar-thumb {

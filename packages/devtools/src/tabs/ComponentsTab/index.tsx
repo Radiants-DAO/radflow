@@ -1,14 +1,44 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
-import { useToast } from '@radflow/ui';
-import { DesignSystemTab } from './DesignSystemTab';
-import { UITab } from './UITab';
+import React, { useState, useEffect, useMemo, useCallback, Suspense, lazy, ComponentType } from 'react';
+import { useToast, Spinner } from '@radflow/ui';
+import { UITab as DefaultUITab } from './UITab';
 import { DynamicFolderTab } from './DynamicFolderTab';
 import { AddTabButton } from './AddTabButton';
 import { COMPONENT_TABS, type ComponentTabConfig } from './tabConfig';
 import { ComponentsSecondaryNav } from '../../components/ComponentsSecondaryNav';
 import { useDevToolsStore } from '../../store';
+
+// Theme-specific preview components by folder (lazy loaded)
+// Format: { [themeId]: { [folderName]: LazyComponent } }
+const themePreviewsByFolder: Record<string, Record<string, React.LazyExoticComponent<ComponentType<object>>>> = {
+  phase: {
+    core: lazy(() => import('@radflow/theme-phase/preview/core')),
+  },
+  // Default RadOS theme uses the built-in UITab for 'ui' folder
+};
+
+// Loading fallback for theme previews
+function PreviewLoadingFallback() {
+  return (
+    <div className="flex items-center justify-center h-64">
+      <Spinner size={24} />
+    </div>
+  );
+}
+
+/**
+ * Get the preview component for a folder in a specific theme
+ */
+function getThemePreviewForFolder(
+  themeId: string | undefined,
+  folderName: string
+): React.LazyExoticComponent<ComponentType<object>> | null {
+  if (!themeId) return null;
+  const themePreviews = themePreviewsByFolder[themeId];
+  if (!themePreviews) return null;
+  return themePreviews[folderName] || null;
+}
 
 const STORAGE_KEY = 'devtools-dynamic-component-tabs';
 
@@ -46,7 +76,7 @@ interface ComponentsTabProps {
 }
 
 export function ComponentsTab({
-  activeSubTab = 'design-system',
+  activeSubTab = 'ui',
   onTabsChange,
   onAddFolder,
   componentTabs = [],
@@ -54,7 +84,7 @@ export function ComponentsTab({
 }: ComponentsTabProps) {
   const [dynamicTabs, setDynamicTabs] = useState<ComponentTabConfig[]>([]);
   const { addToast } = useToast();
-  const { selectedComponentName, clearSelectedComponent } = useDevToolsStore();
+  const activeTheme = useDevToolsStore((state) => state.activeTheme);
 
   // Load dynamic tabs on mount and auto-discover folders
   useEffect(() => {
@@ -182,50 +212,58 @@ export function ComponentsTab({
 
   return (
     <div className="flex flex-col h-full">
-      {/* Secondary Navigation Tabs at Top */}
-      <ComponentsSecondaryNav
-        activeSubTab={activeSubTab}
-        onSubTabChange={(tabId) => {
-          if (onComponentSubTabChange) {
-            onComponentSubTabChange(tabId);
-          }
-        }}
-        tabs={componentTabs.length > 0 ? componentTabs : tabsForParent}
-        onAddFolder={onAddFolder || (() => {})}
-      />
+      {/* Header with sub-tabs */}
+      <div className="flex-shrink-0">
+        <div className="pb-0">
+          <ComponentsSecondaryNav
+            activeSubTab={activeSubTab}
+            onSubTabChange={(tabId) => {
+              if (onComponentSubTabChange) {
+                onComponentSubTabChange(tabId);
+              }
+            }}
+            tabs={componentTabs.length > 0 ? componentTabs : tabsForParent}
+            onAddFolder={onAddFolder || (() => {})}
+          />
+        </div>
+      </div>
 
       {/* Tab Content */}
-      <div className="flex-1 overflow-hidden">
+      <div className="flex flex-col h-full overflow-auto pt-6 pb-4 pl-4 pr-2 bg-surface-elevated border border-edge-primary rounded space-y-4">
         {allTabs.map((tab: ComponentTabConfig) => {
-          // UI tab
+          // UI tab (default RadFlow UI preview)
           if (tab.id === 'ui' && activeSubTab === 'ui') {
-            return (
-              <div key={tab.id} className="h-full pr-2 pl-2 pb-2 rounded overflow-auto">
-                <UITab />
-              </div>
-            );
-          }
-
-          // Design system tab
-          if (tab.id === 'design-system' && activeSubTab === 'design-system') {
-            return (
-              <div key={tab.id} className="h-full pr-2 pl-2 pb-2 rounded overflow-auto">
-                <DesignSystemTab
-                  selectedComponentName={selectedComponentName}
-                  onComponentFocused={clearSelectedComponent}
-                />
-              </div>
-            );
+            // Check if active theme has a 'core' preview (Phase theme uses 'core' instead of 'ui')
+            const themePreview = getThemePreviewForFolder(activeTheme, 'core');
+            if (themePreview) {
+              const ThemePreviewComponent = themePreview;
+              return (
+                <Suspense key={`ui-${activeTheme}`} fallback={<PreviewLoadingFallback />}>
+                  <ThemePreviewComponent />
+                </Suspense>
+              );
+            }
+            // Fall back to default UITab
+            return <DefaultUITab key={tab.id} />;
           }
 
           // Dynamic folder tabs
           if (tab.id.startsWith('folder-') && activeSubTab === tab.id) {
             const folderName = tab.id.replace('folder-', '');
-            return (
-              <div key={tab.id} className="h-full pr-2 pl-2 pb-2 rounded overflow-auto">
-                <DynamicFolderTab folderName={folderName} />
-              </div>
-            );
+
+            // Check if active theme has a preview for this folder
+            const themePreview = getThemePreviewForFolder(activeTheme, folderName);
+            if (themePreview) {
+              const ThemePreviewComponent = themePreview;
+              return (
+                <Suspense key={`${tab.id}-${activeTheme}`} fallback={<PreviewLoadingFallback />}>
+                  <ThemePreviewComponent />
+                </Suspense>
+              );
+            }
+
+            // Fall back to dynamic folder component list
+            return <DynamicFolderTab key={tab.id} folderName={folderName} />;
           }
 
           return null;

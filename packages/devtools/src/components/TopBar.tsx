@@ -1,14 +1,11 @@
 'use client';
 
+import { useState } from 'react';
 import { Button, DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@radflow/ui';
 import { useDevToolsStore } from '../store';
 import { BreakpointIndicator } from './BreakpointIndicator';
 
 interface TopBarProps {
-  onClose?: () => void;
-  onFullscreen?: () => void;
-  showCloseButton?: boolean;
-  showFullscreenButton?: boolean;
   onSettingsClick?: () => void;
 }
 
@@ -17,13 +14,15 @@ interface TopBarProps {
  * Displays active theme name/logo, theme switcher dropdown, and window controls.
  */
 export function TopBar({
-  onClose,
-  onFullscreen,
-  showCloseButton = true,
-  showFullscreenButton = false,
   onSettingsClick,
 }: TopBarProps) {
-  const { activeTheme, availableThemes, switchTheme } = useDevToolsStore();
+  const {
+    activeTheme,
+    availableThemes,
+    switchTheme,
+  } = useDevToolsStore();
+
+  const [isThemeDropdownOpen, setIsThemeDropdownOpen] = useState(false);
 
   // Get current theme data
   const currentTheme = availableThemes.find((t) => t.id === activeTheme);
@@ -34,23 +33,28 @@ export function TopBar({
     }
   };
 
+
   return (
     <div
-      className="flex items-center justify-between p-1 select-none w-full bg-surface-elevated border border-edge-primary rounded-sm"
+      className="flex items-center justify-between select-none w-full bg-surface-elevated border border-edge-primary rounded-sm h-fit overflow-hidden"
     >
       {/* Left: Theme Indicator + Dropdown */}
       <div className="flex items-center gap-2">
-        <DropdownMenu position="bottom-start">
+        <DropdownMenu 
+          position="bottom-start"
+          open={isThemeDropdownOpen}
+          onOpenChange={setIsThemeDropdownOpen}
+        >
           <DropdownMenuTrigger asChild>
             <Button
-              variant="ghost"
+              variant={isThemeDropdownOpen ? "secondary" : "ghost"}
               size="sm"
               iconName="plug"
               title="Switch theme"
-              className="gap-2"
+              className={`!rounded-none gap-2 ${isThemeDropdownOpen ? 'text-content-inverted' : ''}`}
             >
               {/* Theme Name */}
-              <span className="font-joystix text-xs uppercase tracking-wider text-content-primary">
+              <span className={`font-joystix text-xs uppercase tracking-wider ${isThemeDropdownOpen ? 'text-content-inverted' : 'text-content-primary'}`}>
                 {currentTheme?.name || 'RadOS'}
               </span>
               {/* Dropdown Arrow */}
@@ -75,7 +79,7 @@ export function TopBar({
               <DropdownMenuItem
                 key={theme.id}
                 onClick={() => handleThemeSelect(theme.id)}
-                className={`flex items-center justify-between ${
+                className={`flex items-center justify-between px-0 py-0 ${
                   theme.id === activeTheme ? 'bg-surface-tertiary' : ''
                 }`}
               >
@@ -84,7 +88,7 @@ export function TopBar({
                     {theme.name}
                   </span>
                   {theme.description && (
-                    <span className="text-[10px] text-content-secondary">
+                    <span className="text-sm text-black">
                       {theme.description}
                     </span>
                   )}
@@ -119,32 +123,8 @@ export function TopBar({
         </DropdownMenu>
       </div>
 
-      {/* Center: Breakpoint Indicator */}
+      {/* Right: Breakpoint Indicator */}
       <BreakpointIndicator />
-
-      {/* Right: Buttons */}
-      <div className="flex items-center gap-1">
-        {showFullscreenButton && onFullscreen && (
-          <Button
-            variant="ghost"
-            size="sm"
-            iconOnly
-            iconName="full-screen"
-            onClick={onFullscreen}
-            title="Toggle Fullscreen"
-          />
-        )}
-        {showCloseButton && onClose && (
-          <Button
-            variant="ghost"
-            size="sm"
-            iconOnly
-            iconName="close"
-            onClick={onClose}
-            title="Close (⌘⇧K)"
-          />
-        )}
-      </div>
     </div>
   );
 }

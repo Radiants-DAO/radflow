@@ -80,8 +80,7 @@ export function TypographyStylesDisplay() {
     return (
       <div
         key={style.id}
-        className="p-4 rounded flex flex-col gap-4 mb-4"
-        style={{ color: 'var(--color-surface-elevated)' }}
+        className="p-4 rounded-sm flex flex-col gap-4 mb-4 bg-surface-primary border border-edge-primary shadow-card text-content-primary"
       >
         {/* Element name and preview */}
         <div className="flex items-start justify-between gap-4">

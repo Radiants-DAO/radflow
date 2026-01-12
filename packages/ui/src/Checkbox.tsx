@@ -66,7 +66,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
             border border-edge-primary
             rounded-xs
             peer-checked:bg-surface-tertiary
-            peer-focus:ring-2 peer-focus:ring-ring peer-focus:ring-offset-1
+            peer-focus:ring-2 peer-focus:ring-edge-focus peer-focus:ring-offset-1
             flex items-center justify-center
           `}
         />
@@ -133,7 +133,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio({ l
             border border-edge-primary
             rounded-full
             peer-checked:bg-surface-tertiary
-            peer-focus:ring-2 peer-focus:ring-ring peer-focus:ring-offset-1
+            peer-focus:ring-2 peer-focus:ring-edge-focus peer-focus:ring-offset-1
             flex items-center justify-center
           `}
         />

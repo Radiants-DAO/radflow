@@ -1,15 +1,41 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDevToolsStore } from './store';
 import type { Tab, Tool } from './types';
 
+// Spotlight CSS for navigation highlighting
+const spotlightStyles = `
+  [data-radtools-panel].spotlight-active [data-subsection-id],
+  [data-radtools-panel].spotlight-active [id^="typography-"] {
+    opacity: 0.25;
+    transition: opacity 0.3s ease;
+  }
+  [data-radtools-panel].spotlight-active [data-spotlight-target] {
+    opacity: 1 !important;
+    outline: 2px solid var(--color-brand-primary);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+  [data-radtools-panel].spotlight-fading [data-subsection-id],
+  [data-radtools-panel].spotlight-fading [id^="typography-"] {
+    opacity: 1;
+    transition: opacity 0.5s ease;
+  }
+  [data-radtools-panel].spotlight-fading [data-spotlight-target] {
+    outline-color: transparent;
+    transition: outline-color 0.3s ease, opacity 0.5s ease;
+  }
+`;
+
 // Import UI components
 import { TopBar } from './components/TopBar';
+import { SearchInput } from './components/SearchInput';
 import { LeftRail } from './components/LeftRail';
 import { ResizeHandle } from './components/ResizeHandle';
 import { SettingsPanel } from './components/SettingsPanel';
 import { HelpMode } from './components/HelpMode';
+import { Button } from '@radflow/ui';
 
 // Import actual tab components
 import { VariablesTab } from './tabs/VariablesTab';
@@ -26,9 +52,6 @@ export function DevToolsPanel() {
     panelWidth,
     setPanelWidth,
     togglePanel,
-    isFullscreen,
-    toggleFullscreen,
-    isMinimized,
     isTextEditActive,
     isComponentIdActive,
     isHelpActive,
@@ -41,11 +64,21 @@ export function DevToolsPanel() {
     openSettings,
     closeSettings,
     searchQuery,
+    pendingSubTab,
+    setPendingSubTab,
   } = useDevToolsStore();
 
   // Footer state
   const [componentSubTab, setComponentSubTab] = useState<string>('design-system');
   const [componentTabs, setComponentTabs] = useState<Array<{ id: string; label: string }>>([]);
+
+  // Handle pending sub-tab navigation from search
+  useEffect(() => {
+    if (pendingSubTab && activeTab === 'components') {
+      setComponentSubTab(pendingSubTab);
+      setPendingSubTab(null);
+    }
+  }, [pendingSubTab, activeTab, setPendingSubTab]);
 
   // Determine active tool
   function getActiveTool(): Tool | null {
@@ -80,31 +113,12 @@ export function DevToolsPanel() {
 
   // Panel always docked on right
   const getPositionClasses = () => {
-    if (isFullscreen) return 'inset-0';
     return 'top-0 right-0 h-screen';
   };
 
   const getPositionStyles = (): React.CSSProperties => {
-    const base: React.CSSProperties = {
-      background: 'linear-gradient(0deg, var(--color-surface-tertiary) 0%, var(--color-surface-primary) 100%)',
-    };
-
-    if (isFullscreen) {
-      return { ...base, width: '100%' };
-    }
-
-    // Minimized panel: only LeftRail width (60px)
-    if (isMinimized) {
-      return {
-        ...base,
-        width: '60px',
-        borderLeft: '1px solid var(--color-edge-primary)',
-      };
-    }
-
-    // Expanded panel: user-defined width (right-docked)
     return {
-      ...base,
+      background: 'linear-gradient(0deg, var(--color-surface-tertiary) 0%, var(--color-surface-primary) 100%)',
       width: `${panelWidth}px`,
       borderLeft: '1px solid var(--color-edge-primary)',
     };
@@ -116,29 +130,38 @@ export function DevToolsPanel() {
       className={`fixed flex flex-col z-[40] ${getPositionClasses()}`}
       style={getPositionStyles()}
     >
-      {/* TopBar - spans full width above LeftRail */}
-      {!isMinimized && (
-        <div className="p-2 pb-2">
+      {/* Spotlight styles for navigation */}
+      <style dangerouslySetInnerHTML={{ __html: spotlightStyles }} />
+
+      {/* TopBar and Search - spans full width above LeftRail */}
+      <div className="p-2 pb-2 flex items-center gap-2">
+        <div className="relative h-fit bg-surface-elevated border border-edge-primary rounded-sm p-0 flex items-center w-fit overflow-hidden">
+          <Button
+            variant="ghost"
+            size="sm"
+            iconOnly
+            iconName="close"
+            onClick={togglePanel}
+            title="Close (⌘⇧K)"
+            className="!rounded-none"
+          />
+        </div>
+        <SearchInput panelWidth={panelWidth} />
+        <div className="flex-1">
           <TopBar
-            onClose={togglePanel}
-            onFullscreen={toggleFullscreen}
-            showCloseButton
-            showFullscreenButton
             onSettingsClick={openSettings}
           />
         </div>
-      )}
+      </div>
 
       {/* Bottom section: ResizeHandle, LeftRail, and Content */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Resize Handle - left side of right-docked panel (hidden when minimized) */}
-        {!isFullscreen && !isMinimized && (
-          <ResizeHandle
-            onResize={setPanelWidth}
-            minWidth={300}
-            maxWidth={typeof window !== 'undefined' ? window.innerWidth * 0.8 : 1200}
-          />
-        )}
+        {/* Resize Handle - left side of right-docked panel */}
+        <ResizeHandle
+          onResize={setPanelWidth}
+          minWidth={300}
+          maxWidth={typeof window !== 'undefined' ? window.innerWidth * 0.8 : 1200}
+        />
 
         {/* Left Rail */}
         <LeftRail
@@ -149,9 +172,8 @@ export function DevToolsPanel() {
           onSettingsClick={openSettings}
         />
 
-        {/* Main Content - hidden when minimized */}
-        {!isMinimized && (
-          <div className="flex-1 overflow-hidden flex flex-col">
+        {/* Main Content */}
+        <div className="flex-1 overflow-hidden flex flex-col">
             {/* Help Mode Info Bar */}
             <HelpMode />
 
@@ -168,21 +190,23 @@ export function DevToolsPanel() {
                 </div>
               )}
               {activeTab === 'components' && (
-                <ComponentsTab
-                  activeSubTab={componentSubTab}
-                  onTabsChange={setComponentTabs}
-                  componentTabs={componentTabs}
-                  onComponentSubTabChange={setComponentSubTab}
-                  onAddFolder={async (folderName) => {
-                    // Trigger folder creation via ComponentsTab's exposed handler
-                    const windowWithHandler = window as Window & { __componentsTabAddFolder?: (name: string) => void };
-                    if (windowWithHandler.__componentsTabAddFolder) {
-                      windowWithHandler.__componentsTabAddFolder(folderName);
-                      // Switch to the new tab
-                      setComponentSubTab(`folder-${folderName}`);
-                    }
-                  }}
-                />
+                <div className="h-full pr-2 pl-2 pb-2 rounded">
+                  <ComponentsTab
+                    activeSubTab={componentSubTab}
+                    onTabsChange={setComponentTabs}
+                    componentTabs={componentTabs}
+                    onComponentSubTabChange={setComponentSubTab}
+                    onAddFolder={async (folderName) => {
+                      // Trigger folder creation via ComponentsTab's exposed handler
+                      const windowWithHandler = window as Window & { __componentsTabAddFolder?: (name: string) => void };
+                      if (windowWithHandler.__componentsTabAddFolder) {
+                        windowWithHandler.__componentsTabAddFolder(folderName);
+                        // Switch to the new tab
+                        setComponentSubTab(`folder-${folderName}`);
+                      }
+                    }}
+                  />
+                </div>
               )}
               {activeTab === 'assets' && (
                 <div className="h-full pr-2 pl-2 pb-2 rounded">
@@ -201,7 +225,6 @@ export function DevToolsPanel() {
               )}
             </div>
           </div>
-        )}
       </div>
 
 

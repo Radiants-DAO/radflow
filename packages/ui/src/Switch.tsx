@@ -91,7 +91,7 @@ export function Switch({ checked, onChange, size = 'md', disabled = false, label
         transition-colors
         ${checked ? 'bg-surface-tertiary' : 'bg-surface-primary'}
         ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-        focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2
+        focus:outline-none focus:ring-2 focus:ring-edge-focus focus:ring-offset-2
       `.trim()}
     >
       {/* Thumb */}

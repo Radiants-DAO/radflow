@@ -1,0 +1,58 @@
+/* ============================================================================
+   @radflow/theme-phase - Base Styles
+
+   HTML and body element styling, selection colors, and global resets.
+   Phase is dark-mode first with warm cream on near-black.
+   ============================================================================ */
+
+@layer base {
+  html {
+    @apply antialiased;
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--color-black);
+    color: var(--color-cream);
+  }
+
+  body {
+    @apply min-h-screen;
+    background-color: var(--color-black);
+    color: var(--color-cream);
+  }
+
+  /* Selection colors */
+  ::selection {
+    background-color: var(--color-indigo);
+    color: var(--color-cream);
+  }
+
+  ::-moz-selection {
+    background-color: var(--color-indigo);
+    color: var(--color-cream);
+  }
+
+  /* Focus outline styling */
+  :focus-visible {
+    outline: 2px solid var(--color-blue);
+    outline-offset: 2px;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

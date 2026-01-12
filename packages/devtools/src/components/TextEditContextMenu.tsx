@@ -152,7 +152,7 @@ export function TextEditContextMenu({ element, position, onClose }: TextEditCont
         <button
           key={option.tag}
           onClick={() => handleTagChange(option.tag)}
-          className={`w-full text-left px-3 py-1.5 text-sm hover:bg-surface-secondary/5 transition-colors ${
+          className={`w-full text-left px-3 py-1.5 text-sm hover:bg-surface-tertiary/30 transition-colors ${
             currentTag === option.tag ? 'bg-surface-tertiary/20 font-semibold' : ''
           }`}
         >
@@ -162,7 +162,7 @@ export function TextEditContextMenu({ element, position, onClose }: TextEditCont
       <div className="border-t border-edge-primary/10 mt-1 pt-1">
         <button
           onClick={onClose}
-          className="w-full text-left px-3 py-1.5 text-sm hover:bg-surface-secondary/5 transition-colors text-content-primary/60"
+          className="w-full text-left px-3 py-1.5 text-sm hover:bg-surface-tertiary/30 transition-colors text-content-primary/60"
         >
           Cancel
         </button>

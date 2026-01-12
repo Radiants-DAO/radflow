@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import { useDevToolsStore } from '../../store';
 import { PromptTemplate } from '../../store/slices/aiSlice';
 import { Button } from '@radflow/ui/Button';
-import { Icon } from '@radflow/ui/Icon';
+import { ThemeIcon as Icon } from '../../components/ThemeIcon';
 
 interface ThemePromptsSubTabProps {
   prompts: PromptTemplate[];
@@ -190,7 +190,7 @@ export function ThemePromptsSubTab({ prompts, searchQuery }: ThemePromptsSubTabP
 
       {/* Prompts List */}
       {filteredPrompts.length === 0 && !isAddingPrompt && !editingPromptId && (
-        <div className="flex items-center justify-center h-64 text-content-tertiary">
+        <div className="flex items-center justify-center h-64 text-content-primary">
           <div className="text-center">
             <Icon name="document" size={48} className="mx-auto mb-4 opacity-50" />
             <p className="mb-2">

@@ -15,6 +15,133 @@ This skill audits code for **RadOS design system compliance**. Use it to catch a
 - When refactoring existing components
 - When onboarding code from other projects
 
+---
+
+## HARD RULES (Never Break These)
+
+These rules are **absolute** and must never be violated. Claude must self-audit code before submitting.
+
+### Rule 1: NEVER use raw `<button>` elements
+```tsx
+// ❌ FORBIDDEN - Always use Button component
+<button onClick={...} className="...">Click</button>
+
+// ✅ REQUIRED
+import { Button } from '@radflow/ui/Button';
+<Button onClick={...} variant="outline">Click</Button>
+```
+
+### Rule 2: NEVER use raw brand color names in className
+```tsx
+// ❌ FORBIDDEN - Direct brand color references
+bg-sky-blue
+text-sky-blue
+bg-sun-yellow
+text-sun-yellow
+bg-sun-red
+text-sun-red
+bg-warm-cloud
+bg-cream
+hover:bg-sun-yellow
+
+// ✅ REQUIRED - Use semantic tokens only
+bg-surface-primary      // instead of bg-warm-cloud, bg-cream
+bg-surface-secondary    // instead of bg-black
+bg-surface-tertiary     // instead of bg-sun-yellow
+text-content-primary    // instead of text-black
+text-content-secondary  // instead of text-sun-yellow
+border-edge-primary     // instead of border-black
+border-edge-focus       // instead of border-sky-blue
+```
+
+### Rule 3: NEVER hardcode hex values in TypeScript/TSX
+```tsx
+// ❌ FORBIDDEN
+value: '#888888'
+color: '#FCE184'
+backgroundColor: '#0F0E0C'
+
+// ✅ REQUIRED - Use CSS variables or semantic tokens
+// If you need a fallback color, use a semantic token reference
+value: 'var(--color-content-tertiary)'
+// Or reference from the design system
+const color = baseColors.find(c => c.name === 'black')?.value
+```
+
+### Rule 4: NEVER use opacity on brand colors, only on semantic tokens
+```tsx
+// ❌ FORBIDDEN
+bg-sky-blue/20
+text-sun-yellow/50
+border-sun-red/30
+
+// ✅ REQUIRED - Opacity only on semantic tokens
+bg-surface-tertiary/20
+text-content-primary/50
+border-edge-primary/30
+```
+
+### Rule 5: ALWAYS include full interaction states on clickable elements
+```tsx
+// ❌ FORBIDDEN - Partial interaction states
+<button className="hover:bg-surface-secondary">
+
+// ✅ REQUIRED - Full interaction state set
+<Button variant="outline" />
+// Or if custom element is absolutely necessary:
+className="
+  shadow-btn
+  hover:-translate-y-0.5 hover:shadow-btn-hover
+  active:translate-y-0.5 active:shadow-none
+  focus:ring-2 focus:ring-edge-focus focus:ring-offset-2
+  transition-all duration-200
+"
+```
+
+### Rule 6: ALWAYS specify font family for headings and labels
+```tsx
+// ❌ FORBIDDEN - Relying on inherited fonts
+<h3 className="text-lg font-semibold">Title</h3>
+
+// ✅ REQUIRED - Explicit font family
+<h3 className="text-lg font-semibold font-joystix">Title</h3>
+// Or use semantic HTML elements which have @layer base styles
+```
+
+### Rule 7: NEVER create category/status badges with raw colors
+```tsx
+// ❌ FORBIDDEN - Color-coded badges with brand colors
+const getBadgeColor = (type) => {
+  switch(type) {
+    case 'success': return 'bg-green/20 text-green';
+    case 'warning': return 'bg-sun-yellow/20 text-sun-yellow';
+  }
+}
+
+// ✅ REQUIRED - Use semantic status tokens
+const getBadgeColor = (type) => {
+  switch(type) {
+    case 'success': return 'bg-surface-success text-content-success';
+    case 'warning': return 'bg-surface-warning text-content-warning';
+    case 'error': return 'bg-surface-error text-content-error';
+    default: return 'bg-surface-secondary text-content-primary';
+  }
+}
+```
+
+### Rule 8: ALWAYS use Button component for any clickable action
+```tsx
+// ❌ FORBIDDEN - Any of these patterns
+<button>...</button>
+<div onClick={...}>...</div>
+<span onClick={...} className="cursor-pointer">...</span>
+
+// ✅ REQUIRED
+<Button variant="primary|secondary|outline|ghost" size="sm|md|lg">
+```
+
+---
+
 ## Audit Categories
 
 ### 1. Component Duplication Check

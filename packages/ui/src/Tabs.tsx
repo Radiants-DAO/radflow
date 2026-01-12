@@ -120,7 +120,7 @@ export function TabList({ children, className = '' }: TabListProps) {
   const baseClasses = orientation === 'vertical' ? 'flex flex-col gap-1 overflow-y-auto' : wrap ? 'flex flex-wrap gap-1 justify-center' : 'flex gap-1 items-center overflow-x-auto';
 
   if (variant === 'manila') {
-    const manilaClasses = orientation === 'vertical' ? 'flex flex-col items-start' : wrap ? 'flex flex-wrap items-end flex-1' : 'flex items-end overflow-x-auto flex-1';
+    const manilaClasses = orientation === 'vertical' ? 'flex flex-col items-start' : wrap ? 'flex flex-wrap items-end flex-1' : 'flex items-end flex-1';
 
     return (
       <div className={`${manilaClasses} ${className}`} role="tablist">
@@ -144,9 +144,9 @@ export function TabTrigger({ value, children, iconName, tooltip, className = '' 
   const isActive = activeTab === value;
 
   if (variant === 'manila') {
-    const manilaBaseClasses = 'flex-1 px-3 py-1.5 text-xs font-joystix rounded-t-sm cursor-pointer outline-none border border-edge-primary -mr-px last:mr-0';
-    const manilaActiveClasses = 'bg-surface-elevated border-b-surface-elevated relative z-20';
-    const manilaInactiveClasses = 'bg-surface-primary hover:bg-surface-primary/80 border-b-edge-primary z-10';
+    const manilaBaseClasses = 'flex-1 px-3 h-8 text-xs font-joystix rounded-t-sm cursor-pointer outline-none border border-edge-primary border-b-0 -mr-px last:mr-0 flex items-center justify-center';
+    const manilaActiveClasses = 'bg-surface-elevated relative z-20 text-content-primary h-[33px] -mb-px';
+    const manilaInactiveClasses = 'bg-sun-yellow hover:bg-sun-yellow/90 z-10 text-black';
 
     const manilaButton = (
       <button onClick={() => setActiveTab(value)} className={`${manilaBaseClasses} ${isActive ? manilaActiveClasses : manilaInactiveClasses} ${className}`} aria-selected={isActive} role="tab">

@@ -1,10 +1,7 @@
 import { NextResponse } from 'next/server';
 import { readFile, writeFile, copyFile } from 'fs/promises';
-import { join } from 'path';
+import { getCurrentThemeId, getThemeFilePaths } from '@radflow/devtools/lib/themeUtils';
 import type { BaseColor, FontDefinition, TypographyStyle, ColorMode } from '@radflow/devtools/types';
-
-const GLOBALS_PATH = join(process.cwd(), 'app', 'globals.css');
-const BACKUP_PATH = join(process.cwd(), 'app', '.globals.css.backup');
 
 export async function POST(req: Request) {
   // Security: Block in production
@@ -16,62 +13,82 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { baseColors, borderRadius, fonts, typographyStyles, colorModes } = await req.json();
-
-    // Read existing CSS content
-    let existingCSS: string;
-    try {
-      existingCSS = await readFile(GLOBALS_PATH, 'utf-8');
-    } catch {
+    // Detect current theme
+    const themeId = await getCurrentThemeId();
+    if (!themeId) {
       return NextResponse.json(
-        { error: 'Could not read globals.css' },
-        { status: 500 }
+        { error: 'No theme detected. Ensure globals.css imports a @radflow/theme-* package.' },
+        { status: 400 }
       );
     }
 
-    // Create backup before writing
-    try {
-      await copyFile(GLOBALS_PATH, BACKUP_PATH);
-    } catch {
-      // Could not create backup - continue anyway
+    const themePaths = getThemeFilePaths(themeId);
+    const { baseColors, borderRadius, fonts, typographyStyles, colorModes } = await req.json();
+
+    const results: { typography?: boolean; fonts?: boolean; colorModes?: boolean; tokens?: boolean } = {};
+
+    // Update typography in theme package
+    if (typographyStyles && Array.isArray(typographyStyles) && typographyStyles.length > 0) {
+      try {
+        await updateTypographyFile(themePaths.typographyPath, typographyStyles, fonts || [], themeId);
+        results.typography = true;
+      } catch (error) {
+        return NextResponse.json(
+          { error: `Failed to update typography for theme "${themeId}"`, details: String(error) },
+          { status: 500 }
+        );
+      }
     }
 
-    // Perform surgical update - only replace @theme blocks, @font-face, and @layer base
-    let updatedCSS = existingCSS;
-    
-    // Update @theme blocks if color data provided
-    if (baseColors) {
-      updatedCSS = updateCSSBlocks(updatedCSS, {
-        baseColors,
-        borderRadius: borderRadius || {},
-      });
-    }
-    
-    // Update @font-face declarations if fonts provided
-    if (fonts) {
-      updatedCSS = updateFontFaces(updatedCSS, fonts);
-    }
-    
-    // Update @layer base if typography styles provided
-    if (typographyStyles) {
-      updatedCSS = updateLayerBase(updatedCSS, typographyStyles, fonts || []);
+    // Update fonts in theme package
+    if (fonts && Array.isArray(fonts) && fonts.length > 0) {
+      try {
+        await updateFontsFile(themePaths.fontsPath, fonts, themeId);
+        results.fonts = true;
+      } catch (error) {
+        return NextResponse.json(
+          { error: `Failed to update fonts for theme "${themeId}"`, details: String(error) },
+          { status: 500 }
+        );
+      }
     }
 
-    // Update color mode classes if provided
-    if (colorModes) {
-      updatedCSS = updateColorModeClasses(updatedCSS, colorModes);
+    // Update color modes in theme package (dark.css)
+    if (colorModes && Array.isArray(colorModes) && colorModes.length > 0) {
+      try {
+        await updateColorModesFile(themePaths.darkPath, colorModes, themeId);
+        results.colorModes = true;
+      } catch (error) {
+        return NextResponse.json(
+          { error: `Failed to update color modes for theme "${themeId}"`, details: String(error) },
+          { status: 500 }
+        );
+      }
     }
 
-    // Write updated CSS
-    await writeFile(GLOBALS_PATH, updatedCSS, 'utf-8');
+    // Update tokens in theme package (tokens.css) - base colors and border radius
+    if (baseColors && Array.isArray(baseColors) && baseColors.length > 0) {
+      try {
+        await updateTokensFile(themePaths.tokensPath, baseColors, borderRadius || {}, themeId);
+        results.tokens = true;
+      } catch (error) {
+        return NextResponse.json(
+          { error: `Failed to update tokens for theme "${themeId}"`, details: String(error) },
+          { status: 500 }
+        );
+      }
+    }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({
+      success: true,
+      themeId,
+      updated: results,
+    });
   } catch (error) {
     return NextResponse.json(
-      { 
-        error: 'Failed to write CSS', 
+      {
+        error: 'Failed to write CSS',
         details: String(error),
-        hint: 'Try restoring from backup: copy .globals.css.backup to globals.css'
       },
       { status: 500 }
     );
@@ -79,184 +96,114 @@ export async function POST(req: Request) {
 }
 
 /**
- * Surgically update only the @theme inline and @theme blocks,
- * preserving all other CSS (fonts, base styles, scrollbar, etc.)
+ * Update typography.css in the theme package
  */
-function updateCSSBlocks(
-  existingCSS: string,
-  data: {
-    baseColors: BaseColor[];
-    borderRadius: Record<string, string>;
+async function updateTypographyFile(
+  filePath: string,
+  typographyStyles: TypographyStyle[],
+  fonts: FontDefinition[],
+  themeId: string
+): Promise<void> {
+  // Create backup
+  const backupPath = filePath.replace('.css', '.css.backup');
+  try {
+    await copyFile(filePath, backupPath);
+  } catch {
+    // Continue without backup
   }
-): string {
-  const { baseColors, borderRadius } = data;
 
-  // Build a map of baseColorId -> value for resolving references
-  const colorMap = new Map<string, { name: string; value: string }>();
-  for (const color of baseColors) {
-    colorMap.set(color.id, { name: color.name, value: color.value });
+  // Build font family map
+  const fontFamilyMap = new Map<string, string>();
+  for (const font of fonts) {
+    // Map font ID to a CSS-safe family name
+    fontFamilyMap.set(font.id, font.family);
   }
 
-  // Generate @theme inline block content
-  const themeInlineContent = generateThemeInlineBlock(baseColors);
-  
-  // Generate @theme block content
-  const themeContent = generateThemeBlock(baseColors, borderRadius);
+  // Generate element rules
+  const elementRules: string[] = [];
 
-  let updated = existingCSS;
+  for (const style of typographyStyles) {
+    const classes: string[] = [];
+    const inlineStyles: string[] = [];
 
-  // Replace @theme inline block (match from @theme inline { to the closing } )
-  // Use a more robust regex that handles nested content
-  const themeInlineRegex = /@theme\s+inline\s*\{[^}]*(?:\{[^}]*\}[^}]*)*\}/;
-  if (themeInlineRegex.test(updated)) {
-    updated = updated.replace(themeInlineRegex, themeInlineContent);
-  } else {
-    // If no @theme inline block exists, insert after @import
-    const importMatch = updated.match(/@import\s+["']tailwindcss["'];?\s*/);
-    if (importMatch) {
-      const insertPos = (importMatch.index || 0) + importMatch[0].length;
-      updated = updated.slice(0, insertPos) + '\n\n' + themeInlineContent + '\n' + updated.slice(insertPos);
+    // Add size, weight, and other classes
+    if (style.fontSize) classes.push(style.fontSize);
+    if (style.fontWeight) classes.push(style.fontWeight);
+    if (style.lineHeight) classes.push(style.lineHeight);
+    if (style.letterSpacing) classes.push(style.letterSpacing);
+
+    // Add color - convert baseColorId to Tailwind class
+    if (style.baseColorId) {
+      classes.push(`text-${style.baseColorId}`);
+    }
+
+    // Add utilities
+    if (style.utilities) {
+      classes.push(...style.utilities);
+    }
+
+    // Get font family - use inline style for explicit font control
+    const fontFamily = fontFamilyMap.get(style.fontFamilyId);
+    if (fontFamily) {
+      inlineStyles.push(`font-family: '${fontFamily}', sans-serif;`);
+    }
+
+    const applyLine = classes.length > 0 ? `    @apply ${classes.join(' ')};` : '';
+    const styleLine = inlineStyles.length > 0 ? `    ${inlineStyles.join('\n    ')}` : '';
+
+    const ruleBody = [applyLine, styleLine].filter(Boolean).join('\n');
+
+    if (ruleBody) {
+      elementRules.push(`  ${style.element} {\n${ruleBody}\n  }`);
     }
   }
 
-  // Replace @theme block (not inline) - need to match @theme { but not @theme inline {
-  // Look for @theme that is NOT followed by "inline"
-  const themeRegex = /@theme\s*(?!inline)\{[^}]*(?:\{[^}]*\}[^}]*)*\}/;
-  if (themeRegex.test(updated)) {
-    updated = updated.replace(themeRegex, themeContent);
-  } else {
-    // If no @theme block exists, insert after @theme inline
-    const themeInlineEndMatch = updated.match(/@theme\s+inline\s*\{[^}]*(?:\{[^}]*\}[^}]*)*\}/);
-    if (themeInlineEndMatch) {
-      const insertPos = (themeInlineEndMatch.index || 0) + themeInlineEndMatch[0].length;
-      updated = updated.slice(0, insertPos) + '\n\n' + themeContent + updated.slice(insertPos);
-    }
-  }
+  // Get theme display name for header
+  const themeDisplayName = themeId === 'rad-os' ? 'Rad OS' : themeId.charAt(0).toUpperCase() + themeId.slice(1);
 
-  return updated;
+  const content = `/* ============================================================================
+   @radflow/theme-${themeId} - Typography
+
+   Base typography styles using @layer base for Tailwind v4 integration.
+   Auto-generated by RadFlow DevTools - edits will be overwritten.
+   ============================================================================ */
+
+@layer base {
+${elementRules.join('\n\n')}
+}
+`;
+
+  await writeFile(filePath, content, 'utf-8');
 }
 
 /**
- * Generate the @theme inline block with base colors
+ * Update fonts.css in the theme package
  */
-function generateThemeInlineBlock(baseColors: BaseColor[]): string {
-  const brandColors = baseColors.filter(c => c.category === 'brand');
-  const neutralColors = baseColors.filter(c => c.category === 'neutral');
-
-  const brandVars = brandColors
-    .map(c => `  --color-${c.name}: ${c.value};`)
-    .join('\n');
-
-  const neutralVars = neutralColors
-    .map(c => `  --color-neutral-${c.name}: ${c.value};`)
-    .join('\n');
-
-  return `@theme inline {
-  /* ============================================
-     BRAND COLORS (internal reference only)
-     ============================================ */
-  
-${brandVars}
-  
-  /* Neutral Colors */
-${neutralVars}
-  
-  /* System Colors */
-  --color-success-green: #22C55E;
-  --color-success-green-dark: #87BB82;
-  --color-warning-yellow: var(--color-sun-yellow);
-  --color-warning-yellow-dark: #BE9D2B;
-  --color-error-red: var(--color-sun-red);
-  --color-error-red-dark: #9E433E;
-  --color-focus-state: var(--color-sky-blue);
-  
-  /* Fonts */
-  --font-mondwest: 'Mondwest';
-  --font-joystix: 'Joystix Monospace', monospace;
-}`;
-}
-
-/**
- * Generate the @theme block with brand colors and border radius
- */
-function generateThemeBlock(
-  baseColors: BaseColor[],
-  borderRadius: Record<string, string>
-): string {
-  // Generate brand color utilities (Tailwind v4 auto-generates bg-*, text-*, border-* from these)
-  const brandColorUtils: string[] = [];
-  for (const color of baseColors) {
-    if (color.category === 'brand') {
-      brandColorUtils.push(`  --color-${color.name}: ${color.value};`);
-    }
+async function updateFontsFile(
+  filePath: string,
+  fonts: FontDefinition[],
+  themeId: string
+): Promise<void> {
+  // Create backup
+  const backupPath = filePath.replace('.css', '.css.backup');
+  try {
+    await copyFile(filePath, backupPath);
+  } catch {
+    // Continue without backup
   }
 
-  // Generate neutral color utilities
-  const neutralColorUtils: string[] = [];
-  for (const color of baseColors) {
-    if (color.category === 'neutral') {
-      neutralColorUtils.push(`  --color-neutral-${color.name}: ${color.value};`);
-    }
-  }
-
-  // Generate border radius
-  const radiusVars = Object.entries(borderRadius)
-    .map(([key, value]) => `  --radius-${key}: ${value};`)
-    .join('\n');
-
-  return `@theme {
-  /* ============================================
-     BRAND COLORS (Tailwind v4 auto-generates utilities)
-     bg-sun-yellow, text-black, border-warm-cloud, etc.
-     ============================================ */
-  
-${brandColorUtils.join('\n')}
-  
-  /* Neutral Colors */
-${neutralColorUtils.join('\n')}
-  
-  /* System Colors */
-  --color-success-green: #22C55E;
-  --color-success-green-dark: #87BB82;
-  --color-warning-yellow: var(--color-sun-yellow);
-  --color-warning-yellow-dark: #BE9D2B;
-  --color-error-red: var(--color-sun-red);
-  --color-error-red-dark: #9E433E;
-  --color-focus-state: var(--color-sky-blue);
-  
-  /* Border Radius → rounded-sm, rounded-md, etc. */
-${radiusVars}
-  
-  /* Box Shadows → shadow-btn, shadow-card, etc. */
-  --shadow-btn: 0 1px 0 0 var(--color-black);
-  --shadow-btn-hover: 0 3px 0 0 var(--color-black);
-  --shadow-card: 2px 2px 0 0 var(--color-black);
-  --shadow-card-lg: 4px 4px 0 0 var(--color-black);
-  --shadow-inner: inset 0 0 0 1px var(--color-black);
-  
-  /* Font Families */
-  --font-family-mondwest: var(--font-mondwest);
-  --font-family-joystix: var(--font-joystix);
-}`;
-}
-
-/**
- * Update @font-face declarations
- * Preserves existing fonts and adds new ones
- */
-function updateFontFaces(css: string, fonts: FontDefinition[]): string {
-  // Remove existing @font-face blocks
-  let updated = css.replace(/@font-face\s*\{[^}]+\}\s*/g, '');
-  
-  // Generate new @font-face blocks
+  // Generate @font-face blocks
   const fontFaceBlocks: string[] = [];
-  
+
   for (const font of fonts) {
     for (const file of font.files) {
-      const format = file.format === 'ttf' ? 'truetype' 
-        : file.format === 'otf' ? 'opentype' 
-        : file.format;
-      
+      const format =
+        file.format === 'ttf'
+          ? 'truetype'
+          : file.format === 'otf'
+          ? 'opentype'
+          : file.format;
+
       fontFaceBlocks.push(`@font-face {
   font-family: '${font.family}';
   src: url('${file.path}') format('${format}');
@@ -266,158 +213,168 @@ function updateFontFaces(css: string, fonts: FontDefinition[]): string {
 }`);
     }
   }
-  
-  // Insert after @import tailwindcss
-  const importMatch = updated.match(/@import\s+["']tailwindcss["'];?\s*\n?/);
-  if (importMatch && fontFaceBlocks.length > 0) {
-    const insertPos = (importMatch.index || 0) + importMatch[0].length;
-    const fontFaceCSS = '\n' + fontFaceBlocks.join('\n\n') + '\n';
-    updated = updated.slice(0, insertPos) + fontFaceCSS + updated.slice(insertPos);
-  }
-  
-  return updated;
-}
 
-/**
- * Update @layer base with typography styles
- */
-function updateLayerBase(
-  css: string, 
-  typographyStyles: TypographyStyle[],
-  fonts: FontDefinition[]
-): string {
-  // Build font family map
-  const fontFamilyMap = new Map<string, string>();
+  // Generate utility classes
+  const utilityClasses: string[] = [];
   for (const font of fonts) {
-    fontFamilyMap.set(font.id, font.family.toLowerCase().replace(/\s+/g, ''));
-  }
-  
-  // Generate element rules
-  const elementRules: string[] = [];
-  
-  for (const style of typographyStyles) {
-    const classes: string[] = [];
-    
-    // Add font family class if available
-    const fontClass = fontFamilyMap.get(style.fontFamilyId);
-    if (fontClass) {
-      classes.push(`font-${fontClass}`);
-    }
-    
-    // Add size, weight, and other classes
-    if (style.fontSize) classes.push(style.fontSize);
-    if (style.fontWeight) classes.push(style.fontWeight);
-    if (style.lineHeight) classes.push(style.lineHeight);
-    if (style.letterSpacing) classes.push(style.letterSpacing);
-    
-    // Add color - convert baseColorId to Tailwind class
-    // baseColorId is the base color name (e.g., 'black', 'cream', 'sky-blue')
-    if (style.baseColorId) {
-      classes.push(`text-${style.baseColorId}`);
-    }
-    
-    // Add utilities
-    if (style.utilities) {
-      classes.push(...style.utilities);
-    }
-
-    if (classes.length > 0) {
-      elementRules.push(`  ${style.element} {
-    @apply ${classes.join(' ')};
+    const className = font.family.toLowerCase().replace(/\s+/g, '-');
+    utilityClasses.push(`  .font-${className} {
+    font-family: '${font.family}', sans-serif;
   }`);
-    }
   }
 
-  const layerBaseContent = `@layer base {
-${elementRules.join('\n\n')}
-}`;
-  
-  // Replace existing @layer base or insert before closing content
-  // Match @layer base { ... } with any whitespace/newlines
-  const layerBaseRegex = /@layer\s+base\s*\{[\s\S]*?\}/;
-  
-  if (layerBaseRegex.test(css)) {
-    return css.replace(layerBaseRegex, layerBaseContent);
-  } else {
-    // Insert at the end of the file
-    return css.trimEnd() + '\n\n' + layerBaseContent + '\n';
-  }
+  // Get theme display name
+  const themeDisplayName = themeId === 'rad-os' ? 'Rad OS' : themeId.charAt(0).toUpperCase() + themeId.slice(1);
+
+  const content = `/* ============================================================================
+   @radflow/theme-${themeId} - Fonts
+
+   Font face declarations for ${themeDisplayName} theme.
+   Auto-generated by RadFlow DevTools - edits will be overwritten.
+   ============================================================================ */
+
+${fontFaceBlocks.join('\n\n')}
+
+/* Font family utility classes */
+@layer utilities {
+${utilityClasses.join('\n\n')}
+}
+`;
+
+  await writeFile(filePath, content, 'utf-8');
 }
 
 /**
- * Update color mode classes in CSS
- * Writes color mode overrides as CSS classes (.dark, .light, etc.)
+ * Update dark.css (color modes) in the theme package
  */
-function updateColorModeClasses(css: string, colorModes: ColorMode[]): string {
-  let updated = css;
-  
-  // First, remove existing color mode class blocks that we manage
-  // Match patterns like .dark { ... } or .light { ... }
-  const knownModeNames = colorModes.map(m => m.name);
-  
-  for (const modeName of knownModeNames) {
-    // Remove existing block for this mode
-    const modeRegex = new RegExp(`\\.${modeName}\\s*\\{[^}]*\\}\\s*`, 'g');
-    updated = updated.replace(modeRegex, '');
+async function updateColorModesFile(
+  filePath: string,
+  colorModes: ColorMode[],
+  themeId: string
+): Promise<void> {
+  // Create backup
+  const backupPath = filePath.replace('.css', '.css.backup');
+  try {
+    await copyFile(filePath, backupPath);
+  } catch {
+    // Continue without backup
   }
-  
-  // Also clean up any orphan color mode classes that might exist
-  // This regex matches common color mode class names
-  const commonModes = ['dark', 'light', 'contrast'];
-  for (const modeName of commonModes) {
-    if (!knownModeNames.includes(modeName)) {
-      // Only remove if it's a devtools-managed block (has CSS variable overrides)
-      const modeRegex = new RegExp(`\\.${modeName}\\s*\\{[^}]*--[^}]*\\}\\s*`, 'g');
-      updated = updated.replace(modeRegex, '');
-    }
+
+  // Read existing file to preserve any manual additions
+  let existingContent = '';
+  try {
+    existingContent = await readFile(filePath, 'utf-8');
+  } catch {
+    // File doesn't exist, create fresh
   }
-  
-  // Generate new color mode class blocks
+
+  // Generate color mode class blocks
   const colorModeBlocks: string[] = [];
-  
+
   for (const mode of colorModes) {
     if (Object.keys(mode.overrides).length === 0) continue;
-    
+
     const overrideVars = Object.entries(mode.overrides)
-      .map(([colorName, colorRef]) => {
-        // colorRef is like "neutral-darkest" or "sun-yellow" (base color name)
-        // Convert to CSS variable reference
-        const varName = colorRef.startsWith('neutral-') 
-          ? `--color-neutral-${colorRef.replace('neutral-', '')}` 
+      .map(([tokenName, colorRef]) => {
+        // colorRef is the base color name (e.g., 'cream', 'black', 'neutral-darkest')
+        const varName = colorRef.startsWith('neutral-')
+          ? `--color-neutral-${colorRef.replace('neutral-', '')}`
           : `--color-${colorRef}`;
-        return `  --color-${colorName}: var(${varName});`;
+        return `  --color-${tokenName}: var(${varName});`;
       })
       .join('\n');
-    
+
     colorModeBlocks.push(`.${mode.name} {\n${overrideVars}\n}`);
   }
-  
-  if (colorModeBlocks.length === 0) {
-    return updated;
+
+  // Get theme display name
+  const themeDisplayName = themeId === 'rad-os' ? 'Rad OS' : themeId.charAt(0).toUpperCase() + themeId.slice(1);
+
+  const content = `/* ============================================================================
+   @radflow/theme-${themeId} - Color Modes
+
+   Color mode overrides for ${themeDisplayName} theme.
+   Auto-generated by RadFlow DevTools - edits will be overwritten.
+   ============================================================================ */
+
+${colorModeBlocks.join('\n\n')}
+`;
+
+  await writeFile(filePath, content, 'utf-8');
+}
+
+/**
+ * Update tokens.css in the theme package
+ */
+async function updateTokensFile(
+  filePath: string,
+  baseColors: BaseColor[],
+  borderRadius: Record<string, string>,
+  themeId: string
+): Promise<void> {
+  // Create backup
+  const backupPath = filePath.replace('.css', '.css.backup');
+  try {
+    await copyFile(filePath, backupPath);
+  } catch {
+    // Continue without backup
   }
-  
-  // Find the right place to insert color mode classes
-  // Insert after @theme block but before :root or scrollbar styles
-  const colorModeCSS = `\n/* ============================================
-   COLOR MODES (DevTools managed)
-   ============================================ */\n\n${colorModeBlocks.join('\n\n')}\n`;
-  
-  // Look for :root block as insertion point
-  const rootMatch = updated.match(/:root\s*\{/);
-  if (rootMatch && rootMatch.index !== undefined) {
-    // Insert before :root
-    updated = updated.slice(0, rootMatch.index) + colorModeCSS + '\n' + updated.slice(rootMatch.index);
-  } else {
-    // Look for scrollbar styles as insertion point
-    const scrollbarMatch = updated.match(/\/\*.*scrollbar.*\*\//i);
-    if (scrollbarMatch && scrollbarMatch.index !== undefined) {
-      // Insert before scrollbar section
-      updated = updated.slice(0, scrollbarMatch.index) + colorModeCSS + '\n' + updated.slice(scrollbarMatch.index);
-    } else {
-      // Append at the end
-      updated = updated.trimEnd() + '\n' + colorModeCSS;
-    }
+
+  // Read existing content to preserve structure
+  let existingCSS = '';
+  try {
+    existingCSS = await readFile(filePath, 'utf-8');
+  } catch {
+    // File doesn't exist
   }
-  
-  return updated;
+
+  // Build color categories
+  const brandColors = baseColors.filter((c) => c.category === 'brand');
+  const neutralColors = baseColors.filter((c) => c.category === 'neutral');
+
+  // Generate @theme inline block
+  const brandVars = brandColors.map((c) => `  --color-${c.name}: ${c.value};`).join('\n');
+  const neutralVars = neutralColors.map((c) => `  --color-neutral-${c.name}: ${c.value};`).join('\n');
+
+  const themeInlineContent = `@theme inline {
+  /* Brand Colors */
+${brandVars}
+
+  /* Neutral Colors */
+${neutralVars}
+}`;
+
+  // Generate @theme block with utilities
+  const brandUtilVars = brandColors.map((c) => `  --color-${c.name}: ${c.value};`).join('\n');
+  const neutralUtilVars = neutralColors.map((c) => `  --color-neutral-${c.name}: ${c.value};`).join('\n');
+  const radiusVars = Object.entries(borderRadius)
+    .map(([key, value]) => `  --radius-${key}: ${value};`)
+    .join('\n');
+
+  const themeContent = `@theme {
+  /* Brand Colors (Tailwind v4 auto-generates utilities) */
+${brandUtilVars}
+
+  /* Neutral Colors */
+${neutralUtilVars}
+
+  /* Border Radius */
+${radiusVars}
+}`;
+
+  let updatedCSS = existingCSS;
+
+  // Replace @theme inline block
+  const themeInlineRegex = /@theme\s+inline\s*\{[^}]*(?:\{[^}]*\}[^}]*)*\}/;
+  if (themeInlineRegex.test(updatedCSS)) {
+    updatedCSS = updatedCSS.replace(themeInlineRegex, themeInlineContent);
+  }
+
+  // Replace @theme block (not inline)
+  const themeRegex = /@theme\s*(?!inline)\{[^}]*(?:\{[^}]*\}[^}]*)*\}/;
+  if (themeRegex.test(updatedCSS)) {
+    updatedCSS = updatedCSS.replace(themeRegex, themeContent);
+  }
+
+  await writeFile(filePath, updatedCSS, 'utf-8');
 }

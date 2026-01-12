@@ -1,15 +1,31 @@
 'use client';
 
-import { SEARCH_INDEX, type SearchableItem } from '../tabs/ComponentsTab/DesignSystemTab';
-import { UI_SEARCH_INDEX } from '../tabs/ComponentsTab/UITabSearchIndex';
+import { UI_SEARCH_INDEX, type SearchableItem } from '../tabs/ComponentsTab/UITabSearchIndex';
 import type { DiscoveredComponent } from '../types';
+
+export type { SearchableItem };
 
 /**
  * Extended searchable item that includes tab information for cross-tab navigation
  */
 export interface ExtendedSearchableItem extends SearchableItem {
-  tabId: string; // e.g., 'design-system', 'folder-UI', 'folder-Rad_os'
+  tabId: string; // e.g., 'design-system', 'folder-UI', 'folder-Rad_os', 'assets'
   componentName?: string; // For discovered components
+  iconName?: string; // For icons
+}
+
+/**
+ * Fetch available icons from the API
+ */
+async function fetchIcons(): Promise<string[]> {
+  try {
+    const response = await fetch('/api/devtools/icons');
+    if (!response.ok) return [];
+    const data = await response.json();
+    return data.icons || [];
+  } catch {
+    return [];
+  }
 }
 
 /**
@@ -17,6 +33,7 @@ export interface ExtendedSearchableItem extends SearchableItem {
  * 1. DesignSystemTab SEARCH_INDEX (static)
  * 2. Component registry (from API)
  * 3. Folder contents (from API)
+ * 4. Icons (from API)
  */
 export async function buildSearchIndex(
   registryComponents: DiscoveredComponent[] = [],
@@ -32,15 +49,7 @@ export async function buildSearchIndex(
     });
   });
 
-  // 2. Add DesignSystem tab items
-  SEARCH_INDEX.forEach((item) => {
-    index.push({
-      ...item,
-      tabId: 'design-system',
-    });
-  });
-
-  // 3. Add registry components (for UI tab or similar)
+  // 2. Add registry components (for UI tab or similar)
   registryComponents.forEach((comp) => {
     index.push({
       text: comp.name,
@@ -61,6 +70,18 @@ export async function buildSearchIndex(
         tabId: `folder-${folderName}`,
         componentName: comp.name,
       });
+    });
+  });
+
+  // 5. Add icons
+  const icons = await fetchIcons();
+  icons.forEach((iconName) => {
+    index.push({
+      text: iconName,
+      sectionId: 'icons',
+      type: 'icon',
+      tabId: 'assets',
+      iconName: iconName,
     });
   });
 

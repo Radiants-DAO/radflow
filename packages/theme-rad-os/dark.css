@@ -8,10 +8,10 @@
   /* ─────────────────────────────────────────────
      SURFACE TOKENS (inverted)
      ───────────────────────────────────────────── */
-  --color-surface-primary: #1C1917;
+  --color-surface-primary: var(--color-black);
   --color-surface-secondary: var(--color-warm-cloud);
   --color-surface-tertiary: var(--color-black);
-  --color-surface-elevated: #292524;
+  --color-surface-elevated: var(--color-black);
   --color-surface-success: #1a3d1a;
   --color-surface-warning: #3d3520;
   --color-surface-error: #3d1a1a;
@@ -31,25 +31,49 @@
   /* ─────────────────────────────────────────────
      EDGE TOKENS (inverted)
      ───────────────────────────────────────────── */
-  --color-edge-primary: var(--color-warm-cloud);
-  --color-edge-secondary: var(--color-sun-yellow);
-  --color-edge-elevated: #292524;
+  --color-edge-primary: var(--color-sun-yellow);
+  --color-edge-secondary: var(--color-warm-cloud);
 
   /* Edge states */
   --color-edge-success: var(--color-green);
   --color-edge-warning: var(--color-sun-yellow);
   --color-edge-error: #FF8A84;
-  --color-edge-focus: var(--color-sky-blue);
+  --color-edge-focus: var(--color-sun-yellow);
 
   /* ─────────────────────────────────────────────
      DARK MODE GLOW SHADOWS
-     Yellow glow effect replacing hard black shadows
+     2-layer glow effect: warm-cloud inner + sun-yellow outer
      ───────────────────────────────────────────── */
   --shadow-btn: 0 1px 8px 0 rgba(252, 225, 132, 0.3);
   --shadow-btn-hover: 0 3px 12px 0 rgba(252, 225, 132, 0.5);
-  --shadow-card: 0 0 12px 2px rgba(252, 225, 132, 0.2);
-  --shadow-card-lg: 0 0 20px 4px rgba(252, 225, 132, 0.25);
-  --shadow-card-hover: 0 0 24px 6px rgba(252, 225, 132, 0.35);
+  --shadow-card: 0 0 0.5rem rgba(254, 248, 226, 0.4), 0 0 2rem rgba(252, 225, 132, 0.3);
+  --shadow-card-lg: 0 0 0.5rem rgba(254, 248, 226, 0.5), 0 0 2rem rgba(252, 225, 132, 0.4);
+  --shadow-card-hover: 0 0 0.5rem rgba(254, 248, 226, 0.6), 0 0 2rem rgba(252, 225, 132, 0.5);
   --shadow-panel-left: -4px 0 12px 0 rgba(252, 225, 132, 0.15);
   --shadow-inner: inset 0 0 0 1px var(--color-edge-primary);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PREVIEW CONTAINER
+   Forces light-mode colors inside preview/demo areas in dark mode
+   Use this for component preview sections that have cream backgrounds
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.preview-light {
+  /* Reset content tokens to light mode values */
+  --color-content-primary: var(--color-black);
+  --color-content-secondary: var(--color-sun-yellow);
+  --color-content-tertiary: var(--color-warm-cloud);
+  --color-content-inverted: var(--color-warm-cloud);
+
+  /* Reset edge tokens to light mode values */
+  --color-edge-primary: var(--color-black);
+  --color-edge-secondary: var(--color-sun-yellow);
+
+  /* Reset shadows to light mode pixel shadows */
+  --shadow-btn: 0 1px 0 0 var(--color-black);
+  --shadow-btn-hover: 0 3px 0 0 var(--color-black);
+  --shadow-card: 2px 2px 0 0 var(--color-black);
+  --shadow-card-lg: 4px 4px 0 0 var(--color-black);
+  --shadow-card-hover: 6px 6px 0 0 var(--color-black);
 }

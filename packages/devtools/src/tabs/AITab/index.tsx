@@ -65,13 +65,13 @@ export function AITab() {
             placeholder="Search prompts and styles..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-3 py-2 bg-surface-primary border border-edge-primary/20 rounded-sm text-content-primary placeholder:text-content-tertiary focus:outline-none focus:ring-2 focus:ring-edge-focus"
+            className="w-full px-3 py-2 bg-surface-primary border border-edge-primary/20 rounded-sm text-content-primary placeholder:text-content-primary focus:outline-none focus:ring-2 focus:ring-edge-focus"
           />
         </div>
       </div>
 
       {/* Sub-tab content */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto pt-4 pb-4 pl-4 pr-2 bg-surface-elevated border border-edge-primary rounded">
         {activeSubTab === 'radflow-prompts' && (
           <PromptsSubTab prompts={storeRadflowPrompts} searchQuery={searchQuery} />
         )}

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Icon } from '@radflow/ui/Icon';
+import { ThemeIcon as Icon } from '../../components/ThemeIcon';
 
 interface UploadDropzoneProps {
   onUpload: (files: File[]) => void;

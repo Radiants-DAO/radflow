@@ -1,0 +1,33 @@
+/* ============================================================================
+   @radflow/theme-phase
+
+   Dark-mode Web3 brand with warm cream text and glass-effect components.
+
+   Design Language:
+   - Dark-first: Warm cream (#f3eed9) on near-black (#0f0c0e)
+   - Glass effect: 5-10% opacity backgrounds, 20-50% opacity borders
+   - Sharp corners: 0-2px radius, no shadows
+   - Fonts: Audiowide (display), Outfit (body), Kode Mono (code)
+   - Icons: Phosphor (regular style)
+   ============================================================================ */
+
+/* Design tokens (colors, shadows, radius, semantic mappings) */
+@import "./tokens.css";
+
+/* Font face declarations */
+@import "./fonts.css";
+
+/* Base typography styles */
+@import "./typography.css";
+
+/* Base HTML/body styles */
+@import "./base.css";
+
+/* Color mode overrides (Phase is dark-first) */
+@import "./dark.css";
+
+/* Scrollbar styling */
+@import "./scrollbar.css";
+
+/* Keyframe animations */
+@import "./animations.css";

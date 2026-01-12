@@ -13,9 +13,8 @@ interface LeftRailProps {
 }
 
 const TOOLS: Array<{ id: Tool; icon: string; label: string; shortcut: string }> = [
-  { id: 'search', icon: 'search', label: 'Search', shortcut: '⌘K' },
-  { id: 'componentId', icon: 'crosshair1', label: 'Component ID', shortcut: '⌘⇧I' },
-  { id: 'textEdit', icon: 'pencil', label: 'Text Edit', shortcut: '⌘⇧T' },
+  { id: 'componentId', icon: 'crosshair1', label: 'Component ID', shortcut: '' },
+  { id: 'textEdit', icon: 'pencil', label: 'Text Edit', shortcut: '' },
   { id: 'help', icon: 'question', label: 'Help', shortcut: '⌘⇧?' },
 ];
 
@@ -25,7 +24,7 @@ const TABS: Array<{ id: Tab; icon: string; label: string; shortcut: string }> = 
   { id: 'components', icon: 'code-window', label: 'Components', shortcut: '3' },
   { id: 'assets', icon: 'multiple-images', label: 'Assets', shortcut: '4' },
   { id: 'ai', icon: 'lightbulb', label: 'AI', shortcut: '5' },
-  { id: 'mockStates', icon: 'settings-cog', label: 'Mock States', shortcut: '6' },
+  { id: 'mockStates', icon: 'list', label: 'Mock States', shortcut: '6' },
 ];
 
 export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle, onSettingsClick }: LeftRailProps) {
@@ -33,27 +32,28 @@ export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle, onS
   const pendingChangeCount = pendingChanges.length;
 
   return (
-    <div className="flex flex-col items-center py-0 px-0 h-full">
+    <div className="flex flex-col items-center py-0 px-0 pb-2 h-full">
       {/* Top Section */}
       <div className="flex flex-col">
         {/* Tools Section */}
-        <div className="flex flex-col gap-1 mb-2 bg-surface-elevated p-1 border border-edge-primary rounded-sm">
+        <div className="flex flex-col gap-0 mb-2 bg-surface-elevated p-0 border border-edge-primary rounded-sm w-fit overflow-hidden">
           {TOOLS.map((tool) => (
             <Tooltip
               key={tool.id}
-              content={`${tool.label} (${tool.shortcut})`}
+              content={tool.shortcut ? `${tool.label} (${tool.shortcut})` : tool.label}
               position="right"
               size="sm"
               delay={300}
             >
               <div className="relative">
                 <Button
-                  variant={activeTool === tool.id ? 'secondary' : 'ghost'}
+                  variant="ghost"
                   size="md"
                   iconOnly
                   iconName={tool.icon}
                   onClick={() => onToolToggle(tool.id)}
                   data-help-id={`tool-${tool.id}`}
+                  className={`!rounded-none ${activeTool === tool.id ? '!bg-surface-secondary !text-content-inverted' : ''}`}
                 />
                 {/* Badge for Text Edit mode showing pending change count */}
                 {tool.id === 'textEdit' && pendingChangeCount > 0 && (
@@ -70,7 +70,7 @@ export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle, onS
         <Divider orientation="horizontal" className="w-6 mb-2" />
 
         {/* Tabs Section */}
-        <div className="flex flex-col gap-1 bg-surface-elevated p-1 border border-edge-primary rounded-sm">
+        <div className="flex flex-col gap-0 bg-surface-elevated p-0 border border-edge-primary rounded-sm w-fit overflow-hidden">
           {TABS.map((tab) => (
             <Tooltip
               key={tab.id}
@@ -80,12 +80,13 @@ export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle, onS
               delay={300}
             >
               <Button
-                variant={activeTab === tab.id ? 'secondary' : 'ghost'}
+                variant="ghost"
                 size="md"
                 iconOnly
                 iconName={tab.icon}
                 onClick={() => onTabChange(tab.id)}
                 data-help-id={`tab-${tab.id}`}
+                className={`!rounded-none ${activeTab === tab.id ? '!bg-surface-secondary !text-content-inverted' : ''}`}
               />
             </Tooltip>
           ))}
@@ -96,21 +97,24 @@ export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle, onS
       <div className="flex-1" />
 
       {/* Settings Button - Bottom */}
-      <Tooltip
-        content="Settings"
-        position="right"
-        size="sm"
-        delay={300}
-      >
-        <Button
-          variant="ghost"
-          size="md"
-          iconOnly
-          iconName="settings-cog"
-          onClick={onSettingsClick}
-          data-help-id="settings-button"
-        />
-      </Tooltip>
+      <div className="h-fit bg-surface-elevated border border-edge-primary rounded-sm p-0 flex items-center w-fit overflow-hidden">
+        <Tooltip
+          content="Settings (⌘⇧.)"
+          position="right"
+          size="sm"
+          delay={300}
+        >
+          <Button
+            variant="ghost"
+            size="sm"
+            iconOnly
+            iconName="settings-cog"
+            onClick={onSettingsClick}
+            data-help-id="settings-button"
+            className="!rounded-none"
+          />
+        </Tooltip>
+      </div>
     </div>
   );
 }

@@ -47,7 +47,7 @@ export function TypographyTab({ searchQuery = '' }: TypographyTabProps) {
   }, [message]);
 
   return (
-    <div className="flex flex-col h-full overflow-auto pt-4 pb-4 pl-4 pr-2 bg-surface-primary border border-edge-primary rounded space-y-4">
+    <div className="flex flex-col h-full overflow-auto pt-4 pb-4 pl-4 pr-2 bg-surface-elevated border border-edge-primary rounded space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2>
@@ -85,7 +85,7 @@ export function TypographyTab({ searchQuery = '' }: TypographyTabProps) {
         <FontManager />
 
         {/* Fluid Typography Info */}
-        <div className="border border-edge-primary rounded-sm bg-surface-elevated p-4 space-y-3">
+        <div className="rounded-sm bg-surface-elevated space-y-3">
           <h3>Proportional Fluid Scaling</h3>
           <p className="font-mondwest text-sm text-content-primary/70">
             Everything scales proportionally using a single <code>clamp()</code> on the root HTML element. All rem-based measurements scale together, maintaining design ratios.

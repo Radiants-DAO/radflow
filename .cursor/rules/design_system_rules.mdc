@@ -1,0 +1,640 @@
+# RadFlow Design System Rules
+
+> **Purpose**: This document defines the design system structure, conventions, and patterns for implementing Figma designs in this codebase. Use these rules when generating code from Figma MCP context.
+
+---
+
+## Quick Reference
+
+| Aspect | Convention |
+|--------|------------|
+| **Framework** | React 19 + Next.js 16 (App Router) |
+| **Styling** | Tailwind CSS v4 with `@theme` blocks |
+| **Build** | pnpm monorepo, tsup bundler |
+| **Tokens** | CSS Custom Properties (semantic) |
+| **Dark Mode** | `.dark` class on root |
+| **Icons** | SVG files at `/public/assets/icons/` |
+| **Fonts** | Joystix (headings), Mondwest (body), PixelCode (code) |
+
+---
+
+## 1. Token Definitions
+
+### Location & Format
+
+Design tokens are defined using **Tailwind CSS v4's `@theme` blocks** in CSS files:
+
+```
+packages/theme-rad-os/tokens.css    # Theme implementation
+app/globals.css                     # Project-level overrides
+```
+
+### Token Architecture (3 Tiers)
+
+```
+TIER 1: Brand Colors (raw hex values)
+    ↓
+TIER 2: Semantic Tokens (CSS variables referencing brand colors)
+    ↓
+TIER 3: Tailwind Utilities (auto-generated from @theme)
+```
+
+### Brand Colors (Tier 1)
+
+```css
+@theme {
+  --color-black: #0F0E0C;
+  --color-sun-yellow: #FCE184;
+  --color-sky-blue: #95BAD2;
+  --color-warm-cloud: #FEF8E2;
+  --color-sunset-fuzz: #FCC383;
+  --color-sun-red: #FF6B63;
+  --color-green: #CEF5CA;
+  --color-white: #FFFFFF;
+}
+```
+
+**Usage**: `bg-sun-yellow`, `text-black`, `border-warm-cloud`
+
+### Semantic Tokens (Tier 2)
+
+Organized by **CSS property type** for automatic dark mode inversion:
+
+#### Surface Tokens (backgrounds)
+```css
+--color-surface-primary: var(--color-warm-cloud);   /* Main backgrounds */
+--color-surface-secondary: var(--color-black);      /* Inverted sections */
+--color-surface-tertiary: var(--color-sun-yellow);  /* Accent backgrounds */
+--color-surface-elevated: var(--color-white);       /* Raised elements */
+--color-surface-success: var(--color-green);
+--color-surface-warning: var(--color-sun-yellow);
+--color-surface-error: var(--color-sun-red);
+```
+**Usage**: `bg-surface-primary`, `bg-surface-tertiary`
+
+#### Content Tokens (text/icons)
+```css
+--color-content-primary: var(--color-black);        /* Main text */
+--color-content-secondary: var(--color-sun-yellow); /* Accent text */
+--color-content-tertiary: var(--color-warm-cloud);  /* Subtle text */
+--color-content-inverted: var(--color-warm-cloud);  /* Text on dark bg */
+--color-content-success: var(--color-green);
+--color-content-warning: var(--color-sunset-fuzz);
+--color-content-error: var(--color-sun-red);
+--color-content-link: var(--color-sky-blue);
+```
+**Usage**: `text-content-primary`, `text-content-link`
+
+#### Edge Tokens (borders/dividers)
+```css
+--color-edge-primary: var(--color-black);           /* Main borders */
+--color-edge-secondary: var(--color-sun-yellow);    /* Accent borders */
+--color-edge-focus: var(--color-sky-blue);          /* Focus rings */
+--color-edge-success: var(--color-green);
+--color-edge-warning: var(--color-sunset-fuzz);
+--color-edge-error: var(--color-sun-red);
+```
+**Usage**: `border-edge-primary`, `ring-edge-focus`
+
+### Layout Tokens
+
+#### Border Radius
+```css
+--radius-none: 0;
+--radius-xs: 0.125rem;   /* 2px */
+--radius-sm: 0.25rem;    /* 4px - buttons, inputs */
+--radius-md: 0.5rem;     /* 8px - cards */
+--radius-lg: 1rem;       /* 16px - modals */
+--radius-full: 9999px;   /* Pills */
+```
+**Usage**: `rounded-sm`, `rounded-md`
+
+#### Box Shadows (Hard Pixel Style)
+```css
+/* Light mode: hard black pixel shadows */
+--shadow-btn: 0 1px 0 0 var(--color-black);
+--shadow-btn-hover: 0 3px 0 0 var(--color-black);
+--shadow-card: 2px 2px 0 0 var(--color-black);
+--shadow-card-lg: 4px 4px 0 0 var(--color-black);
+--shadow-card-hover: 6px 6px 0 0 var(--color-black);
+--shadow-panel-left: -4px 0 0 0 var(--color-black);
+--shadow-inner: inset 0 0 0 1px var(--color-black);
+
+/* Dark mode: yellow glow shadows */
+--shadow-btn: 0 1px 8px 0 rgba(252, 225, 132, 0.3);
+--shadow-card: 0 0 12px 2px rgba(252, 225, 132, 0.2);
+```
+**Usage**: `shadow-btn`, `shadow-card`, `shadow-card-lg`
+
+#### Typography Scale
+```css
+--font-size-2xs: 0.5rem;    /* 8px - tiny labels */
+--font-size-xs: 0.75rem;    /* 12px - buttons, small UI */
+--font-size-sm: 0.875rem;   /* 14px - body text */
+--font-size-base: 0.875rem; /* 14px - default */
+--font-size-lg: 1rem;       /* 16px - large body */
+```
+
+---
+
+## 2. Component Library
+
+### Location
+
+```
+packages/ui/src/           # 26 core components
+packages/ui/src/index.ts   # Barrel exports
+```
+
+### Available Components
+
+**Layout**: `Card`, `CardHeader`, `CardBody`, `CardFooter`, `Tabs`, `TabList`, `TabTrigger`, `TabContent`, `Divider`, `Table`
+
+**Forms**: `Input`, `TextArea`, `Label`, `Select`, `Checkbox`, `Radio`, `RadioGroup`, `Switch`, `Slider`
+
+**Feedback**: `Alert`, `Badge`, `BadgeGroup`, `Progress`, `Spinner`, `Skeleton`, `Toast`, `Tooltip`, `Avatar`
+
+**Navigation**: `Accordion`, `AccordionItem`, `Breadcrumbs`
+
+**Overlay**: `Dialog`, `Sheet`, `Popover`, `DropdownMenu`, `ContextMenu`, `HelpPanel`
+
+**Actions**: `Button`
+
+**Icons**: `Icon`
+
+### Component Architecture Pattern
+
+All components follow this structure:
+
+```tsx
+import clsx from 'clsx';
+
+type ComponentVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
+type ComponentSize = 'sm' | 'md' | 'lg';
+
+interface ComponentProps {
+  variant?: ComponentVariant;
+  size?: ComponentSize;
+  children: React.ReactNode;
+  className?: string;
+}
+
+const baseStyles = `
+  inline-flex items-center
+  border border-edge-primary
+  rounded-sm
+`;
+
+const variantStyles: Record<ComponentVariant, string> = {
+  primary: 'bg-surface-tertiary text-content-primary',
+  secondary: 'bg-surface-secondary text-content-inverted',
+  outline: 'bg-surface-primary text-content-primary',
+  ghost: 'bg-transparent border-transparent',
+};
+
+export function Component({
+  variant = 'primary',  // Always provide defaults
+  size = 'md',
+  children,
+  className = '',
+}: ComponentProps) {
+  const classes = [baseStyles, variantStyles[variant], className]
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  return <div className={classes}>{children}</div>;
+}
+
+export default Component;
+export type { ComponentVariant, ComponentSize, ComponentProps };
+```
+
+### Key Requirements
+
+1. **Default export required** (component scanner ignores named-only exports)
+2. **Default prop values required** (visual editor needs them)
+3. **TypeScript props interface required**
+4. **Semantic tokens only** - never hardcode colors (`#FCE184` -> `bg-sun-yellow` or `bg-surface-tertiary`)
+5. **clsx for class composition**
+
+### Button Component Example
+
+```tsx
+import { Button } from '@radflow/ui';
+
+// Variants: primary | secondary | outline | ghost
+// Sizes: sm | md | lg
+
+<Button variant="primary" size="md">
+  Click me
+</Button>
+
+<Button variant="secondary" iconName="settings-cog">
+  Settings
+</Button>
+
+<Button variant="ghost" iconOnly iconName="close" />
+```
+
+### Card Component Example
+
+```tsx
+import { Card, CardHeader, CardBody, CardFooter } from '@radflow/ui';
+
+// Variants: default | dark | raised
+
+<Card variant="raised">
+  <CardHeader>Title</CardHeader>
+  <CardBody>Content</CardBody>
+  <CardFooter>Actions</CardFooter>
+</Card>
+```
+
+---
+
+## 3. Frameworks & Libraries
+
+### Stack
+
+| Layer | Technology |
+|-------|------------|
+| **Framework** | Next.js 16 (App Router, Server Components default) |
+| **React** | React 19 |
+| **Styling** | Tailwind CSS v4 |
+| **PostCSS** | `@tailwindcss/postcss` plugin |
+| **Bundler** | tsup (ESM/CJS, tree-shakeable) |
+| **Package Manager** | pnpm workspace |
+| **State** | zustand v5 |
+| **Types** | TypeScript 5 |
+
+### PostCSS Configuration
+
+```js
+// postcss.config.mjs
+const config = {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+export default config;
+```
+
+### Key Dependencies
+
+```json
+{
+  "dependencies": {
+    "next": "16.0.10",
+    "react": "19.2.1",
+    "react-dom": "19.2.1",
+    "zustand": "^5.0.9"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "tailwindcss": "^4",
+    "clsx": "^2.1.1"
+  }
+}
+```
+
+---
+
+## 4. Asset Management
+
+### Directory Structure
+
+```
+public/
+├── assets/
+│   ├── icons/         # 168 SVG icons (retro pixel style)
+│   ├── images/        # Image assets by category
+│   ├── logos/         # Logo variants
+│   └── backgrounds/   # Pattern backgrounds
+├── fonts/             # 26 font files (woff2)
+└── scrollbar-background.svg
+```
+
+### Font Loading
+
+Fonts are loaded via `@font-face` in `globals.css`:
+
+```css
+@font-face {
+  font-family: 'Mondwest';
+  src: url('/fonts/Mondwest-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PixelCode';
+  src: url('/fonts/PixelCode.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+```
+
+### Image References
+
+```tsx
+// Next.js Image component
+import Image from 'next/image';
+
+<Image
+  src="/assets/images/category/filename.png"
+  alt="Description"
+  width={100}
+  height={100}
+/>
+```
+
+---
+
+## 5. Icon System
+
+### Location & Format
+
+- **Path**: `/public/assets/icons/*.svg`
+- **Count**: 168 icons
+- **Style**: Retro pixel aesthetic
+- **Format**: SVG with currentColor for fill/stroke
+
+### Icon Component Usage
+
+```tsx
+import { Icon, ICON_SIZES } from '@radflow/ui';
+
+// Semantic sizes
+<Icon name="checkmark" size="sm" />  {/* 16px */}
+<Icon name="settings-cog" size="md" />  {/* 20px */}
+<Icon name="close" size="lg" />  {/* 32px */}
+<Icon name="avatar" size="xl" />  {/* 48px */}
+
+// With color inheritance
+<Icon name="checkmark" className="text-content-success" />
+
+// Custom base path
+<Icon name="custom-icon" basePath="/custom/icons" />
+```
+
+### Size Mapping
+
+```ts
+const ICON_SIZES = {
+  sm: 16,
+  md: 20,
+  lg: 32,
+  xl: 48,
+};
+```
+
+### Icon Aliases
+
+Some icons have aliases for backward compatibility:
+
+```ts
+const ICON_ALIASES = {
+  refresh: 'refresh1',
+  settings: 'settings-cog',
+  lightning: 'electric',
+  'information-circle': 'info-filled',
+  expand: 'full-screen',
+  collapse: 'minus',
+  'checkmark-filled': 'checkmark',
+};
+```
+
+### Common Icon Names
+
+`checkmark`, `close`, `chevron-down`, `settings-cog`, `copy-to-clipboard`, `copied-to-clipboard`, `refresh1`, `search`, `plus`, `minus`, `edit`, `trash`, `info-filled`, `warning`, `error`
+
+---
+
+## 6. Styling Approach
+
+### Methodology
+
+**Semantic Tokens + Tailwind CSS v4**
+
+- No `tailwind.config.js` file - theme is defined in CSS via `@theme` blocks
+- `@apply` directives for component base styles
+- `@layer base` for typography hierarchy
+
+### Dark Mode
+
+Class-based toggle using `.dark` on the document root:
+
+```css
+/* Light mode (default) */
+--color-surface-primary: var(--color-warm-cloud);
+--color-content-primary: var(--color-black);
+--shadow-card: 2px 2px 0 0 var(--color-black);
+
+/* Dark mode override */
+.dark {
+  --color-surface-primary: var(--color-black);
+  --color-content-primary: var(--color-warm-cloud);
+  --shadow-card: 0 0 12px 2px rgba(252, 225, 132, 0.2);
+}
+```
+
+**Light preview areas in dark mode**:
+```html
+<div class="dark">
+  <div class="preview-light">
+    <!-- Forces light mode tokens inside -->
+  </div>
+</div>
+```
+
+### Interactive States Pattern
+
+All interactive elements use this lift/press pattern:
+
+```css
+/* Base shadow */
+shadow-btn
+
+/* Hover: lift up, increase shadow */
+hover:-translate-y-0.5
+hover:shadow-btn-hover
+
+/* Active: press down, remove shadow */
+active:translate-y-0.5
+active:shadow-none
+
+/* Focus ring */
+focus:outline-none
+focus-visible:ring-2
+focus-visible:ring-edge-focus
+focus-visible:ring-offset-1
+
+/* Disabled state */
+disabled:opacity-50
+disabled:cursor-not-allowed
+disabled:hover:translate-y-0
+disabled:hover:shadow-btn
+```
+
+### Typography Rules
+
+Typography is defined in `@layer base`:
+
+```css
+@layer base {
+  h2 {
+    @apply font-joystix text-3xl font-normal leading-tight text-content-primary;
+  }
+
+  p {
+    @apply font-mondwest text-base font-normal leading-relaxed text-content-primary;
+  }
+
+  code {
+    @apply text-xs font-normal leading-normal text-content-primary bg-warm-cloud px-1 py-0.5 rounded-sm;
+    font-family: "PixelCode";
+  }
+}
+```
+
+### Font Usage
+
+| Element | Font | Usage |
+|---------|------|-------|
+| `h2-h6`, `label`, `small`, `strong` | Joystix Monospace | Headings, labels, UI text |
+| `p`, `li`, `a` | Mondwest | Body text, paragraphs |
+| `code`, `pre`, `kbd` | PixelCode | Code blocks, shortcuts |
+
+### Responsive Design
+
+Standard Tailwind breakpoints:
+
+```css
+--breakpoint-sm: 640px;
+--breakpoint-md: 768px;
+--breakpoint-lg: 1024px;
+--breakpoint-xl: 1280px;
+--breakpoint-2xl: 1536px;
+```
+
+**Usage**: `sm:flex`, `md:grid-cols-2`, `lg:px-8`
+
+---
+
+## 7. Project Structure
+
+```
+radtools/
+├── packages/
+│   ├── theme/              # @radflow/theme - base interface
+│   ├── theme-rad-os/       # @radflow/theme-rad-os - implementation
+│   │   ├── tokens.css      # Brand + semantic tokens
+│   │   ├── typography.css  # @layer base typography
+│   │   ├── dark.css        # Dark mode overrides
+│   │   ├── fonts.css       # @font-face declarations
+│   │   └── animations.css  # Keyframe animations
+│   ├── ui/                 # @radflow/ui - components
+│   │   └── src/
+│   │       ├── Button.tsx
+│   │       ├── Card.tsx
+│   │       ├── Icon.tsx
+│   │       └── index.ts    # Barrel exports
+│   └── devtools/           # @radflow/devtools - visual editor
+├── app/                    # Next.js app router
+│   ├── globals.css         # Root styles + token overrides
+│   ├── layout.tsx
+│   └── page.tsx
+├── public/
+│   ├── assets/
+│   │   ├── icons/          # SVG icons
+│   │   ├── images/
+│   │   └── logos/
+│   └── fonts/              # WOFF2 font files
+├── CLAUDE.md               # Development rules
+├── package.json
+├── pnpm-workspace.yaml
+├── postcss.config.mjs
+└── tsconfig.json
+```
+
+---
+
+## 8. Code Generation Rules
+
+### When Implementing Figma Designs
+
+1. **Always use semantic tokens** - map Figma colors to token names:
+   - Yellow backgrounds → `bg-surface-tertiary`
+   - Cream backgrounds → `bg-surface-primary`
+   - Black text → `text-content-primary`
+   - Blue links → `text-content-link`
+
+2. **Use existing components** - check `packages/ui/src/` first:
+   ```tsx
+   // Prefer this:
+   import { Button, Card, Icon } from '@radflow/ui';
+
+   // Over creating new components
+   ```
+
+3. **Follow the shadow hierarchy**:
+   - Buttons: `shadow-btn` / `shadow-btn-hover`
+   - Cards: `shadow-card` / `shadow-card-lg`
+   - Panels: `shadow-panel-left`
+   - Inset: `shadow-inner`
+
+4. **Match border radius to element type**:
+   - Buttons, inputs: `rounded-sm` (4px)
+   - Cards, modals: `rounded-md` (8px)
+   - Pills, avatars: `rounded-full`
+
+5. **Apply the lift/press interaction pattern** to all clickable elements
+
+6. **Use proper font families**:
+   - UI labels, headings: `font-joystix`
+   - Body text, descriptions: `font-mondwest`
+   - Code snippets: PixelCode (set via CSS)
+
+### Figma-to-Tailwind Mapping
+
+| Figma Property | Tailwind Class |
+|----------------|----------------|
+| Fill: #FCE184 | `bg-sun-yellow` or `bg-surface-tertiary` |
+| Fill: #FEF8E2 | `bg-warm-cloud` or `bg-surface-primary` |
+| Fill: #0F0E0C | `bg-black` or `bg-surface-secondary` |
+| Stroke: #0F0E0C | `border-edge-primary` |
+| Text: #0F0E0C | `text-content-primary` |
+| Corner radius: 4px | `rounded-sm` |
+| Corner radius: 8px | `rounded-md` |
+| Drop shadow: 2px 2px | `shadow-card` |
+
+### Don't Do
+
+- Don't hardcode hex colors - use tokens
+- Don't create new fonts - use Joystix/Mondwest/PixelCode
+- Don't use blur shadows in light mode - use hard pixel shadows
+- Don't skip the disabled state pattern
+- Don't forget dark mode compatibility
+
+---
+
+## 9. Design System Philosophy
+
+### Aesthetic: Retro-Modern
+
+Inspired by 1980s-90s computing interfaces (System 7, early Mac OS):
+
+- **Warm color palette**: Yellow (#FCE184), cream (#FEF8E2), black (#0F0E0C)
+- **Hard pixel shadows**: No blur, offset shadow for tactile depth
+- **Mixed typography**: Retro monospace (Joystix) + modern humanist (Mondwest)
+- **Physical interactions**: Lift on hover, press on click
+
+### Core Principles
+
+1. **Semantic tokens everywhere** - no raw colors in components
+2. **Theme-agnostic components** - swap themes without code changes
+3. **Property-based token organization** - surface/content/edge for automatic dark mode
+4. **Visual source of truth** - RadFlow DevTools edits push to source files

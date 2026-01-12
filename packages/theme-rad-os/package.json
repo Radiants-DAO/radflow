@@ -1,9 +1,10 @@
 {
   "name": "@radflow/theme-rad-os",
   "version": "0.1.0",
-  "description": "Rad OS theme for RadFlow - retro pixel aesthetic",
+  "description": "Rad OS theme for RadFlow - retro pixel aesthetic with warm California vibes",
   "license": "MIT",
   "main": "index.css",
+  "style": "index.css",
   "exports": {
     ".": "./index.css",
     "./tokens": "./tokens.css",
@@ -15,25 +16,17 @@
     "./animations": "./animations.css"
   },
   "files": [
-    "index.css",
-    "tokens.css",
-    "dark.css",
-    "fonts.css",
-    "typography.css",
-    "base.css",
-    "scrollbar.css",
-    "animations.css",
+    "*.css",
     "agents"
   ],
   "peerDependencies": {
-    "@radflow/theme": "^0.1.0"
-  },
-  "devDependencies": {
-    "@radflow/theme": "workspace:*"
+    "tailwindcss": "^4.0.0"
   },
   "keywords": [
     "radflow",
     "theme",
+    "css",
+    "tailwind",
     "rad-os",
     "retro",
     "pixel"
@@ -42,5 +35,21 @@
     "type": "git",
     "url": "https://github.com/Radiants-DAO/radflow.git",
     "directory": "packages/theme-rad-os"
+  },
+  "radflow": {
+    "type": "theme",
+    "displayName": "Rad OS",
+    "description": "Retro pixel aesthetic with warm California vibes and System 7 heritage",
+    "colorMode": "light",
+    "icons": {
+      "library": "phosphor",
+      "style": "bold",
+      "package": "phosphor-react"
+    },
+    "fonts": {
+      "heading": "Joystix Monospace",
+      "body": "Mondwest",
+      "mono": "PixelCode"
+    }
   }
 }

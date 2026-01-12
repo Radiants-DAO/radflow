@@ -439,14 +439,20 @@ export const createTypographySlice: StateCreator<TypographySlice, [], [], Typogr
 
   // Sync typography to CSS
   syncTypographyToCSS: async () => {
-    const state = get();
+    const state = get() as unknown as { fonts: FontDefinition[]; typographyStyles: TypographyStyle[]; activeTheme: string };
+    const { activeTheme, fonts, typographyStyles } = state;
+
+    if (!activeTheme) {
+      throw new Error('No active theme set');
+    }
+
     try {
-      const response = await fetch('/api/devtools/write-css', {
+      const response = await fetch(`/api/devtools/themes/${activeTheme}/write-css`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          fonts: state.fonts,
-          typographyStyles: state.typographyStyles,
+          fonts,
+          typographyStyles,
         }),
       });
 

@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import { useDevToolsStore } from '../../store';
 import { PromptTemplate } from '../../store/slices/aiSlice';
 import { Button } from '@radflow/ui/Button';
-import { Icon } from '@radflow/ui/Icon';
+import { ThemeIcon as Icon } from '../../components/ThemeIcon';
 
 interface PromptsSubTabProps {
   prompts: PromptTemplate[];
@@ -56,7 +56,7 @@ export function PromptsSubTab({ prompts, searchQuery }: PromptsSubTabProps) {
 
   if (filteredPrompts.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full text-content-tertiary">
+      <div className="flex items-center justify-center h-full text-content-primary">
         <div className="text-center">
           <Icon name="search" size={48} className="mx-auto mb-4 opacity-50" />
           <p>No prompts found matching &quot;{searchQuery}&quot;</p>

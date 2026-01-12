@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Icon } from '@radflow/ui/Icon';
+import { ThemeIcon as Icon } from '../../components/ThemeIcon';
 import { Button } from '@radflow/ui/Button';
 
 interface LogoData {
@@ -176,7 +176,7 @@ export function LogosSubTab({ searchQuery }: LogosSubTabProps) {
       ))}
 
       {filteredLogos.length === 0 && (
-        <p className="text-content-tertiary text-center py-8">
+        <p className="text-content-primary text-center py-8">
           No logos found matching &ldquo;{searchQuery}&rdquo;
         </p>
       )}

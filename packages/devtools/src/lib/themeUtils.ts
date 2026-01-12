@@ -113,3 +113,49 @@ export async function triggerHotReload(): Promise<void> {
   // No additional action needed
   return Promise.resolve();
 }
+
+/**
+ * Get the theme ID from the current theme import
+ * Extracts 'phase' from '@radflow/theme-phase' or 'rad-os' from '@radflow/theme-rad-os'
+ *
+ * @returns The theme ID, or null if not found
+ */
+export async function getCurrentThemeId(): Promise<string | null> {
+  const packageName = await getCurrentThemeImport();
+  if (!packageName) return null;
+
+  // Extract theme ID from package name: @radflow/theme-phase -> phase
+  const match = packageName.match(/@radflow\/theme-(.+)/);
+  return match ? match[1] : null;
+}
+
+/**
+ * Get file paths for a theme's CSS files
+ *
+ * @param themeId - The theme identifier (e.g., 'phase', 'rad-os')
+ * @returns Object with paths to all theme CSS files
+ */
+export function getThemeFilePaths(themeId: string): {
+  tokensPath: string;
+  typographyPath: string;
+  fontsPath: string;
+  darkPath: string;
+  basePath: string;
+  scrollbarPath: string;
+  animationsPath: string;
+  indexPath: string;
+  packageDir: string;
+} {
+  const packageDir = join(process.cwd(), 'packages', `theme-${themeId}`);
+  return {
+    packageDir,
+    tokensPath: join(packageDir, 'tokens.css'),
+    typographyPath: join(packageDir, 'typography.css'),
+    fontsPath: join(packageDir, 'fonts.css'),
+    darkPath: join(packageDir, 'dark.css'),
+    basePath: join(packageDir, 'base.css'),
+    scrollbarPath: join(packageDir, 'scrollbar.css'),
+    animationsPath: join(packageDir, 'animations.css'),
+    indexPath: join(packageDir, 'index.css'),
+  };
+}

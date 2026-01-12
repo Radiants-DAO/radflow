@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useDevToolsStore } from '../../store';
 import { UploadDropzone } from './UploadDropzone';
-import { Icon } from '@radflow/ui/Icon';
+import { ThemeIcon as Icon } from '../../components/ThemeIcon';
 import { Button } from '@radflow/ui/Button';
 
 interface ImageFile {
@@ -161,7 +161,7 @@ export function ImagesSubTab({ searchQuery }: ImagesSubTabProps) {
 
       {/* Images Grid */}
       {filteredImages.length === 0 ? (
-        <p className="text-content-tertiary text-center py-8">
+        <p className="text-content-primary text-center py-8">
           {searchQuery ? `No images found matching "${searchQuery}"` : 'No images uploaded yet'}
         </p>
       ) : (

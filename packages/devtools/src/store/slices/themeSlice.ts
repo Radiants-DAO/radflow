@@ -143,14 +143,25 @@ export const createThemeSlice: StateCreator<ThemeSlice, [], [], ThemeSlice> = (s
 
   fetchAvailableThemes: async () => {
     try {
-      const response = await fetch('/api/devtools/themes/list');
+      // Fetch both available themes and current active theme in parallel
+      const [themesResponse, currentResponse] = await Promise.all([
+        fetch('/api/devtools/themes/list'),
+        fetch('/api/devtools/themes/current'),
+      ]);
 
-      if (!response.ok) {
-        console.error('Failed to fetch available themes:', response.statusText);
+      if (!themesResponse.ok) {
+        console.error('Failed to fetch available themes:', themesResponse.statusText);
         return;
       }
 
-      const data = await response.json() as { themes: Theme[] };
+      // Get current theme from globals.css (may fail if no import found)
+      let detectedActiveTheme = get().activeTheme;
+      if (currentResponse.ok) {
+        const currentData = await currentResponse.json() as { themeId: string };
+        detectedActiveTheme = currentData.themeId;
+      }
+
+      const data = await themesResponse.json() as { themes: Theme[] };
       const themes: Theme[] = data.themes.map((themeConfig) => ({
         id: themeConfig.id,
         name: themeConfig.name,
@@ -159,10 +170,19 @@ export const createThemeSlice: StateCreator<ThemeSlice, [], [], ThemeSlice> = (s
         description: themeConfig.description,
         cssFiles: themeConfig.cssFiles,
         componentFolders: themeConfig.componentFolders,
-        isActive: themeConfig.id === get().activeTheme,
+        isActive: themeConfig.id === detectedActiveTheme,
       }));
 
-      set({ availableThemes: themes });
+      // Calculate write-locked themes (all non-active themes)
+      const writeLockedThemes = themes
+        .filter((t) => t.id !== detectedActiveTheme)
+        .map((t) => t.id);
+
+      set({
+        availableThemes: themes,
+        activeTheme: detectedActiveTheme,
+        writeLockedThemes,
+      });
     } catch (error) {
       console.error('Error fetching available themes:', error);
     }

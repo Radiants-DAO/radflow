@@ -65,7 +65,7 @@ export function PanelHeader({
             iconOnly
             iconName="close"
             onClick={onClose}
-            title="Close (⌘⇧K)"
+            title="Minimize (⌘⇧K)"
           />
         )}
       </div>

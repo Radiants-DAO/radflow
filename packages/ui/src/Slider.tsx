@@ -170,7 +170,7 @@ export function Slider({ value, onChange, min = 0, max = 100, step = 1, size = '
           border border-edge-primary
           rounded-sm
           ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-          focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2
+          focus:outline-none focus:ring-2 focus:ring-edge-focus focus:ring-offset-2
         `.trim()}
         style={{
           backgroundColor: 'var(--color-surface-sunken)',

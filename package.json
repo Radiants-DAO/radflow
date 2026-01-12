@@ -40,6 +40,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
+    "@radflow/theme-phase": "workspace:*",
+    "@radflow/theme-rad-os": "workspace:*",
     "next": "16.0.10",
     "react": "19.2.1",
     "react-dom": "19.2.1",
@@ -56,6 +59,6 @@
     "tailwindcss": "^4",
     "tsup": "^8.3.0",
     "tsx": "^4.21.0",
-    "typescript": "^5"
+    "typescript": "^5.9.3"
   }
 }

@@ -42,6 +42,12 @@ export type { SwitchSize, SwitchProps } from './Switch';
 export { Slider } from './Slider';
 export type { SliderSize, SliderProps } from './Slider';
 
+export { Combobox } from './Combobox';
+export type { ComboboxOption, ComboboxProps, ComboboxSize } from './Combobox';
+
+export { NumberField } from './NumberField';
+export type { NumberFieldProps, NumberFieldSize } from './NumberField';
+
 // ============================================================================
 // Feedback Components
 // ============================================================================
@@ -120,3 +126,10 @@ export type { IconSize, IconProps } from './Icon';
 
 export { useEscapeKey, useClickOutside, useLockBodyScroll } from './hooks/useModalBehavior';
 export { createSafeContext } from './hooks/createSafeContext';
+
+// ============================================================================
+// Layout Components
+// ============================================================================
+
+export { ScrollArea } from './ScrollArea';
+export type { ScrollAreaProps, ScrollAreaOrientation } from './ScrollArea';

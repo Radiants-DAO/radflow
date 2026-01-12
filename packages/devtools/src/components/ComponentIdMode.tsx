@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useDevToolsStore } from '../store';
 import type { ComponentInfo } from '../types';
+import { resolveComponentNavigation, scrollToTarget } from '../lib/navigationUtils';
 
 /**
  * Find React component info from a DOM element
@@ -100,6 +101,7 @@ export function ComponentIdMode() {
     toggleComponentIdMode,
     navigateToComponent,
     expandAndNavigate,
+    setPendingSubTab,
   } = useDevToolsStore();
 
   const [clickedComponent, setClickedComponent] = useState<ComponentInfo | null>(null);
@@ -141,11 +143,30 @@ export function ComponentIdMode() {
 
       // Navigate to component in Components tab
       if (componentInfo) {
+        // Resolve navigation target using new utility
+        const navTarget = resolveComponentNavigation(componentInfo.name);
+
         // Set the component to navigate to
         navigateToComponent(componentInfo.name);
 
         // Expand panel and switch to Components tab
         expandAndNavigate('components');
+
+        // Set pending sub-tab if needed
+        if (navTarget?.subTabId) {
+          setPendingSubTab(navTarget.subTabId);
+        }
+
+        // Schedule scroll and spotlight after tab renders
+        setTimeout(() => {
+          if (navTarget) {
+            scrollToTarget(navTarget, {
+              spotlight: true,
+              spotlightDuration: 2000,
+              block: 'center',
+            });
+          }
+        }, 250);
 
         // Copy to clipboard as well
         const text = `${componentInfo.name} (${componentInfo.path})`;
@@ -175,7 +196,7 @@ export function ComponentIdMode() {
       document.removeEventListener('keydown', handleKeyDown);
       document.body.style.cursor = '';
     };
-  }, [isComponentIdActive, setHoveredComponent, toggleComponentIdMode, navigateToComponent, expandAndNavigate]);
+  }, [isComponentIdActive, setHoveredComponent, toggleComponentIdMode, navigateToComponent, expandAndNavigate, setPendingSubTab]);
 
   if (!isComponentIdActive) return null;
 

@@ -143,16 +143,16 @@ export function BreakpointIndicator() {
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         <button
-          className="flex items-center gap-1.5 font-mono text-[10px] text-content-secondary hover:text-content-primary transition-colors cursor-pointer px-1.5 py-0.5 rounded-sm hover:bg-surface-secondary/5"
+          className="flex items-center gap-1.5 font-mono text-[10px] text-content-secondary hover:text-content-primary transition-colors cursor-pointer px-1.5 py-0.5 rounded-sm hover:bg-warm-cloud"
           title="Click to switch breakpoints"
         >
           <span className="font-bold uppercase">{currentBreakpoint.label}</span>
-          <span className="text-content-tertiary">·</span>
-          <span className="text-content-tertiary">{currentBreakpoint.width}px</span>
+          <span className="text-content-primary">·</span>
+          <span className="text-content-primary">{currentBreakpoint.width}px</span>
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-[160px]">
-        <DropdownMenuLabel className="text-[10px] text-content-tertiary font-normal px-2 py-1">
+        <DropdownMenuLabel className="text-[10px] text-content-primary font-normal px-2 py-1">
           Breakpoints
         </DropdownMenuLabel>
         {sortedBreakpoints.map((bp) => {
@@ -165,7 +165,7 @@ export function BreakpointIndicator() {
             >
               <div className="flex items-center justify-between w-full">
                 <span className="font-mono text-xs font-bold uppercase">{bp.label}</span>
-                <span className="font-mono text-xs text-content-tertiary ml-2">
+                <span className="font-mono text-xs text-content-primary ml-2">
                   {bp.width}px
                 </span>
               </div>

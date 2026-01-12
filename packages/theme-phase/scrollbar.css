@@ -1,0 +1,56 @@
+/* ============================================================================
+   @radflow/theme-phase - Scrollbar Styling
+
+   Minimal, dark scrollbar styling consistent with Phase's flat design.
+   ============================================================================ */
+
+/* Scrollbar base styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-black);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-grey);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--color-black);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--glass-border) var(--color-black);
+}
+
+/* Light mode scrollbar overrides */
+.light ::-webkit-scrollbar-track {
+  background: var(--color-cream);
+}
+
+.light ::-webkit-scrollbar-thumb {
+  background: rgba(15, 12, 14, 0.2);
+}
+
+.light ::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 12, 14, 0.4);
+}
+
+.light ::-webkit-scrollbar-corner {
+  background: var(--color-cream);
+}
+
+.light * {
+  scrollbar-color: rgba(15, 12, 14, 0.2) var(--color-cream);
+}

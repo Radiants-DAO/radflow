@@ -3,8 +3,23 @@ import { readFile, writeFile, copyFile } from 'fs/promises';
 import { join } from 'path';
 import type { BaseColor, FontDefinition, TypographyStyle, ColorMode } from '@radflow/devtools/types';
 
-const GLOBALS_PATH = join(process.cwd(), 'app', 'globals.css');
-const BACKUP_PATH = join(process.cwd(), 'app', '.globals.css.backup');
+/**
+ * Get the paths to theme package files
+ */
+function getThemePaths(themeId: string) {
+  const packageDir = join(process.cwd(), 'packages', `theme-${themeId}`);
+  return {
+    packageDir,
+    tokensPath: join(packageDir, 'tokens.css'),
+    tokensBackup: join(packageDir, '.tokens.css.backup'),
+    fontsPath: join(packageDir, 'fonts.css'),
+    fontsBackup: join(packageDir, '.fonts.css.backup'),
+    typographyPath: join(packageDir, 'typography.css'),
+    typographyBackup: join(packageDir, '.typography.css.backup'),
+    darkPath: join(packageDir, 'dark.css'),
+    darkBackup: join(packageDir, '.dark.css.backup'),
+  };
+}
 
 /**
  * POST /api/devtools/themes/[themeId]/write-css
@@ -42,60 +57,92 @@ export async function POST(
       );
     }
 
-    // Read existing CSS content
-    let existingCSS: string;
-    try {
-      existingCSS = await readFile(GLOBALS_PATH, 'utf-8');
-    } catch {
-      return NextResponse.json(
-        { error: 'Could not read globals.css' },
-        { status: 500 }
-      );
+    // Get paths for this theme package
+    const paths = getThemePaths(themeId);
+    const updates: string[] = [];
+
+    // Update tokens.css (contains @theme inline and @theme blocks)
+    if (baseColors || borderRadius) {
+      try {
+        let tokensCSS = await readFile(paths.tokensPath, 'utf-8');
+        await copyFile(paths.tokensPath, paths.tokensBackup).catch(() => {});
+
+        tokensCSS = updateCSSBlocks(tokensCSS, {
+          baseColors: baseColors || [],
+          borderRadius: borderRadius || {},
+        });
+
+        await writeFile(paths.tokensPath, tokensCSS, 'utf-8');
+        updates.push('tokens.css');
+      } catch (err) {
+        return NextResponse.json(
+          { error: `Could not update tokens.css for theme "${themeId}"`, details: String(err) },
+          { status: 500 }
+        );
+      }
     }
 
-    // Create backup before writing
-    try {
-      await copyFile(GLOBALS_PATH, BACKUP_PATH);
-    } catch {
-      // Could not create backup - continue anyway
-    }
-
-    // Perform surgical update - only replace @theme blocks, @font-face, and @layer base
-    let updatedCSS = existingCSS;
-
-    // Update @theme blocks if color data provided
-    if (baseColors) {
-      updatedCSS = updateCSSBlocks(updatedCSS, {
-        baseColors,
-        borderRadius: borderRadius || {},
-      });
-    }
-
-    // Update @font-face declarations if fonts provided
+    // Update fonts.css (contains @font-face declarations)
     if (fonts) {
-      updatedCSS = updateFontFaces(updatedCSS, fonts);
+      try {
+        let fontsCSS = await readFile(paths.fontsPath, 'utf-8');
+        await copyFile(paths.fontsPath, paths.fontsBackup).catch(() => {});
+
+        fontsCSS = updateFontFaces(fontsCSS, fonts);
+
+        await writeFile(paths.fontsPath, fontsCSS, 'utf-8');
+        updates.push('fonts.css');
+      } catch (err) {
+        return NextResponse.json(
+          { error: `Could not update fonts.css for theme "${themeId}"`, details: String(err) },
+          { status: 500 }
+        );
+      }
     }
 
-    // Update @layer base if typography styles provided
+    // Update typography.css (contains @layer base)
     if (typographyStyles) {
-      updatedCSS = updateLayerBase(updatedCSS, typographyStyles, fonts || []);
+      try {
+        let typographyCSS = await readFile(paths.typographyPath, 'utf-8');
+        await copyFile(paths.typographyPath, paths.typographyBackup).catch(() => {});
+
+        typographyCSS = updateLayerBase(typographyCSS, typographyStyles, fonts || []);
+
+        await writeFile(paths.typographyPath, typographyCSS, 'utf-8');
+        updates.push('typography.css');
+      } catch (err) {
+        return NextResponse.json(
+          { error: `Could not update typography.css for theme "${themeId}"`, details: String(err) },
+          { status: 500 }
+        );
+      }
     }
 
-    // Update color mode classes if provided
+    // Update dark.css (contains color mode classes)
     if (colorModes) {
-      updatedCSS = updateColorModeClasses(updatedCSS, colorModes);
+      try {
+        let darkCSS = await readFile(paths.darkPath, 'utf-8');
+        await copyFile(paths.darkPath, paths.darkBackup).catch(() => {});
+
+        darkCSS = updateColorModeClasses(darkCSS, colorModes);
+
+        await writeFile(paths.darkPath, darkCSS, 'utf-8');
+        updates.push('dark.css');
+      } catch (err) {
+        return NextResponse.json(
+          { error: `Could not update dark.css for theme "${themeId}"`, details: String(err) },
+          { status: 500 }
+        );
+      }
     }
 
-    // Write updated CSS
-    await writeFile(GLOBALS_PATH, updatedCSS, 'utf-8');
-
-    return NextResponse.json({ success: true, themeId });
+    return NextResponse.json({ success: true, themeId, updatedFiles: updates });
   } catch (error) {
     return NextResponse.json(
       {
         error: `Failed to write CSS for theme "${themeId}"`,
         details: String(error),
-        hint: 'Try restoring from backup: copy .globals.css.backup to globals.css'
+        hint: `Try restoring from backup files in packages/theme-${themeId}/`
       },
       { status: 500 }
     );

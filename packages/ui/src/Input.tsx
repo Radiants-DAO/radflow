@@ -43,7 +43,7 @@ const baseStyles = `
   placeholder:text-content-primary/40
   focus:outline-none
   focus:bg-surface-elevated
-  focus:ring-2 focus:ring-ring focus:ring-offset-0
+  focus:ring-2 focus:ring-edge-focus focus:ring-offset-0
   disabled:opacity-50 disabled:cursor-not-allowed
 `;
 
@@ -69,7 +69,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ s
   const iconSize = size === 'sm' ? 14 : size === 'lg' ? 18 : 16;
   const paddingLeft = iconName ? (size === 'sm' ? 'pl-8' : size === 'lg' ? 'pl-12' : 'pl-10') : '';
 
-  const classes = [baseStyles, sizeStyles[size], error ? errorStyles : '', fullWidth ? 'w-full' : '', paddingLeft, className]
+  // If className includes h-full, remove h-* from sizeStyles to allow h-full to take precedence
+  const hasFullHeight = className.includes('h-full');
+  const sizeClass = hasFullHeight ? sizeStyles[size].replace(/h-\d+/g, '').trim() : sizeStyles[size];
+
+  const classes = [baseStyles, sizeClass, error ? errorStyles : '', fullWidth ? 'w-full' : '', paddingLeft, className]
     .join(' ')
     .replace(/\s+/g, ' ')
     .trim();
@@ -78,7 +82,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ s
 
   if (iconName) {
     return (
-      <div className="relative">
+      <div className="relative h-full">
         <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
           <Icon name={iconName} size={iconSize} className="text-content-primary/40" />
         </div>

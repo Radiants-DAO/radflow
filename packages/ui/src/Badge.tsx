@@ -64,7 +64,7 @@ const interactiveStyles = `
   cursor-pointer
   hover:bg-surface-tertiary hover:border-edge-primary
   active:bg-surface-tertiary/80
-  focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1
+  focus:outline-none focus-visible:ring-2 focus-visible:ring-edge-focus focus-visible:ring-offset-1
 `;
 
 // ============================================================================

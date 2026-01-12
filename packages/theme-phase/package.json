@@ -1,0 +1,63 @@
+{
+  "name": "@radflow/theme-phase",
+  "version": "0.1.0",
+  "description": "Dark-mode Web3 brand theme with warm cream text and glass-effect components",
+  "license": "MIT",
+  "main": "index.css",
+  "style": "index.css",
+  "exports": {
+    ".": "./index.css",
+    "./tokens": "./tokens.css",
+    "./dark": "./dark.css",
+    "./fonts": "./fonts.css",
+    "./typography": "./typography.css",
+    "./base": "./base.css",
+    "./scrollbar": "./scrollbar.css",
+    "./animations": "./animations.css",
+    "./components/core": "./components/core/index.ts",
+    "./components/core/*": "./components/core/*.tsx",
+    "./preview/*": "./preview/*.tsx"
+  },
+  "files": [
+    "*.css",
+    "components/**/*",
+    "preview/**/*"
+  ],
+  "keywords": [
+    "radflow",
+    "theme",
+    "css",
+    "tailwind",
+    "dark-mode",
+    "web3"
+  ],
+  "dependencies": {
+    "clsx": "^2.0.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "tailwindcss": "^4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Radiants-DAO/radflow.git",
+    "directory": "packages/theme-phase"
+  },
+  "radflow": {
+    "type": "theme",
+    "displayName": "Phase",
+    "description": "Dark-mode Web3 brand with warm cream text and glass-effect components",
+    "colorMode": "dark",
+    "icons": {
+      "library": "phosphor",
+      "style": "regular",
+      "package": "phosphor-react"
+    },
+    "fonts": {
+      "heading": "Audiowide",
+      "body": "Outfit",
+      "mono": "Kode Mono"
+    }
+  }
+}

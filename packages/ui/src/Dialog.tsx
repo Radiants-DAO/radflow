@@ -128,6 +128,7 @@ export function DialogContent({ className = '', children }: DialogContentProps) 
           rounded-sm
           shadow-card-lg
           animate-scaleIn
+          flex flex-col
           ${className}
         `.trim()}
       >
@@ -179,7 +180,7 @@ interface DialogBodyProps {
 }
 
 export function DialogBody({ className = '', children }: DialogBodyProps) {
-  return <div className={`px-6 py-4 ${className}`.trim()}>{children}</div>;
+  return <div className={`px-6 py-4 bg-surface-elevated flex-1 overflow-y-auto min-h-0 ${className}`.trim()}>{children}</div>;
 }
 
 interface DialogFooterProps {

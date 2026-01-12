@@ -1,0 +1,77 @@
+/* ============================================================================
+   @radflow/theme-phase - Color Modes
+
+   Phase is dark-mode first. This file provides light mode overrides
+   and preview utilities.
+   ============================================================================ */
+
+/* Light mode overrides (opt-in via .light class) */
+.light {
+  --color-background: var(--color-cream);
+  --color-foreground: var(--color-black);
+
+  --color-card: rgba(15, 12, 14, 0.05);
+  --color-card-foreground: var(--color-black);
+
+  --color-popover: var(--color-cream);
+  --color-popover-foreground: var(--color-black);
+
+  --color-primary: var(--color-indigo);
+  --color-primary-foreground: var(--color-cream);
+
+  --color-secondary: rgba(15, 12, 14, 0.05);
+  --color-secondary-foreground: var(--color-black);
+
+  --color-muted: rgba(15, 12, 14, 0.05);
+  --color-muted-foreground: var(--color-grey);
+
+  --color-border: rgba(15, 12, 14, 0.2);
+  --color-input: rgba(15, 12, 14, 0.05);
+  --color-ring: var(--color-indigo);
+
+  --color-surface-primary: var(--color-cream);
+  --color-surface-secondary: rgba(15, 12, 14, 0.05);
+  --color-surface-tertiary: rgba(102, 118, 255, 0.1);
+  --color-surface-elevated: var(--color-cream);
+  --color-surface-sunken: rgba(15, 12, 14, 0.1);
+
+  --color-content-primary: var(--color-black);
+  --color-content-secondary: var(--color-grey);
+  --color-content-tertiary: rgba(15, 12, 14, 0.5);
+  --color-content-inverted: var(--color-cream);
+  --color-content-link: var(--color-indigo);
+
+  --color-edge-primary: rgba(15, 12, 14, 0.2);
+  --color-edge-secondary: rgba(15, 12, 14, 0.1);
+  --color-edge-focus: var(--color-indigo);
+
+  /* Light mode glass effects */
+  --glass-bg: rgba(15, 12, 14, 0.05);
+  --glass-border: rgba(15, 12, 14, 0.2);
+}
+
+/* Preview light mode - force light colors in dark contexts */
+.preview-light {
+  --color-background: var(--color-cream) !important;
+  --color-foreground: var(--color-black) !important;
+  --color-surface-primary: var(--color-cream) !important;
+  --color-content-primary: var(--color-black) !important;
+  --color-border: rgba(15, 12, 14, 0.2) !important;
+}
+
+/* Dark mode explicit class (for when system preference is light) */
+.dark {
+  --color-background: var(--color-black);
+  --color-foreground: var(--color-cream);
+
+  --color-card: var(--glass-bg);
+  --color-card-foreground: var(--color-cream);
+
+  --color-surface-primary: var(--color-black);
+  --color-surface-secondary: var(--glass-bg);
+  --color-content-primary: var(--color-cream);
+  --color-content-secondary: var(--color-grey);
+
+  --color-border: var(--glass-border);
+  --color-input: var(--glass-bg);
+}

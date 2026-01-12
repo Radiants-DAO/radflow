@@ -1,0 +1,57 @@
+/* ============================================================================
+   @radflow/theme-phase - Fonts
+
+   Font face declarations for Phase theme.
+   Uses Google Fonts: Audiowide (display), Outfit (body), Kode Mono (code)
+
+   Note: For production, download font files and serve locally.
+   For development, fonts are loaded from Google Fonts CDN via link tags
+   in the document head (see layout.tsx).
+   ============================================================================ */
+
+/* Audiowide - Display/Heading font (futuristic, uppercase)
+   Google Fonts: https://fonts.google.com/specimen/Audiowide */
+@font-face {
+  font-family: 'Audiowide';
+  src: url('https://fonts.gstatic.com/s/audiowide/v20/l7gdbjpo0cum0ckerWCdmA_OC-k.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Outfit - Body font (clean geometric sans)
+   Google Fonts: https://fonts.google.com/specimen/Outfit
+   Variable font with weights 100-900 */
+@font-face {
+  font-family: 'Outfit';
+  src: url('https://fonts.gstatic.com/s/outfit/v11/QGYyz_MVcBeNP4NjuGObqx1XmO1I4TC0C4G-EiAou6Y.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Kode Mono - Code/Label font (monospace)
+   Google Fonts: https://fonts.google.com/specimen/Kode+Mono
+   Variable font with weights 400-700 */
+@font-face {
+  font-family: 'Kode Mono';
+  src: url('https://fonts.gstatic.com/s/kodemono/v2/A2BLn5pb0QgtVEPFnlYkkaoBgw4qv9odq5myxDs9WA.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Font family utility classes */
+@layer utilities {
+  .font-audiowide {
+    font-family: 'Audiowide', sans-serif;
+  }
+
+  .font-outfit {
+    font-family: 'Outfit', sans-serif;
+  }
+
+  .font-kode-mono {
+    font-family: 'Kode Mono', monospace;
+  }
+}

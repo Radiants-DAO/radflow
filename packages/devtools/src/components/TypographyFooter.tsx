@@ -120,7 +120,7 @@ export function TypographyFooter({
                 className={`w-full text-left px-3 py-2 font-mondwest text-sm transition-colors ${
                   index === selectedSuggestionIndex
                     ? 'bg-surface-tertiary text-content-primary'
-                    : 'bg-surface-primary text-content-primary hover:bg-surface-secondary/5'
+                    : 'bg-surface-primary text-content-primary hover:bg-surface-tertiary/30'
                 }`}
               >
                 <div className="flex items-center justify-between">

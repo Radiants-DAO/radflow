@@ -1,5 +1,6 @@
 'use client';
 
+import { Tabs, TabList, TabTrigger } from '@radflow/ui';
 import { AddTabButton } from '../tabs/ComponentsTab/AddTabButton';
 
 interface ComponentsSecondaryNavProps {
@@ -16,19 +17,16 @@ export function ComponentsSecondaryNav({
   onAddFolder,
 }: ComponentsSecondaryNavProps) {
   return (
-    <div className="flex items-center gap-1 px-2 py-2 bg-surface-primary border-t border-edge-primary overflow-x-auto">
-      {tabs.map((tab) => (
-        <button
-          key={tab.id}
-          type="button"
-          onClick={() => onSubTabChange(tab.id)}
-          className={`flex items-center justify-center px-4 py-2 font-joystix text-xs uppercase cursor-pointer select-none text-content-primary transition-all duration-200 ease-out relative border border-edge-primary rounded-sm flex-none ${
-            activeSubTab === tab.id ? 'bg-surface-tertiary' : 'bg-transparent hover:bg-surface-secondary/5'
-          }`}
-        >
-          {tab.label}
-        </button>
-      ))}
+    <div className="flex items-center gap-1">
+      <Tabs value={activeSubTab} onValueChange={onSubTabChange} variant="manila" className="flex-1">
+        <TabList className="flex-1">
+          {tabs.map((tab) => (
+            <TabTrigger key={tab.id} value={tab.id}>
+              {tab.label}
+            </TabTrigger>
+          ))}
+        </TabList>
+      </Tabs>
       <AddTabButton
         onAdd={(folderName) => {
           onAddFolder(folderName);

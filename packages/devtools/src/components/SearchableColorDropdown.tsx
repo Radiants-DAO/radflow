@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Icon } from '@radflow/ui';
+import { ThemeIcon as Icon } from './ThemeIcon';
 import type { BaseColor } from '../types';
 
 interface SearchableColorDropdownProps {
@@ -175,7 +175,7 @@ export function SearchableColorDropdown({
                 {groupedColors.brand.length > 0 && (
                   <div>
                     <div 
-                      className="px-3 py-1 text-content-primary/50 font-joystix text-xs uppercase tracking-wider bg-surface-secondary/10"
+                      className="px-3 py-1 text-content-primary/50 font-joystix text-xs uppercase tracking-wider bg-surface-tertiary/30"
                     >
                       Brand
                     </div>
@@ -194,7 +194,7 @@ export function SearchableColorDropdown({
                 {groupedColors.neutral.length > 0 && (
                   <div>
                     <div 
-                      className="px-3 py-1 text-content-primary/50 font-joystix text-xs uppercase tracking-wider bg-surface-secondary/10"
+                      className="px-3 py-1 text-content-primary/50 font-joystix text-xs uppercase tracking-wider bg-surface-tertiary/30"
                     >
                       Neutrals
                     </div>

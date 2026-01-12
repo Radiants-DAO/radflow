@@ -2,14 +2,14 @@ import { NextResponse } from 'next/server';
 import { readdir, readFile } from 'fs/promises';
 import { join, relative } from 'path';
 
-const COMPONENTS_DIR = join(process.cwd(), 'components');
+const ROOT_COMPONENTS_DIR = join(process.cwd(), 'components');
 
 interface DiscoveredComponent {
   name: string;
   path: string;
   props: PropDefinition[];
-  theme?: string; // Theme package name (e.g., '@radflow/theme-rad-os')
-  themeId?: string; // Theme ID (e.g., 'rad-os')
+  theme?: string; // Theme package name (e.g., '@radflow/theme-phase')
+  themeId?: string; // Theme ID (e.g., 'phase')
 }
 
 interface PropDefinition {
@@ -17,6 +17,20 @@ interface PropDefinition {
   type: string;
   required: boolean;
   defaultValue?: string;
+}
+
+/**
+ * Detect active theme from globals.css import
+ */
+async function detectActiveTheme(): Promise<string | null> {
+  try {
+    const globalsPath = join(process.cwd(), 'app', 'globals.css');
+    const content = await readFile(globalsPath, 'utf-8');
+    const match = content.match(/@import\s+["']@radflow\/theme-([^"']+)["']/);
+    return match?.[1] || null;
+  } catch {
+    return null;
+  }
 }
 
 export async function GET(request: Request) {
@@ -30,18 +44,44 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const folder = searchParams.get('folder');
+    let themeId = searchParams.get('theme');
+
+    // Auto-detect theme if not specified
+    if (!themeId) {
+      themeId = await detectActiveTheme();
+    }
+
+    // Determine base directory based on theme
+    let baseDir: string;
+    let source: 'theme' | 'root' = 'root';
+
+    if (themeId) {
+      const themeComponentsDir = join(process.cwd(), 'packages', `theme-${themeId}`, 'components');
+      try {
+        await readdir(themeComponentsDir);
+        baseDir = themeComponentsDir;
+        source = 'theme';
+      } catch {
+        // Theme doesn't have components folder, fall back to root
+        baseDir = ROOT_COMPONENTS_DIR;
+      }
+    } else {
+      baseDir = ROOT_COMPONENTS_DIR;
+    }
 
     // If folder is specified, scan only that folder
-    const scanDir = folder
-      ? join(COMPONENTS_DIR, folder)
-      : COMPONENTS_DIR;
+    const scanDir = folder ? join(baseDir, folder) : baseDir;
 
-    const components = await scanComponents(scanDir);
-    return NextResponse.json({ components });
+    const components = await scanComponents(scanDir, themeId);
+    return NextResponse.json({
+      components,
+      source,
+      themeId: themeId || null,
+    });
   } catch (error) {
     // If components directory doesn't exist, return empty array
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      return NextResponse.json({ components: [] });
+      return NextResponse.json({ components: [], source: 'none', themeId: null });
     }
     return NextResponse.json(
       { error: 'Failed to scan components', details: String(error) },
@@ -50,15 +90,15 @@ export async function GET(request: Request) {
   }
 }
 
-async function scanComponents(dir: string): Promise<DiscoveredComponent[]> {
+async function scanComponents(dir: string, themeId: string | null): Promise<DiscoveredComponent[]> {
   const components: DiscoveredComponent[] = [];
-  
+
   async function scan(currentDir: string) {
     const entries = await readdir(currentDir, { withFileTypes: true });
-    
+
     for (const entry of entries) {
       const fullPath = join(currentDir, entry.name);
-      
+
       if (entry.isDirectory()) {
         await scan(fullPath);
       } else if (entry.name.endsWith('.tsx') || entry.name.endsWith('.ts')) {
@@ -66,10 +106,10 @@ async function scanComponents(dir: string): Promise<DiscoveredComponent[]> {
         if (entry.name.includes('.test.') || entry.name.includes('.stories.')) {
           continue;
         }
-        
+
         try {
           const content = await readFile(fullPath, 'utf-8');
-          const component = parseComponent(content, '/' + relative(process.cwd(), fullPath));
+          const component = parseComponent(content, '/' + relative(process.cwd(), fullPath), themeId);
           if (component) {
             components.push(component);
           }
@@ -79,15 +119,20 @@ async function scanComponents(dir: string): Promise<DiscoveredComponent[]> {
       }
     }
   }
-  
+
   await scan(dir);
   return components;
 }
 
-function parseComponent(content: string, filePath: string): DiscoveredComponent | null {
+function parseComponent(
+  content: string,
+  filePath: string,
+  activeThemeId: string | null
+): DiscoveredComponent | null {
   // Check for default export
-  const hasDefaultExport = /export\s+default\s+function\s+(\w+)/.test(content) ||
-                           /export\s+default\s+(\w+)/.test(content);
+  const hasDefaultExport =
+    /export\s+default\s+function\s+(\w+)/.test(content) ||
+    /export\s+default\s+(\w+)/.test(content);
 
   if (!hasDefaultExport) return null;
 
@@ -149,22 +194,25 @@ function parseComponent(content: string, filePath: string): DiscoveredComponent 
     }
   }
 
-  // Extract theme information from file path
-  // Path format: /packages/theme-[id]/... or /packages/ui/...
+  // Use provided themeId or extract from file path
   let theme: string | undefined;
   let themeId: string | undefined;
 
   const themeMatch = filePath.match(/\/packages\/(theme-[^/]+)\//);
   if (themeMatch) {
-    const themePackageId = themeMatch[1]; // e.g., 'theme-rad-os'
-    themeId = themePackageId.replace('theme-', ''); // e.g., 'rad-os'
-    theme = `@radflow/${themePackageId}`; // e.g., '@radflow/theme-rad-os'
+    const themePackageId = themeMatch[1]; // e.g., 'theme-phase'
+    themeId = themePackageId.replace('theme-', ''); // e.g., 'phase'
+    theme = `@radflow/${themePackageId}`; // e.g., '@radflow/theme-phase'
   } else if (filePath.includes('/packages/ui/')) {
     // Components from @radflow/ui package
     theme = '@radflow/ui';
-    themeId = 'ui'; // Special ID for shared UI components
-  } else if (filePath.includes('/components/')) {
-    // Local components (no theme)
+    themeId = 'ui';
+  } else if (filePath.includes('/components/') && activeThemeId) {
+    // Local components with active theme context
+    theme = `@radflow/theme-${activeThemeId}`;
+    themeId = activeThemeId;
+  } else {
+    // Local components without theme context
     theme = undefined;
     themeId = undefined;
   }

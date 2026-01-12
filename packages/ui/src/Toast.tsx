@@ -109,11 +109,19 @@ function ToastViewport({ toasts, removeToast }: ToastViewportProps) {
 // ============================================================================
 
 const variantStyles: Record<ToastVariant, string> = {
-  default: 'bg-surface-primary border-edge-primary',
-  success: 'bg-surface-primary border-edge-success',
-  warning: 'bg-surface-primary border-edge-warning',
-  error: 'bg-surface-primary border-edge-error',
-  info: 'bg-surface-primary border-edge-focus',
+  default: 'bg-surface-secondary text-content-inverted border border-edge-primary',
+  success: 'bg-surface-secondary text-content-inverted border border-edge-success',
+  warning: 'bg-surface-secondary text-content-inverted border border-edge-warning',
+  error: 'bg-surface-secondary text-content-inverted border border-edge-error',
+  info: 'bg-surface-secondary text-content-inverted border border-edge-focus',
+};
+
+const variantShadowStyles: Record<ToastVariant, string> = {
+  default: 'shadow-[4px_4px_0_0_var(--color-edge-primary)]',
+  success: 'shadow-[4px_4px_0_0_var(--color-edge-success)]',
+  warning: 'shadow-[4px_4px_0_0_var(--color-edge-warning)]',
+  error: 'shadow-[4px_4px_0_0_var(--color-edge-error)]',
+  info: 'shadow-[4px_4px_0_0_var(--color-edge-focus)]',
 };
 
 const variantIconMap: Record<ToastVariant, string | null> = {
@@ -137,12 +145,13 @@ function Toast({ toast, onClose }: ToastProps) {
     <div
       className={`
         pointer-events-auto
-        p-4
-        border-2
+        p-3
         rounded-sm
-        shadow-card
         animate-slideIn
+        font-mondwest text-sm
+        border-l-[8px]
         ${variantStyles[variant]}
+        ${variantShadowStyles[variant]}
       `.trim()}
       role="alert"
     >
@@ -150,18 +159,18 @@ function Toast({ toast, onClose }: ToastProps) {
         {/* Icon */}
         {displayIconName && (
           <span className="flex-shrink-0">
-            <Icon name={displayIconName} size={ICON_SIZES.md} />
+            <Icon name={displayIconName} size={ICON_SIZES.md} className="text-content-inverted" />
           </span>
         )}
 
         {/* Content */}
         <div className="flex-1 min-w-0">
-          <p className="font-joystix text-xs uppercase text-content-primary">{toast.title}</p>
-          {toast.description && <p className="font-mondwest text-base text-content-primary/70 mt-1">{toast.description}</p>}
+          <p className="font-joystix text-xs uppercase text-content-inverted font-bold">{toast.title}</p>
+          {toast.description && <p className="font-mondwest text-sm text-content-inverted/80 mt-1">{toast.description}</p>}
         </div>
 
         {/* Close Button */}
-        <button onClick={onClose} className="text-content-primary/50 hover:text-content-primary flex-shrink-0 -mt-1" aria-label="Close">
+        <button onClick={onClose} className="text-content-inverted/50 hover:text-content-inverted flex-shrink-0 -mt-1" aria-label="Close">
           <Icon name="close" size={ICON_SIZES.md} />
         </button>
       </div>

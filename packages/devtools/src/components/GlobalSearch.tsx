@@ -1,16 +1,18 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { useDevToolsStore } from '../store';
 import { buildSearchIndex, searchIndex, type ExtendedSearchableItem } from '../lib/searchIndex';
 import type { SearchResult, Tab } from '../types';
 import { Input } from '@radflow/ui/Input';
-import { Icon } from '@radflow/ui';
+import { ThemeIcon as Icon } from './ThemeIcon';
+import { scrollToTarget, clearSpotlight, resolveTypographyNavigation } from '../lib/navigationUtils';
 
 const TYPOGRAPHY_SECTIONS = ['headings', 'text', 'lists', 'code'];
 
 function getTabIdFromSearchItem(itemTabId: string): Tab {
-  if (itemTabId === 'design-system' || itemTabId.startsWith('folder-')) {
+  // Map sub-tab IDs to the parent 'components' tab
+  if (itemTabId === 'design-system' || itemTabId === 'ui' || itemTabId.startsWith('folder-')) {
     return 'components';
   }
   return itemTabId as Tab;
@@ -32,6 +34,7 @@ export function GlobalSearch(): React.ReactElement | null {
     setSearchResults,
     setSelectedResultIndex,
     setSearchOpen,
+    setPendingSubTab,
     navigateToResult,
     setActiveTab,
   } = useDevToolsStore();
@@ -70,6 +73,7 @@ export function GlobalSearch(): React.ReactElement | null {
         componentName: item.componentName,
         subsectionTitle: item.subsectionTitle,
         subsectionId: item.subsectionTitle?.toLowerCase().replace(/\s+/g, '-'),
+        originalTabId: item.tabId, // Preserve for sub-tab navigation
       },
     }));
 
@@ -104,6 +108,7 @@ export function GlobalSearch(): React.ReactElement | null {
         containerRef.current &&
         !containerRef.current.contains(event.target as Node)
       ) {
+        clearSpotlight();
         setSearchOpen(false);
       }
     };
@@ -114,8 +119,47 @@ export function GlobalSearch(): React.ReactElement | null {
     }
   }, [isSearchOpen, setSearchOpen]);
 
+  // Preview result: scroll to element without closing search
+  const previewResult = useCallback((result: SearchResult) => {
+    // Navigate to correct tab without closing search
+    setActiveTab(result.tabId);
+
+    const originalTabId = result.metadata?.originalTabId as string | undefined;
+    if (result.tabId === 'components' && originalTabId) {
+      setPendingSubTab(originalTabId);
+    }
+
+    // Scroll to element after short delay for tab to render
+    setTimeout(() => {
+      const subsectionId = result.metadata?.subsectionId as string | undefined;
+      if (result.tabId === 'typography' && result.sectionId) {
+        // Use navigation utils for typography
+        const navTarget = resolveTypographyNavigation(result.sectionId);
+        if (navTarget) {
+          scrollToTarget(navTarget, { spotlight: true, spotlightDuration: 0, block: 'center' });
+        }
+      } else if (subsectionId) {
+        scrollToTarget(
+          { tabId: result.tabId, subsectionId },
+          { spotlight: true, spotlightDuration: 0, block: 'center' }
+        );
+      }
+    }, 150);
+  }, [setActiveTab, setPendingSubTab]);
+
+  // Live preview on arrow navigation
+  useEffect(() => {
+    if (!isSearchOpen || searchResults.length === 0) return;
+
+    const result = searchResults[selectedResultIndex];
+    if (result) {
+      previewResult(result);
+    }
+  }, [selectedResultIndex, isSearchOpen, searchResults, previewResult]);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Escape') {
+      clearSpotlight();
       setSearchOpen(false);
     } else if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -142,71 +186,46 @@ export function GlobalSearch(): React.ReactElement | null {
   };
 
   const handleSelectResult = (result: SearchResult) => {
+    // Clear any preview spotlight
+    clearSpotlight();
+
     // Navigate to the correct tab
     setActiveTab(result.tabId);
-    
+
+    // Set pending sub-tab for components tab navigation
+    const originalTabId = result.metadata?.originalTabId as string | undefined;
+    if (result.tabId === 'components' && originalTabId) {
+      setPendingSubTab(originalTabId);
+    }
+
     // Close search
     setSearchOpen(false);
-    
-    // Scroll to section based on tab type (after delay for tab to render)
+
+    // Scroll to element with confirmed spotlight (2 second duration)
     setTimeout(() => {
-      if (!result.sectionId) return;
-
-      let element: HTMLElement | null = null;
-
-      if (result.tabId === 'typography') {
-        // TypographyTab uses id="typography-{sectionId}" format
-        const id = `typography-${result.sectionId}`;
-        element = document.getElementById(id);
-      } else if (result.tabId === 'components') {
-        // ComponentsTab (DesignSystem) uses data-subsection-id attributes
-        const subsectionTitle = result.metadata?.subsectionTitle as string | undefined;
-        const subsectionIdFromMeta = result.metadata?.subsectionId as string | undefined;
-        
-        if (subsectionTitle || subsectionIdFromMeta) {
-          // Convert subsection title to ID format (e.g., "Button Variants" -> "button-variants")
-          const subsectionId = subsectionIdFromMeta || 
-            subsectionTitle?.toLowerCase().replace(/\s+/g, '-');
-          
-          if (subsectionId) {
-            element = document.querySelector(`[data-subsection-id="${subsectionId}"]`) as HTMLElement;
-          }
+      const subsectionId = result.metadata?.subsectionId as string | undefined;
+      if (result.tabId === 'typography' && result.sectionId) {
+        // Use navigation utils for typography with spotlight
+        const navTarget = resolveTypographyNavigation(result.sectionId);
+        if (navTarget) {
+          scrollToTarget(navTarget, { spotlight: true, spotlightDuration: 2000, block: 'center' });
         }
-        
-        // If no subsection found, try to find first subsection in the section
-        if (!element && result.sectionId) {
-          // All subsections have data-subsection-id, find ones that belong to this section
-          // We can't directly match by sectionId, but we can scroll to the tab content area
-          // and let the user see the section (it will be filtered/highlighted by search query)
-          const tabContent = document.querySelector('[data-radtools-panel] [class*="overflow-auto"]');
-          if (tabContent) {
-            tabContent.scrollTo({ top: 0, behavior: 'smooth' });
-            return;
-          }
-        }
-      } else if (result.tabId === 'variables') {
-        // VariablesTab sections don't have IDs, but we can try to find by sectionId
-        // For now, just scroll to top of tab content
-        const tabContent = document.querySelector('[data-radtools-panel] [class*="overflow-auto"]');
-        if (tabContent) {
-          tabContent.scrollTo({ top: 0, behavior: 'smooth' });
-          return;
-        }
+      } else if (subsectionId) {
+        scrollToTarget(
+          { tabId: result.tabId, subsectionId },
+          { spotlight: true, spotlightDuration: 2000, block: 'center' }
+        );
       }
+    }, 150);
 
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        // Add a small offset to account for fixed headers
-        setTimeout(() => {
-          const rect = element!.getBoundingClientRect();
-          const offset = 20;
-          window.scrollBy({ top: rect.top - offset, behavior: 'smooth' });
-        }, 100);
-      }
-    }, 200); // Increased delay to ensure tab content has rendered
-    
     // Call navigateToResult for any additional logic
     navigateToResult(result);
+  };
+
+  // Handle hover on result - trigger preview
+  const handleResultHover = (result: SearchResult, index: number) => {
+    setSelectedResultIndex(index);
+    // Preview will be triggered by the useEffect watching selectedResultIndex
   };
 
   const highlightText = (text: string, query: string) => {
@@ -235,10 +254,10 @@ export function GlobalSearch(): React.ReactElement | null {
   if (!isSearchOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[50] flex items-start justify-center pt-[20vh] pointer-events-none">
+    <div className="fixed bottom-4 right-[70px] z-[50] w-[350px] pointer-events-none">
       <div
         ref={containerRef}
-        className="w-full max-w-2xl mx-4 bg-surface-primary border-2 border-edge-primary rounded-sm shadow-[8px_8px_0_0_var(--color-black)] pointer-events-auto"
+        className="w-full bg-surface-primary border-2 border-edge-primary rounded-sm shadow-[4px_4px_0_0_var(--color-black)] pointer-events-auto"
       >
         {/* Search Input */}
         <div className="p-4 border-b border-edge-primary/20">
@@ -256,7 +275,7 @@ export function GlobalSearch(): React.ReactElement | null {
 
         {/* Results */}
         {searchQuery.trim() && (
-          <div className="max-h-[60vh] overflow-y-auto">
+          <div className="max-h-[300px] overflow-y-auto">
             {searchResults.length > 0 ? (
               <div className="divide-y divide-edge-primary/10">
                 {searchResults.map((result, index) => (
@@ -265,43 +284,44 @@ export function GlobalSearch(): React.ReactElement | null {
                     type="button"
                     data-result-index={index}
                     onClick={() => handleSelectResult(result)}
+                    onMouseEnter={() => handleResultHover(result, index)}
                     className={`w-full text-left px-4 py-3 transition-colors ${
                       index === selectedResultIndex
                         ? 'bg-surface-tertiary text-content-primary'
-                        : 'bg-surface-primary text-content-primary hover:bg-surface-secondary/5'
+                        : 'bg-surface-primary text-content-primary hover:bg-surface-tertiary/30'
                     }`}
                   >
                     <div className="flex items-center justify-between gap-4">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="font-joystix text-xs uppercase text-content-secondary">
+                          <span className="font-joystix text-xs uppercase text-content-primary">
                             {getTypeLabel(result.type)}
                           </span>
                           {result.sectionId && (
                             <>
-                              <span className="text-content-tertiary">·</span>
-                              <span className="text-xs text-content-secondary font-mono">
+                              <span className="text-content-primary/50">·</span>
+                              <span className="text-xs text-content-primary/70 font-mono">
                                 {result.sectionId}
                               </span>
                             </>
                           )}
                         </div>
-                        <div className="font-mondwest text-sm">
+                        <div className="font-mondwest text-sm text-content-primary">
                           {highlightText(result.text, searchQuery)}
                         </div>
                         {typeof result.metadata?.componentName === 'string' && (
-                          <div className="text-xs text-content-tertiary mt-1 font-mono">
+                          <div className="text-xs text-content-primary/60 mt-1 font-mono">
                             {result.metadata.componentName}
                           </div>
                         )}
                       </div>
-                      <Icon name="go-forward" size="sm" className="text-content-tertiary flex-shrink-0" />
+                      <Icon name="go-forward" size="sm" className="text-content-primary/50 flex-shrink-0" />
                     </div>
                   </button>
                 ))}
               </div>
             ) : (
-              <div className="px-4 py-8 text-center text-content-secondary font-mondwest text-sm">
+              <div className="px-4 py-8 text-center text-content-primary/70 font-mondwest text-sm">
                 No results found for &quot;{searchQuery}&quot;
               </div>
             )}
@@ -310,7 +330,7 @@ export function GlobalSearch(): React.ReactElement | null {
 
         {/* Footer */}
         {searchQuery.trim() && searchResults.length > 0 && (
-          <div className="px-4 py-2 border-t border-edge-primary/20 bg-surface-secondary/5 text-xs text-content-secondary font-mondwest flex items-center justify-between">
+          <div className="px-4 py-2 border-t border-edge-primary/20 bg-surface-tertiary/20 text-xs text-content-primary/70 font-mondwest flex items-center justify-between">
             <span>
               {searchResults.length} result{searchResults.length !== 1 ? 's' : ''}
             </span>

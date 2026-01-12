@@ -1,0 +1,166 @@
+/* ============================================================================
+   @radflow/theme-phase - Typography
+
+   Base typography styles using @layer base for Tailwind v4 integration.
+   Phase uses Audiowide for headings, Outfit for body, Kode Mono for code.
+   ============================================================================ */
+
+@layer base {
+  h1 {
+    @apply text-4xl font-bold leading-tight text-content-primary uppercase;
+    font-family: 'Audiowide', sans-serif;
+  }
+
+  h2 {
+    @apply text-3xl font-normal leading-tight text-content-primary uppercase;
+    font-family: 'Audiowide', sans-serif;
+  }
+
+  h3 {
+    @apply text-2xl font-semibold leading-snug text-content-primary uppercase;
+    font-family: 'Audiowide', sans-serif;
+  }
+
+  h4 {
+    @apply text-xl font-medium leading-snug text-content-primary uppercase;
+    font-family: 'Audiowide', sans-serif;
+  }
+
+  h5 {
+    @apply text-lg font-medium leading-normal text-content-primary uppercase;
+    font-family: 'Audiowide', sans-serif;
+  }
+
+  h6 {
+    @apply text-base font-medium leading-normal text-content-primary uppercase;
+    font-family: 'Audiowide', sans-serif;
+  }
+
+  p {
+    @apply text-base font-normal leading-relaxed text-content-primary;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  a {
+    @apply text-base font-normal leading-normal text-content-link hover:opacity-80;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  ul {
+    @apply text-base font-normal leading-relaxed text-content-primary pl-6;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  ol {
+    @apply text-base font-normal leading-relaxed text-content-primary pl-6;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  li {
+    @apply text-base font-normal leading-relaxed text-content-primary mb-2;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  small {
+    @apply text-sm font-normal leading-normal text-content-secondary;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  strong {
+    @apply text-base font-bold leading-normal text-content-primary;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  em {
+    @apply text-base font-normal leading-normal text-content-primary italic;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  code {
+    @apply text-xs font-normal leading-normal text-content-primary px-1 py-0.5 rounded-sm;
+    font-family: 'Kode Mono', monospace;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+  }
+
+  pre {
+    @apply text-sm font-normal leading-relaxed text-content-primary p-4 rounded-sm overflow-x-auto;
+    font-family: 'Kode Mono', monospace;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+  }
+
+  kbd {
+    @apply text-xs font-normal leading-normal text-content-primary px-1.5 py-0.5 rounded-sm;
+    font-family: 'Kode Mono', monospace;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+  }
+
+  mark {
+    @apply text-base font-normal leading-normal text-content-primary;
+    font-family: 'Outfit', sans-serif;
+    background: var(--glass-bg-gold);
+  }
+
+  blockquote {
+    @apply text-base font-normal leading-relaxed text-content-primary border-l-2 pl-4 italic;
+    font-family: 'Outfit', sans-serif;
+    border-color: var(--color-indigo);
+  }
+
+  cite {
+    @apply text-sm font-normal leading-normal text-content-secondary italic;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  abbr {
+    @apply text-base font-normal leading-normal text-content-primary underline decoration-dotted;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  dfn {
+    @apply text-base font-normal leading-normal text-content-primary italic;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  q {
+    @apply text-base font-normal leading-normal text-content-primary italic;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  sub {
+    @apply text-xs font-normal leading-none text-content-primary;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  sup {
+    @apply text-xs font-normal leading-none text-content-primary;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  del {
+    @apply text-base font-normal leading-normal text-content-secondary line-through;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  ins {
+    @apply text-base font-normal leading-normal text-content-primary underline;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  caption {
+    @apply text-xs font-normal leading-normal text-content-secondary uppercase;
+    font-family: 'Kode Mono', monospace;
+  }
+
+  label {
+    @apply text-xs font-medium leading-normal text-content-secondary uppercase;
+    font-family: 'Kode Mono', monospace;
+  }
+
+  figcaption {
+    @apply text-xs font-normal leading-normal text-content-secondary;
+    font-family: 'Outfit', sans-serif;
+  }
+}

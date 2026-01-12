@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { SrefCode } from '../../store/slices/aiSlice';
 import { Button } from '@radflow/ui/Button';
-import { Icon } from '@radflow/ui/Icon';
+import { ThemeIcon as Icon } from '../../components/ThemeIcon';
 
 interface StylesSubTabProps {
   codes: SrefCode[];
@@ -41,7 +41,7 @@ export function StylesSubTab({ codes, searchQuery }: StylesSubTabProps) {
 
   if (filteredCodes.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full text-content-tertiary">
+      <div className="flex items-center justify-center h-full text-content-primary">
         <div className="text-center">
           <Icon name="search" size={48} className="mx-auto mb-4 opacity-50" />
           <p>No SREF codes found matching &quot;{searchQuery}&quot;</p>
@@ -71,7 +71,7 @@ export function StylesSubTab({ codes, searchQuery }: StylesSubTabProps) {
                     onClick={() => toggleExpand(srefCode.id)}
                   >
                     {/* Placeholder for image - replace with actual image once assets are available */}
-                    <Icon name="image" size={32} className="text-content-tertiary opacity-30" />
+                    <Icon name="image" size={32} className="text-content-primary opacity-30" />
                   </div>
                 ))}
               </div>
@@ -117,11 +117,11 @@ export function StylesSubTab({ codes, searchQuery }: StylesSubTabProps) {
                           className="aspect-square bg-surface-tertiary/30 rounded-sm flex items-center justify-center"
                         >
                           {/* Placeholder for full-size preview */}
-                          <Icon name="image" size={64} className="text-content-tertiary opacity-30" />
+                          <Icon name="image" size={64} className="text-content-primary opacity-30" />
                         </div>
                       ))}
                     </div>
-                    <div className="mt-3 text-xs text-content-tertiary">
+                    <div className="mt-3 text-xs text-content-primary">
                       Click images to view full size (feature coming soon)
                     </div>
                   </div>

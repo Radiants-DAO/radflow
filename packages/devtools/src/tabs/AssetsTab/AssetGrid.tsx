@@ -1,6 +1,6 @@
 'use client';
 
-import { Icon } from '@radflow/ui';
+import { ThemeIcon as Icon } from '../../components/ThemeIcon';
 import type { AssetFile } from '../../types';
 
 interface AssetGridProps {

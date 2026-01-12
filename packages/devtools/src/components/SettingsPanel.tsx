@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, DialogBody, DialogFooter, DialogClose } from '@radflow/ui';
 import { useDevToolsStore } from '../store';
-import { ThemeCreationWizard } from './ThemeCreationWizard';
 
 interface SettingsPanelProps {
   open: boolean;
@@ -16,10 +15,7 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
     availableThemes,
     switchTheme,
     deleteTheme,
-    fetchAvailableThemes,
   } = useDevToolsStore();
-
-  const [isWizardOpen, setIsWizardOpen] = useState(false);
 
   const handleThemeSwitch = async (themeId: string) => {
     if (themeId === activeTheme) return;
@@ -32,68 +28,26 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleWizardComplete = async (config: any) => {
-    try {
-      // Call API to create theme scaffolding
-      const response = await fetch('/api/devtools/themes/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(config),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to create theme');
-      }
-
-      const result = await response.json();
-      console.log('Theme created successfully:', result);
-
-      // Refresh available themes to include newly created theme
-      await fetchAvailableThemes();
-
-      // Close wizard
-      setIsWizardOpen(false);
-
-      // Show success message
-      alert(`Theme "${config.themeName}" created successfully! You can now switch to it in the theme switcher.`);
-    } catch (error) {
-      console.error('Error creating theme:', error);
-      alert(`Failed to create theme: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  };
-
   return (
-    <>
-      <Dialog open={open} onOpenChange={onClose}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Settings</DialogTitle>
-          </DialogHeader>
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>Settings</DialogTitle>
+        </DialogHeader>
 
-          <DialogBody className="space-y-6">
-            {/* Theme Management Section */}
-            <section>
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-joystix text-sm uppercase text-content-primary">
-                  Theme Management
-                </h3>
-                <Button
-                  size="sm"
-                  variant="primary"
-                  onClick={() => setIsWizardOpen(true)}
-                >
-                  Create New Theme
-                </Button>
-              </div>
+        <DialogBody className="space-y-6">
+          {/* Theme Management Section */}
+          <section>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-joystix text-sm uppercase text-content-primary">
+                Theme Management
+              </h3>
+            </div>
               <div className="space-y-2">
               {availableThemes.map((theme) => (
                 <div
                   key={theme.id}
-                  className="flex items-center justify-between p-3 border border-edge-primary/20 rounded-sm bg-surface-secondary/5"
+                  className="flex items-center justify-between p-3 border border-edge-primary/20 rounded-sm bg-surface-tertiary/20"
                 >
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
@@ -107,11 +61,11 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
                       )}
                     </div>
                     {theme.description && (
-                      <p className="font-mondwest text-sm text-content-secondary mt-1">
+                      <p className="font-mondwest text-sm text-content-primary mt-1">
                         {theme.description}
                       </p>
                     )}
-                    <p className="font-mondwest text-xs text-content-tertiary mt-1">
+                    <p className="font-mondwest text-xs text-content-primary mt-1">
                       {theme.packageName} {theme.version && `v${theme.version}`}
                     </p>
                   </div>
@@ -151,21 +105,45 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
               <label className="block font-mondwest text-sm text-content-primary mb-2">
                 Keyboard Shortcuts
               </label>
-              <div className="space-y-1 text-sm font-mondwest text-content-secondary">
-                <div className="flex justify-between">
+              <div className="text-sm font-mondwest text-content-primary">
+                <div className="flex items-center justify-between py-1 gap-2">
                   <span>Toggle Panel</span>
+                  <div className="flex-1 border-t border-edge-primary/20 mx-2" />
                   <kbd className="px-2 py-0.5 bg-surface-secondary border border-edge-primary rounded-xs font-mono text-xs">
                     ⌘⇧K
                   </kbd>
                 </div>
-                <div className="flex justify-between">
-                  <span>Switch Tabs</span>
+                <div className="flex items-center justify-between py-1 border-t border-edge-primary/20 gap-2">
+                  <span>Focus Search</span>
+                  <div className="flex-1 border-t border-edge-primary/20 mx-2" />
                   <kbd className="px-2 py-0.5 bg-surface-secondary border border-edge-primary rounded-xs font-mono text-xs">
-                    1-5
+                    ⌘K
                   </kbd>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex items-center justify-between py-1 border-t border-edge-primary/20 gap-2">
+                  <span>Switch Tabs</span>
+                  <div className="flex-1 border-t border-edge-primary/20 mx-2" />
+                  <kbd className="px-2 py-0.5 bg-surface-secondary border border-edge-primary rounded-xs font-mono text-xs">
+                    1-6
+                  </kbd>
+                </div>
+                <div className="flex items-center justify-between py-1 border-t border-edge-primary/20 gap-2">
+                  <span>Toggle Help</span>
+                  <div className="flex-1 border-t border-edge-primary/20 mx-2" />
+                  <kbd className="px-2 py-0.5 bg-surface-secondary border border-edge-primary rounded-xs font-mono text-xs">
+                    ⌘⇧?
+                  </kbd>
+                </div>
+                <div className="flex items-center justify-between py-1 border-t border-edge-primary/20 gap-2">
+                  <span>Open Settings</span>
+                  <div className="flex-1 border-t border-edge-primary/20 mx-2" />
+                  <kbd className="px-2 py-0.5 bg-surface-secondary border border-edge-primary rounded-xs font-mono text-xs">
+                    ⌘⇧.
+                  </kbd>
+                </div>
+                <div className="flex items-center justify-between py-1 border-t border-edge-primary/20 gap-2">
                   <span>Exit Mode</span>
+                  <div className="flex-1 border-t border-edge-primary/20 mx-2" />
                   <kbd className="px-2 py-0.5 bg-surface-secondary border border-edge-primary rounded-xs font-mono text-xs">
                     Esc
                   </kbd>
@@ -184,13 +162,5 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-
-    {/* Theme Creation Wizard */}
-    <ThemeCreationWizard
-      open={isWizardOpen}
-      onClose={() => setIsWizardOpen(false)}
-      onComplete={handleWizardComplete}
-    />
-  </>
   );
 }

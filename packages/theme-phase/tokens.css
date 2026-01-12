@@ -1,0 +1,167 @@
+/* ============================================================================
+   @radflow/theme-phase - Design Tokens
+
+   Brand colors and semantic token mappings for the Phase theme.
+   Dark-mode first with warm cream text on near-black backgrounds.
+   ============================================================================ */
+
+@theme inline {
+  /* ============================================
+     BRAND COLORS (internal reference only)
+     ============================================ */
+
+  --color-cream: #f3eed9;
+  --color-gold: #fce184;
+  --color-blue: #80d0ff;
+  --color-indigo: #6676ff;
+  --color-green: #8ef2d9;
+  --color-black: #0f0c0e;
+  --color-grey: #9a957e;
+  --color-white: #ffffff;
+
+  /* System Colors */
+  --color-success-green: var(--color-green);
+  --color-warning-yellow: var(--color-gold);
+  --color-error-red: #ff6b63;
+  --color-focus-state: var(--color-blue);
+
+  /* ============================================
+     GLASS EFFECT UTILITIES
+     Phase signature component styling
+     ============================================ */
+
+  --glass-bg: rgba(243, 238, 217, 0.05);
+  --glass-border: rgba(243, 238, 217, 0.2);
+  --glass-bg-blue: rgba(128, 208, 255, 0.1);
+  --glass-border-blue: rgba(128, 208, 255, 0.5);
+  --glass-bg-purple: rgba(153, 163, 255, 0.1);
+  --glass-border-purple: rgba(153, 163, 255, 0.5);
+  --glass-bg-green: rgba(142, 242, 217, 0.1);
+  --glass-border-green: rgba(142, 242, 217, 0.5);
+  --glass-bg-gold: rgba(252, 225, 132, 0.1);
+  --glass-border-gold: rgba(252, 225, 132, 0.5);
+
+  /* ============================================
+     SEMANTIC TOKENS (themes override these)
+     ============================================ */
+
+  /* Page-level (dark-first) */
+  --color-background: var(--color-black);
+  --color-foreground: var(--color-cream);
+
+  /* Cards & surfaces - glass effect */
+  --color-card: var(--glass-bg);
+  --color-card-foreground: var(--color-cream);
+
+  /* Popovers, dropdowns, tooltips */
+  --color-popover: var(--color-black);
+  --color-popover-foreground: var(--color-cream);
+
+  /* Primary actions - gold accent */
+  --color-primary: var(--color-gold);
+  --color-primary-foreground: var(--color-black);
+
+  /* Secondary/inverted actions */
+  --color-secondary: var(--glass-bg);
+  --color-secondary-foreground: var(--color-cream);
+
+  /* Muted/subtle surfaces */
+  --color-muted: var(--glass-bg);
+  --color-muted-foreground: var(--color-grey);
+
+  /* Accent highlights - blue */
+  --color-accent: var(--color-blue);
+  --color-accent-foreground: var(--color-black);
+
+  /* Success states */
+  --color-success: var(--color-green);
+  --color-success-foreground: var(--color-black);
+
+  /* Destructive/error states */
+  --color-destructive: var(--color-error-red);
+  --color-destructive-foreground: var(--color-white);
+
+  /* Form elements */
+  --color-border: var(--glass-border);
+  --color-input: var(--glass-bg);
+  --color-ring: var(--color-blue);
+
+  /* Surface variants */
+  --color-surface-primary: var(--color-black);
+  --color-surface-secondary: var(--glass-bg);
+  --color-surface-tertiary: var(--glass-bg-purple);
+  --color-surface-elevated: var(--glass-bg);
+  --color-surface-sunken: rgba(0, 0, 0, 0.3);
+
+  /* Content/text colors */
+  --color-content-primary: var(--color-cream);
+  --color-content-secondary: var(--color-grey);
+  --color-content-tertiary: rgba(243, 238, 217, 0.5);
+  --color-content-inverted: var(--color-black);
+  --color-content-link: var(--color-blue);
+
+  /* Edge/border colors */
+  --color-edge-primary: var(--glass-border);
+  --color-edge-secondary: rgba(243, 238, 217, 0.1);
+  --color-edge-focus: var(--color-blue);
+
+  /* Fonts */
+  --font-audiowide: 'Audiowide', sans-serif;
+  --font-outfit: 'Outfit', sans-serif;
+  --font-kode-mono: 'Kode Mono', monospace;
+}
+
+@theme {
+  /* ============================================
+     BRAND COLORS (Tailwind v4 auto-generates utilities)
+     bg-cream, text-gold, border-blue, etc.
+     ============================================ */
+
+  --color-cream: #f3eed9;
+  --color-gold: #fce184;
+  --color-blue: #80d0ff;
+  --color-indigo: #6676ff;
+  --color-green: #8ef2d9;
+  --color-black: #0f0c0e;
+  --color-grey: #9a957e;
+  --color-white: #ffffff;
+
+  /* System Colors */
+  --color-success-green: #8ef2d9;
+  --color-warning-yellow: #fce184;
+  --color-error-red: #ff6b63;
+  --color-focus-state: #80d0ff;
+
+  /* Border Radius - Sharp corners */
+  --radius-none: 0px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+
+  /* Box Shadows - Minimal/none (flat design) */
+  --shadow-none: none;
+  --shadow-sm: none;
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.15);
+  --shadow-btn: none;
+  --shadow-btn-hover: 0 0 8px rgba(128, 208, 255, 0.3);
+  --shadow-card: none;
+  --shadow-card-lg: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-inner: inset 0 0 0 1px var(--glass-border);
+  --shadow-glow-blue: 0 0 12px rgba(128, 208, 255, 0.4);
+  --shadow-glow-gold: 0 0 12px rgba(252, 225, 132, 0.4);
+
+  /* Font Families */
+  --font-family-audiowide: var(--font-audiowide);
+  --font-family-outfit: var(--font-outfit);
+  --font-family-kode-mono: var(--font-kode-mono);
+
+  /* Breakpoints */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+}

@@ -1,6 +1,6 @@
 'use client';
 
-import { Icon } from '@radflow/ui';
+import { ThemeIcon as Icon } from '../../components/ThemeIcon';
 import type { DiscoveredComponent } from '../../types';
 
 interface PropDisplayProps {
@@ -18,7 +18,7 @@ export function PropDisplay({ component }: PropDisplayProps) {
       {component.props.length > 0 ? (
         <div className="border border-edge-primary rounded-md overflow-hidden">
           <table className="w-full font-mondwest text-base">
-            <thead className="bg-surface-secondary/10">
+            <thead className="bg-surface-tertiary/30">
               <tr>
                 <th className="text-left px-3 py-2 text-content-primary/60 font-joystix text-xs uppercase">Prop</th>
                 <th className="text-left px-3 py-2 text-content-primary/60 font-joystix text-xs uppercase">Type</th>

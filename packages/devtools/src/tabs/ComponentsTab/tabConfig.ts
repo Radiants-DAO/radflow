@@ -24,19 +24,9 @@ export interface ComponentTabConfig {
  */
 export const COMPONENT_TABS: ComponentTabConfig[] = [
   {
-    id: 'folder-Rad_os',
-    label: 'RadOS',
-    description: 'RadOS window components (AppWindow, WindowTitleBar, etc.)',
-  },
-  {
     id: 'ui',
     label: 'UI',
     description: 'Components from @radflow/ui package',
-  },
-  {
-    id: 'design-system',
-    label: 'Design System',
-    description: 'Core UI components (manual reference)',
   },
   // Dynamic folder tabs are added via localStorage and the Add button
 ];

@@ -56,7 +56,7 @@ const baseStyles = `
   active:shadow-none
   disabled:opacity-50 disabled:cursor-not-allowed
   disabled:hover:translate-y-0 disabled:hover:shadow-btn
-  focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1
+  focus:outline-none focus-visible:ring-2 focus-visible:ring-edge-focus focus-visible:ring-offset-1
 `;
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -83,17 +83,16 @@ const variantStyles: Record<ButtonVariant, string> = {
     active:bg-surface-tertiary active:text-content-primary
   `,
   outline: `
-    bg-transparent text-content-primary
-    shadow-none
-    hover:bg-surface-secondary/5 hover:!translate-y-0 hover:shadow-none
-    active:bg-surface-tertiary active:!translate-y-0 active:shadow-none
+    bg-surface-primary text-content-primary
+    hover:bg-surface-primary
+    active:bg-surface-primary
   `,
   ghost: `
     bg-transparent text-content-primary
     border-transparent
     shadow-none
-    hover:bg-transparent hover:border-edge-primary hover:text-content-primary hover:shadow-none hover:translate-y-0
-    active:bg-surface-tertiary active:text-content-primary active:border-edge-primary active:translate-y-0
+    hover:bg-surface-tertiary hover:border-transparent hover:text-content-primary hover:shadow-none
+    active:bg-surface-secondary active:text-content-inverted active:border-transparent
   `,
 };
 
@@ -116,7 +115,17 @@ function getButtonClasses(
     justifyClass = 'justify-between';
   }
 
-  return [baseStyles, iconOnly ? iconOnlySizeStyles[size] : sizeStyles[size], justifyClass, variantStyles[variant], fullWidth ? 'w-full' : '', className]
+  // For ghost variant, exclude translate-y classes from baseStyles
+  let styles = baseStyles;
+  if (variant === 'ghost') {
+    styles = baseStyles
+      .replace(/hover:-translate-y-0\.5/g, '')
+      .replace(/active:translate-y-0\.5/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  return [styles, iconOnly ? iconOnlySizeStyles[size] : sizeStyles[size], justifyClass, variantStyles[variant], fullWidth ? 'w-full' : '', className]
     .join(' ')
     .replace(/\s+/g, ' ')
     .trim();
