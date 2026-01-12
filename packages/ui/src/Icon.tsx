@@ -6,7 +6,7 @@ export type IconSize = 'sm' | 'md' | 'lg' | 'xl';
 /** Size mapping from semantic names to pixels */
 export const ICON_SIZES: Record<IconSize, number> = {
   sm: 16,
-  md: 24,
+  md: 20,
   lg: 32,
   xl: 48,
 };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, ElementType, ComponentPropsWithoutRef } from 'react';
 import clsx from 'clsx';
-import { Icon } from './Icon';
+import { Icon, ICON_SIZES } from './Icon';
 import { Spinner } from './Progress';
 
 // ============================================================================
@@ -159,7 +159,7 @@ export function Button<C extends ElementType = 'button'>({
     };
   }, []);
 
-  const iconSize = size === 'sm' ? 14 : size === 'lg' ? 18 : 20;
+  const iconSize = size === 'sm' ? ICON_SIZES.sm : size === 'lg' ? ICON_SIZES.lg : ICON_SIZES.md;
 
   const effectiveIconName = copyButton ? (copied ? 'copied-to-clipboard' : 'copy-to-clipboard') : iconName;
 

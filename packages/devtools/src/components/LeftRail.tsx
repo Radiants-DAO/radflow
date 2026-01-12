@@ -46,7 +46,7 @@ export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle, onS
             <div className="relative">
               <Button
                 variant={activeTool === tool.id ? 'secondary' : 'ghost'}
-                size="sm"
+                size="md"
                 iconOnly
                 iconName={tool.icon}
                 onClick={() => onToolToggle(tool.id)}
@@ -78,7 +78,7 @@ export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle, onS
           >
             <Button
               variant={activeTab === tab.id ? 'secondary' : 'ghost'}
-              size="sm"
+              size="md"
               iconOnly
               iconName={tab.icon}
               onClick={() => onTabChange(tab.id)}
@@ -100,7 +100,7 @@ export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle, onS
       >
         <Button
           variant="ghost"
-          size="sm"
+          size="md"
           iconOnly
           iconName="settings-cog"
           onClick={onSettingsClick}
