@@ -1178,13 +1178,417 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
 
           {/* Step 5: Preview */}
           {currentStep === 5 && (
-            <div className="space-y-4">
-              <p className="font-mondwest text-sm text-content-primary/60">
-                Live preview will be implemented in the next iteration.
-              </p>
-              <div className="p-8 border-2 border-dashed border-edge-primary/20 rounded text-center">
-                <p className="font-joystix text-sm uppercase text-content-primary/40">
-                  Coming Soon
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h4 className="font-joystix text-sm uppercase text-content-primary">
+                  Live Preview
+                </h4>
+                <p className="font-mondwest text-xs text-content-primary/60">
+                  See how your theme will look in action
+                </p>
+              </div>
+
+              {/* Preview Container with Theme Applied */}
+              <div
+                className="border-2 border-edge-primary rounded-lg overflow-hidden"
+                style={{
+                  backgroundColor: formData.surfaceColor,
+                  color: formData.textColor,
+                }}
+              >
+                {/* Variables Preview Section */}
+                <div className="p-6 border-b border-edge-primary/20">
+                  <h5
+                    className="font-semibold text-base mb-4"
+                    style={{ fontFamily: formData.headingFont }}
+                  >
+                    Variables
+                  </h5>
+                  <div className="grid grid-cols-5 gap-3">
+                    {/* Primary Color */}
+                    <div className="space-y-2">
+                      <div
+                        className="w-full h-20 rounded border border-edge-primary/20 shadow-sm"
+                        style={{ backgroundColor: formData.primaryColor }}
+                      />
+                      <p
+                        className="text-xs text-center"
+                        style={{ fontFamily: formData.bodyFont }}
+                      >
+                        Primary
+                      </p>
+                      <p
+                        className="text-[10px] text-center opacity-60 font-mono"
+                        style={{ fontFamily: formData.monoFont }}
+                      >
+                        {formData.primaryColor}
+                      </p>
+                    </div>
+
+                    {/* Secondary Color */}
+                    <div className="space-y-2">
+                      <div
+                        className="w-full h-20 rounded border border-edge-primary/20 shadow-sm"
+                        style={{ backgroundColor: formData.secondaryColor }}
+                      />
+                      <p
+                        className="text-xs text-center"
+                        style={{ fontFamily: formData.bodyFont }}
+                      >
+                        Secondary
+                      </p>
+                      <p
+                        className="text-[10px] text-center opacity-60 font-mono"
+                        style={{ fontFamily: formData.monoFont }}
+                      >
+                        {formData.secondaryColor}
+                      </p>
+                    </div>
+
+                    {/* Accent Color */}
+                    <div className="space-y-2">
+                      <div
+                        className="w-full h-20 rounded border border-edge-primary/20 shadow-sm"
+                        style={{ backgroundColor: formData.accentColor }}
+                      />
+                      <p
+                        className="text-xs text-center"
+                        style={{ fontFamily: formData.bodyFont }}
+                      >
+                        Accent
+                      </p>
+                      <p
+                        className="text-[10px] text-center opacity-60 font-mono"
+                        style={{ fontFamily: formData.monoFont }}
+                      >
+                        {formData.accentColor}
+                      </p>
+                    </div>
+
+                    {/* Surface Color */}
+                    <div className="space-y-2">
+                      <div
+                        className="w-full h-20 rounded border border-edge-primary/20 shadow-sm"
+                        style={{ backgroundColor: formData.surfaceColor }}
+                      />
+                      <p
+                        className="text-xs text-center"
+                        style={{ fontFamily: formData.bodyFont }}
+                      >
+                        Surface
+                      </p>
+                      <p
+                        className="text-[10px] text-center opacity-60 font-mono"
+                        style={{ fontFamily: formData.monoFont }}
+                      >
+                        {formData.surfaceColor}
+                      </p>
+                    </div>
+
+                    {/* Text Color */}
+                    <div className="space-y-2">
+                      <div
+                        className="w-full h-20 rounded border border-edge-primary/20 shadow-sm"
+                        style={{ backgroundColor: formData.textColor }}
+                      />
+                      <p
+                        className="text-xs text-center"
+                        style={{ fontFamily: formData.bodyFont }}
+                      >
+                        Text
+                      </p>
+                      <p
+                        className="text-[10px] text-center opacity-60 font-mono"
+                        style={{ fontFamily: formData.monoFont }}
+                      >
+                        {formData.textColor}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Typography Preview Section */}
+                <div className="p-6 border-b border-edge-primary/20">
+                  <h5
+                    className="font-semibold text-base mb-4"
+                    style={{ fontFamily: formData.headingFont }}
+                  >
+                    Typography
+                  </h5>
+                  <div className="space-y-4">
+                    <div>
+                      <h1
+                        className="text-4xl font-bold mb-1"
+                        style={{ fontFamily: formData.headingFont }}
+                      >
+                        Heading 1
+                      </h1>
+                      <p
+                        className="text-xs opacity-60"
+                        style={{ fontFamily: formData.bodyFont }}
+                      >
+                        Font: {formData.headingFont}
+                      </p>
+                    </div>
+
+                    <div>
+                      <h2
+                        className="text-3xl font-bold mb-1"
+                        style={{ fontFamily: formData.headingFont }}
+                      >
+                        Heading 2
+                      </h2>
+                      <p
+                        className="text-xs opacity-60"
+                        style={{ fontFamily: formData.bodyFont }}
+                      >
+                        Font: {formData.headingFont}
+                      </p>
+                    </div>
+
+                    <div>
+                      <h3
+                        className="text-2xl font-semibold mb-1"
+                        style={{ fontFamily: formData.headingFont }}
+                      >
+                        Heading 3
+                      </h3>
+                      <p
+                        className="text-xs opacity-60"
+                        style={{ fontFamily: formData.bodyFont }}
+                      >
+                        Font: {formData.headingFont}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p
+                        className="text-base mb-1"
+                        style={{ fontFamily: formData.bodyFont }}
+                      >
+                        Body text: The quick brown fox jumps over the lazy dog. This
+                        demonstrates how your body text will appear with the selected font.
+                      </p>
+                      <p
+                        className="text-xs opacity-60"
+                        style={{ fontFamily: formData.bodyFont }}
+                      >
+                        Font: {formData.bodyFont}
+                      </p>
+                    </div>
+
+                    <div>
+                      <pre
+                        className="p-3 rounded text-sm overflow-x-auto"
+                        style={{
+                          fontFamily: formData.monoFont,
+                          backgroundColor: `${formData.textColor}10`,
+                        }}
+                      >
+{`function example() {
+  return "Monospace font";
+}`}
+                      </pre>
+                      <p
+                        className="text-xs opacity-60 mt-1"
+                        style={{ fontFamily: formData.bodyFont }}
+                      >
+                        Font: {formData.monoFont}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Components Preview Section */}
+                <div className="p-6">
+                  <h5
+                    className="font-semibold text-base mb-4"
+                    style={{ fontFamily: formData.headingFont }}
+                  >
+                    Components
+                  </h5>
+                  <div className="space-y-6">
+                    {/* Buttons */}
+                    <div>
+                      <p
+                        className="text-sm font-semibold mb-3"
+                        style={{ fontFamily: formData.bodyFont }}
+                      >
+                        Buttons
+                      </p>
+                      <div className="flex gap-3 flex-wrap">
+                        <button
+                          type="button"
+                          className="px-4 py-2 rounded font-semibold text-sm transition-opacity hover:opacity-90"
+                          style={{
+                            backgroundColor: formData.primaryColor,
+                            color: formData.surfaceColor,
+                            fontFamily: formData.bodyFont,
+                          }}
+                        >
+                          Primary Button
+                        </button>
+                        <button
+                          type="button"
+                          className="px-4 py-2 rounded font-semibold text-sm border-2 transition-opacity hover:opacity-90"
+                          style={{
+                            backgroundColor: formData.surfaceColor,
+                            color: formData.primaryColor,
+                            borderColor: formData.primaryColor,
+                            fontFamily: formData.bodyFont,
+                          }}
+                        >
+                          Secondary Button
+                        </button>
+                        <button
+                          type="button"
+                          className="px-4 py-2 rounded font-semibold text-sm transition-opacity hover:opacity-90"
+                          style={{
+                            backgroundColor: formData.accentColor,
+                            color: formData.surfaceColor,
+                            fontFamily: formData.bodyFont,
+                          }}
+                        >
+                          Accent Button
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Card */}
+                    <div>
+                      <p
+                        className="text-sm font-semibold mb-3"
+                        style={{ fontFamily: formData.bodyFont }}
+                      >
+                        Card
+                      </p>
+                      <div
+                        className="p-4 rounded border shadow-sm"
+                        style={{
+                          backgroundColor: formData.secondaryColor,
+                          borderColor: `${formData.textColor}20`,
+                        }}
+                      >
+                        <h4
+                          className="text-lg font-semibold mb-2"
+                          style={{ fontFamily: formData.headingFont }}
+                        >
+                          Card Title
+                        </h4>
+                        <p
+                          className="text-sm mb-3"
+                          style={{ fontFamily: formData.bodyFont }}
+                        >
+                          This is a sample card component demonstrating how content will look
+                          within a card using your theme colors and typography.
+                        </p>
+                        <button
+                          type="button"
+                          className="px-3 py-1.5 rounded text-sm font-semibold transition-opacity hover:opacity-90"
+                          style={{
+                            backgroundColor: formData.primaryColor,
+                            color: formData.surfaceColor,
+                            fontFamily: formData.bodyFont,
+                          }}
+                        >
+                          Action
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Form Elements */}
+                    <div>
+                      <p
+                        className="text-sm font-semibold mb-3"
+                        style={{ fontFamily: formData.bodyFont }}
+                      >
+                        Form Elements
+                      </p>
+                      <div className="space-y-3">
+                        <div>
+                          <label
+                            className="block text-sm font-medium mb-1"
+                            style={{ fontFamily: formData.bodyFont }}
+                          >
+                            Text Input
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Enter text..."
+                            className="w-full px-3 py-2 rounded border focus:outline-none focus:ring-2"
+                            style={{
+                              backgroundColor: formData.surfaceColor,
+                              borderColor: `${formData.textColor}30`,
+                              color: formData.textColor,
+                              fontFamily: formData.bodyFont,
+                            }}
+                          />
+                        </div>
+                        <div>
+                          <label
+                            className="flex items-center gap-2 text-sm"
+                            style={{ fontFamily: formData.bodyFont }}
+                          >
+                            <input
+                              type="checkbox"
+                              className="w-4 h-4 rounded"
+                              style={{
+                                accentColor: formData.accentColor,
+                              }}
+                            />
+                            Checkbox option
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Icons (if selected) */}
+                    {formData.iconSet && (
+                      <div>
+                        <p
+                          className="text-sm font-semibold mb-3"
+                          style={{ fontFamily: formData.bodyFont }}
+                        >
+                          Icons ({formData.iconSet === 'rad-os' ? 'Complete Set' : `${selectedIcons.length} Selected`})
+                        </p>
+                        <div className="flex gap-2 flex-wrap">
+                          {(formData.iconSet === 'rad-os' ? availableIcons.slice(0, 12) : selectedIcons.slice(0, 12)).map((icon) => (
+                            <div
+                              key={icon}
+                              className="w-8 h-8 p-1.5 rounded flex items-center justify-center"
+                              style={{
+                                backgroundColor: `${formData.primaryColor}15`,
+                              }}
+                              title={icon}
+                            >
+                              <img
+                                src={`/assets/icons/${icon}.svg`}
+                                alt={icon}
+                                className="w-full h-full object-contain"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Info message */}
+              <div
+                className="p-4 rounded border"
+                style={{
+                  backgroundColor: `${formData.accentColor}10`,
+                  borderColor: `${formData.accentColor}30`,
+                }}
+              >
+                <p
+                  className="text-sm"
+                  style={{ fontFamily: formData.bodyFont, color: formData.textColor }}
+                >
+                  This preview shows how your theme will look when applied to your application.
+                  You can go back to adjust colors, typography, or icons before creating the theme.
                 </p>
               </div>
             </div>
