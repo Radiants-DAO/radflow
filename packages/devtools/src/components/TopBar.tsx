@@ -19,7 +19,6 @@ interface TopBarProps {
  * Displays active theme name/logo, theme switcher dropdown, and window controls.
  */
 export function TopBar({
-  title = 'RADTOOLS',
   onClose,
   onFullscreen,
   showCloseButton = true,
@@ -58,14 +57,14 @@ export function TopBar({
 
   return (
     <div
-      className="flex items-center justify-between px-3 py-2 border-b border-edge-primary/20 select-none"
+      className="flex items-center justify-between px-3 py-2 select-none w-full"
     >
       {/* Left: Theme Indicator + Dropdown */}
       <div className="flex items-center gap-2">
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-surface-secondary/50 transition-colors"
+            className="flex items-center gap-2 px-2 py-1 rounded-sm hover:bg-surface-tertiary/50 transition-colors"
             title="Switch theme"
           >
             {/* Theme Icon/Logo */}
@@ -107,8 +106,8 @@ export function TopBar({
                 <button
                   key={theme.id}
                   onClick={() => handleThemeSelect(theme.id)}
-                  className={`w-full flex items-center justify-between px-3 py-2 text-left hover:bg-surface-secondary/50 transition-colors ${
-                    theme.id === activeTheme ? 'bg-surface-secondary/30' : ''
+                  className={`w-full flex items-center justify-between px-3 py-2 text-left hover:bg-surface-tertiary/50 transition-colors ${
+                    theme.id === activeTheme ? 'bg-surface-tertiary' : ''
                   }`}
                 >
                   <div className="flex flex-col gap-0.5">
@@ -148,7 +147,7 @@ export function TopBar({
                     setIsDropdownOpen(false);
                     onSettingsClick?.();
                   }}
-                  className="w-full px-3 py-2 text-left hover:bg-surface-secondary/50 transition-colors flex items-center gap-2"
+                  className="w-full px-3 py-2 text-left hover:bg-surface-tertiary/50 transition-colors flex items-center gap-2"
                 >
                   <Button
                     variant="ghost"

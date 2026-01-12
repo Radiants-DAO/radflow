@@ -477,7 +477,7 @@ export const createTypographySlice: StateCreator<TypographySlice, [], [], Typogr
       if (typographyStyles.length > 0) {
         set((state) => ({ ...state, typographyStyles }));
       }
-    } catch (error) {
+    } catch {
       // Failed to load typography from CSS
     }
   },
@@ -530,7 +530,7 @@ export const createTypographySlice: StateCreator<TypographySlice, [], [], Typogr
       if (fontMap.size > 0) {
         set({ fonts: Array.from(fontMap.values()) });
       }
-    } catch (error) {
+    } catch {
       // Failed to load fonts from filesystem
     }
   },

@@ -7,6 +7,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { execSync } from 'child_process';
 
 export type VersionBumpType = 'major' | 'minor' | 'patch';
 
@@ -181,8 +182,6 @@ export async function createGitTag(
   version: string,
   message?: string
 ): Promise<void> {
-  const { execSync } = require('child_process');
-
   const tag = generateGitTag(themeId, version);
   const tagMessage = message || `Release ${themeId} v${version}`;
 
@@ -200,8 +199,6 @@ export async function createGitTag(
  * Check if a git tag already exists
  */
 export async function gitTagExists(themeId: string, version: string): Promise<boolean> {
-  const { execSync } = require('child_process');
-
   const tag = generateGitTag(themeId, version);
 
   try {

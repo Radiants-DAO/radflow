@@ -44,7 +44,7 @@ export function StylesSubTab({ codes, searchQuery }: StylesSubTabProps) {
       <div className="flex items-center justify-center h-full text-content-tertiary">
         <div className="text-center">
           <Icon name="search" size={48} className="mx-auto mb-4 opacity-50" />
-          <p>No SREF codes found matching "{searchQuery}"</p>
+          <p>No SREF codes found matching &quot;{searchQuery}&quot;</p>
         </div>
       </div>
     );

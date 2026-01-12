@@ -355,7 +355,6 @@ export function detectFontPropertiesFromFilename(filename: string): { weight: nu
  * Parse @font-face declarations from CSS
  */
 export function parseFontFaces(css: string): FontDefinition[] {
-  const fontFaces: FontDefinition[] = [];
   const fontMap = new Map<string, FontDefinition>();
   
   // Match all @font-face blocks

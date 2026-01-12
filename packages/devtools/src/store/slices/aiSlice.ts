@@ -35,7 +35,7 @@ export interface AISlice {
   loadSrefCodes: (codes: SrefCode[]) => void;
 }
 
-export const createAISlice: StateCreator<AISlice, [], [], AISlice> = (set, get) => ({
+export const createAISlice: StateCreator<AISlice, [], [], AISlice> = (set) => ({
   radflowPrompts: [],
   themePrompts: [],
   recentlyUsedPrompts: [],

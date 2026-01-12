@@ -59,7 +59,7 @@ export function PromptsSubTab({ prompts, searchQuery }: PromptsSubTabProps) {
       <div className="flex items-center justify-center h-full text-content-tertiary">
         <div className="text-center">
           <Icon name="search" size={48} className="mx-auto mb-4 opacity-50" />
-          <p>No prompts found matching "{searchQuery}"</p>
+          <p>No prompts found matching &quot;{searchQuery}&quot;</p>
         </div>
       </div>
     );

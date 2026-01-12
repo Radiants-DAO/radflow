@@ -11,7 +11,7 @@ export interface HelpSlice {
   markAsViewed: (id: string) => void;
 }
 
-export const createHelpSlice: StateCreator<HelpSlice, [], [], HelpSlice> = (set, get) => ({
+export const createHelpSlice: StateCreator<HelpSlice, [], [], HelpSlice> = (set) => ({
   isHelpActive: false,
   hoveredHelpId: null,
   tooltipPosition: null,

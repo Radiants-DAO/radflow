@@ -145,12 +145,14 @@ export function SheetContent({ className = '', children }: SheetContentProps) {
   const styles = sideStyles[side];
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
   // Handle animation states
   useEffect(() => {
     if (open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsVisible(true);
     } else {
       // Delay hiding until animation completes

@@ -68,8 +68,8 @@
      For muted text, use opacity: text-content-primary/50
      ───────────────────────────────────────────── */
   --color-content-primary: var(--color-black);
-  --color-content-secondary: var(--color-sun-yellow);
-  --color-content-tertiary: var(--color-warm-cloud);
+  --color-content-secondary: var(--color-black);
+  --color-content-tertiary: var(--color-black);
   --color-content-inverted: var(--color-warm-cloud);
   --color-content-success: var(--color-green);
   --color-content-warning: var(--color-sunset-fuzz);

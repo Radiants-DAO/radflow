@@ -150,8 +150,8 @@ export const createThemeSlice: StateCreator<ThemeSlice, [], [], ThemeSlice> = (s
         return;
       }
 
-      const data = await response.json();
-      const themes: Theme[] = data.themes.map((themeConfig: any) => ({
+      const data = await response.json() as { themes: Theme[] };
+      const themes: Theme[] = data.themes.map((themeConfig) => ({
         id: themeConfig.id,
         name: themeConfig.name,
         packageName: themeConfig.packageName,

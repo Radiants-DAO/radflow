@@ -71,13 +71,11 @@ interface TextEditOverlayProps {
 }
 
 export function TextEditOverlay({ onContextMenu }: TextEditOverlayProps) {
-  const { 
-    isTextEditActive, 
+  const {
+    isTextEditActive,
     currentElement,
     setCurrentElement,
     addChange,
-    formatChangesForClipboard,
-    pendingChanges,
   } = useDevToolsStore();
   
   const { addToast } = useToast();
@@ -174,11 +172,11 @@ export function TextEditOverlay({ onContextMenu }: TextEditOverlayProps) {
           
           // Try to find React component name (basic detection)
           let reactComponent: string | undefined;
-          const fiberKey = Object.keys(currentElement).find(key => 
+          const fiberKey = Object.keys(currentElement).find(key =>
             key.startsWith('__reactFiber') || key.startsWith('__reactInternalInstance')
           );
           if (fiberKey) {
-            const fiber = (currentElement as any)[fiberKey];
+            const fiber = (currentElement as unknown as Record<string, unknown>)[fiberKey] as { return?: { type?: { displayName?: string; name?: string } } };
             if (fiber?.return?.type?.displayName || fiber?.return?.type?.name) {
               reactComponent = fiber.return.type.displayName || fiber.return.type.name;
             }
@@ -255,8 +253,11 @@ export function TextEditOverlay({ onContextMenu }: TextEditOverlayProps) {
     const originalCursor = hoveredElement.style.cursor;
     const originalBg = hoveredElement.style.backgroundColor;
 
+    // eslint-disable-next-line react-hooks/immutability
     hoveredElement.style.outline = '1px dashed var(--color-edge-focus)';
+    // eslint-disable-next-line react-hooks/immutability
     hoveredElement.style.cursor = 'text';
+    // eslint-disable-next-line react-hooks/immutability
     hoveredElement.style.backgroundColor = 'color-mix(in srgb, var(--color-edge-focus) 5%, transparent)';
 
     return () => {
@@ -274,8 +275,11 @@ export function TextEditOverlay({ onContextMenu }: TextEditOverlayProps) {
     const originalBg = currentElement.style.backgroundColor;
     const originalBoxShadow = currentElement.style.boxShadow;
 
+    // eslint-disable-next-line react-hooks/immutability
     currentElement.style.outline = '2px solid var(--color-surface-tertiary)';
+    // eslint-disable-next-line react-hooks/immutability
     currentElement.style.backgroundColor = 'var(--color-surface-elevated)';
+    // eslint-disable-next-line react-hooks/immutability
     currentElement.style.boxShadow = '0 2px 4px color-mix(in srgb, var(--color-surface-secondary) 10%, transparent)';
 
     return () => {

@@ -17,7 +17,7 @@ export interface ComponentsSlice {
   fetchFolders: () => Promise<void>; // Fetch available folders
 }
 
-export const createComponentsSlice: StateCreator<ComponentsSlice, [], [], ComponentsSlice> = (set, get) => {
+export const createComponentsSlice: StateCreator<ComponentsSlice, [], [], ComponentsSlice> = (set) => {
   const scan = async () => {
     set({ isLoading: true });
     try {

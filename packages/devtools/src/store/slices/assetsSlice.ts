@@ -34,6 +34,7 @@ export const createAssetsSlice: StateCreator<AssetsSlice, [], [], AssetsSlice> =
   })),
   
   clearUploadProgress: (fileName) => set((state) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { [fileName]: _, ...rest } = state.uploadProgress;
     return { uploadProgress: rest };
   }),
@@ -44,7 +45,7 @@ export const createAssetsSlice: StateCreator<AssetsSlice, [], [], AssetsSlice> =
       const res = await fetch('/api/devtools/assets');
       const data = await res.json();
       set({ assets: data.assets, isLoading: false });
-    } catch (error) {
+    } catch {
       set({ isLoading: false });
     }
   },
@@ -70,7 +71,7 @@ export const createAssetsSlice: StateCreator<AssetsSlice, [], [], AssetsSlice> =
         }));
         await get().refreshAssets();
       }
-    } catch (error) {
+    } catch {
       // Failed to upload asset
     } finally {
       setTimeout(() => get().clearUploadProgress(file.name), 2000);
@@ -85,7 +86,7 @@ export const createAssetsSlice: StateCreator<AssetsSlice, [], [], AssetsSlice> =
         body: JSON.stringify({ path }),
       });
       await get().refreshAssets();
-    } catch (error) {
+    } catch {
       // Failed to delete asset
     }
   },
@@ -98,7 +99,7 @@ export const createAssetsSlice: StateCreator<AssetsSlice, [], [], AssetsSlice> =
         body: JSON.stringify({ files: paths }),
       });
       await get().refreshAssets();
-    } catch (error) {
+    } catch {
       // Failed to optimize assets
     }
   },

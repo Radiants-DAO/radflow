@@ -51,12 +51,15 @@ const sizeStyles: Record<SwitchSize, { track: string; thumb: string; translate: 
 // Component
 // ============================================================================
 
+// Generate a stable ID (only once per component instance)
+let idCounter = 0;
+
 /**
  * Switch component - On/off toggle
  */
 export function Switch({ checked, onChange, size = 'md', disabled = false, label, labelPosition = 'right', className = '', id }: SwitchProps) {
   const styles = sizeStyles[size];
-  const switchId = id || `switch-${Math.random().toString(36).slice(2)}`;
+  const switchId = React.useMemo(() => id || `switch-${++idCounter}`, [id]);
 
   const handleClick = () => {
     if (!disabled) {

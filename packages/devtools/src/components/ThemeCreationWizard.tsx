@@ -985,7 +985,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
                   >
                     This is a sample paragraph demonstrating how your body text will look with the
                     selected font. The body font is used throughout most of your content, so choose
-                    one that is readable and matches your theme's personality.
+                    one that is readable and matches your theme&apos;s personality.
                   </p>
                   <pre
                     className="p-3 bg-surface-secondary/10 rounded text-sm overflow-x-auto"
@@ -1627,7 +1627,7 @@ export function ThemeCreationWizard({ open, onClose, onComplete }: ThemeCreation
 
               <div className="p-4 bg-surface-tertiary/20 border border-edge-focus/20 rounded-sm">
                 <p className="font-mondwest text-sm text-content-primary">
-                  Clicking "Create Theme" will scaffold a new theme package with the
+                  Clicking &quot;Create Theme&quot; will scaffold a new theme package with the
                   following structure:
                 </p>
                 <pre className="mt-2 p-2 bg-surface-primary/50 rounded font-mono text-xs text-content-primary overflow-x-auto">

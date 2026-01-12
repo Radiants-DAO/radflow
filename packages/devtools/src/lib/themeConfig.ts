@@ -121,7 +121,7 @@ function extractCssFiles(exports?: Record<string, string>): string[] {
 
   const cssFiles: string[] = [];
 
-  for (const [key, value] of Object.entries(exports)) {
+  for (const [, value] of Object.entries(exports)) {
     if (value.endsWith('.css')) {
       cssFiles.push(value);
     }
@@ -133,7 +133,7 @@ function extractCssFiles(exports?: Record<string, string>): string[] {
 /**
  * Extract component folders from theme package
  */
-function extractComponentFolders(packagePath: string): string[] | undefined {
+function extractComponentFolders(_packagePath: string): string[] | undefined {
   // This will be implemented when we add file system scanning
   // For now, return undefined
   return undefined;

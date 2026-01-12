@@ -233,7 +233,7 @@ export function TokenEditor({ open, onClose }: TokenEditorProps) {
             </Button>
             <button
               onClick={onClose}
-              className="w-8 h-8 flex items-center justify-center rounded-sm hover:bg-surface-secondary transition-colors"
+              className="w-8 h-8 flex items-center justify-center rounded-sm hover:bg-surface-tertiary transition-colors"
               aria-label="Close"
             >
               <Icon name="close" size={16} className="text-content-primary" />

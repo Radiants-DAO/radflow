@@ -24,7 +24,7 @@ export const createSearchSlice: StateCreator<SearchSlice, [], [], SearchSlice> =
   setSearchResults: (results) => set({ searchResults: results, selectedResultIndex: 0 }),
   setSelectedResultIndex: (index) => set({ selectedResultIndex: index }),
   setSearchOpen: (open) => set({ isSearchOpen: open }),
-  navigateToResult: (result) => {
+  navigateToResult: () => {
     set({ isSearchOpen: false });
     // Navigation is handled by GlobalSearch component
     // This function is called after tab change
