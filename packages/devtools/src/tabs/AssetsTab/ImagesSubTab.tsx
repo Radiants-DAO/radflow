@@ -149,7 +149,7 @@ export function ImagesSubTab({ searchQuery }: ImagesSubTabProps) {
           className={`px-3 py-2 font-mondwest text-sm rounded-sm ${
             message.type === 'success'
               ? 'bg-success text-content-primary'
-              : 'bg-error text-content-inverse'
+              : 'bg-error text-content-inverted'
           }`}
         >
           {message.text}
@@ -207,7 +207,7 @@ export function ImagesSubTab({ searchQuery }: ImagesSubTabProps) {
                   e.stopPropagation();
                   handleDelete(image.path);
                 }}
-                className="absolute top-2 right-2 p-2 bg-surface-primary border border-edge-primary rounded-sm shadow-btn opacity-0 group-hover:opacity-100 hover:bg-error hover:text-content-inverse hover:-translate-y-0.5 hover:shadow-btn-hover active:translate-y-0.5 active:shadow-none transition-all duration-200"
+                className="absolute top-2 right-2 p-2 bg-surface-primary border border-edge-primary rounded-sm shadow-btn opacity-0 group-hover:opacity-100 hover:bg-error hover:text-content-inverted hover:-translate-y-0.5 hover:shadow-btn-hover active:translate-y-0.5 active:shadow-none transition-all duration-200"
                 title="Delete"
               >
                 <Icon name="trash" size={16} />

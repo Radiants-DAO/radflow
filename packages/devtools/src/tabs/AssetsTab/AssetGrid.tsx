@@ -64,9 +64,9 @@ export function AssetGrid({ files, selectedFiles, onSelect, onDelete }: AssetGri
               e.stopPropagation();
               onDelete(file.path);
             }}
-            className="absolute top-1 right-1 w-6 h-6 bg-error text-content-inverse rounded-sm opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+            className="absolute top-1 right-1 w-6 h-6 bg-error text-content-inverted rounded-sm opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
           >
-            <Icon name="close" size={12} className="text-content-inverse" />
+            <Icon name="close" size={12} className="text-content-inverted" />
           </button>
         </div>
       ))}

@@ -191,19 +191,19 @@ export function ComponentIdMode() {
             maxWidth: '400px',
           }}
         >
-          <div className="bg-surface-secondary text-content-inverse border border-edge-primary rounded-sm shadow-[4px_4px_0_0_var(--color-black)] p-3 font-mondwest text-sm">
-            <div className="font-joystix text-xs uppercase text-content-inverse font-bold mb-1">
+          <div className="bg-surface-secondary text-content-inverted border border-edge-primary rounded-sm shadow-[4px_4px_0_0_var(--color-black)] p-3 font-mondwest text-sm">
+            <div className="font-joystix text-xs uppercase text-content-inverted font-bold mb-1">
               {hoveredComponent.name}
             </div>
-            <div className="text-content-inverse/80 text-xs font-mono">
+            <div className="text-content-inverted/80 text-xs font-mono">
               {hoveredComponent.path}
             </div>
             {hoveredComponent.theme && (
-              <div className="text-content-inverse/70 text-xs mt-1">
+              <div className="text-content-inverted/70 text-xs mt-1">
                 theme: {hoveredComponent.theme}
               </div>
             )}
-            <div className="text-content-inverse/60 text-[10px] mt-2">
+            <div className="text-content-inverted/60 text-[10px] mt-2">
               Click to copy
             </div>
           </div>
@@ -213,18 +213,18 @@ export function ComponentIdMode() {
       {/* Click Feedback */}
       {clickedComponent && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none">
-          <div className="bg-surface-secondary text-content-inverse border-2 border-edge-primary rounded-sm shadow-[8px_8px_0_0_var(--color-black)] p-4 font-mondwest">
-            <div className="font-joystix text-sm uppercase text-content-inverse font-bold mb-2">
+          <div className="bg-surface-secondary text-content-inverted border-2 border-edge-primary rounded-sm shadow-[8px_8px_0_0_var(--color-black)] p-4 font-mondwest">
+            <div className="font-joystix text-sm uppercase text-content-inverted font-bold mb-2">
               Copied to Clipboard!
             </div>
-            <div className="text-content-inverse/90 text-xs font-mono">
+            <div className="text-content-inverted/90 text-xs font-mono">
               {clickedComponent.name}
             </div>
-            <div className="text-content-inverse/70 text-[10px] mt-1">
+            <div className="text-content-inverted/70 text-[10px] mt-1">
               {clickedComponent.path}
             </div>
             {clickedComponent.theme && (
-              <div className="text-content-inverse/70 text-[10px] mt-1">
+              <div className="text-content-inverted/70 text-[10px] mt-1">
                 theme: {clickedComponent.theme}
               </div>
             )}
