@@ -619,12 +619,17 @@ Phase 1 + Phase 2 + Phase 3
 
 ---
 
-## Next Steps
+## Code Quality Improvements (Optional)
 
-1. **Start with Phase 1 (Foundation)** - This unlocks all other phases
-2. **Prioritize Phase 6 (AI Tab)** after foundation - High user value
-3. **Phase 8.1 (Remove keyboard shortcuts)** - Quick win, improves UX immediately
-4. Review generated plan and adjust priorities based on user needs
+All planned features are complete. The following are optional quality improvements:
+
+1. **Fix remaining linting warnings** - Unused variables in some catch blocks
+2. **Fix remaining TypeScript 'any' types** - Several components still use 'any' for event handlers
+3. **Fix React hooks issues** - Some effects need dependency array updates
+4. **Fix React unescaped entities** - Some JSX contains unescaped quotes and apostrophes
+5. **Add .eslintignore** - Exclude dist/ and build artifacts from linting
+
+These are non-critical and don't affect functionality. The build passes all TypeScript checks.
 
 ---
 

@@ -38,6 +38,7 @@ export function DevToolsPanel() {
     isSettingsOpen,
     openSettings,
     closeSettings,
+    searchQuery,
   } = useDevToolsStore();
 
   // Footer state
@@ -142,7 +143,7 @@ export function DevToolsPanel() {
           )}
           {activeTab === 'typography' && (
             <div className="h-full pr-2 pl-2 pb-2 rounded">
-              <TypographyTab searchQuery="" />
+              <TypographyTab searchQuery={searchQuery} />
             </div>
           )}
           {activeTab === 'components' && (
