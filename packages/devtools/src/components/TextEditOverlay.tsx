@@ -253,6 +253,7 @@ export function TextEditOverlay({ onContextMenu }: TextEditOverlayProps) {
     const originalCursor = hoveredElement.style.cursor;
     const originalBg = hoveredElement.style.backgroundColor;
 
+    // Direct DOM manipulation is intentional for DevTools overlay
     // eslint-disable-next-line react-hooks/immutability
     hoveredElement.style.outline = '1px dashed var(--color-edge-focus)';
     // eslint-disable-next-line react-hooks/immutability
@@ -275,6 +276,7 @@ export function TextEditOverlay({ onContextMenu }: TextEditOverlayProps) {
     const originalBg = currentElement.style.backgroundColor;
     const originalBoxShadow = currentElement.style.boxShadow;
 
+    // Direct DOM manipulation is intentional for DevTools overlay
     // eslint-disable-next-line react-hooks/immutability
     currentElement.style.outline = '2px solid var(--color-surface-tertiary)';
     // eslint-disable-next-line react-hooks/immutability
