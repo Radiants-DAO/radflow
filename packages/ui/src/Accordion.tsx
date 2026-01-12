@@ -54,11 +54,10 @@ export function Accordion({ type = 'single', defaultValue, value: controlledValu
 
   const [expandedItems, setExpandedItems] = useState<Set<string>>(getInitialExpanded);
 
-  useEffect(() => {
-    if (controlledValue !== undefined) {
-      setExpandedItems(new Set(Array.isArray(controlledValue) ? controlledValue : [controlledValue]));
-    }
-  }, [controlledValue]);
+  // Use controlled value directly if provided, otherwise use internal state
+  const activeExpandedItems = controlledValue !== undefined
+    ? new Set(Array.isArray(controlledValue) ? controlledValue : [controlledValue])
+    : expandedItems;
 
   const toggleItem = useCallback(
     (itemValue: string) => {
@@ -86,7 +85,7 @@ export function Accordion({ type = 'single', defaultValue, value: controlledValu
   );
 
   return (
-    <AccordionContext.Provider value={{ type, expandedItems, toggleItem }}>
+    <AccordionContext.Provider value={{ type, expandedItems: activeExpandedItems, toggleItem }}>
       <div className={`space-y-0 ${className}`}>{children}</div>
     </AccordionContext.Provider>
   );

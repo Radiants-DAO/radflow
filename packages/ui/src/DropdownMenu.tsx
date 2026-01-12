@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useRef, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { Icon } from './Icon';
 import { useEscapeKey, useClickOutside } from './hooks/useModalBehavior';
@@ -95,10 +95,15 @@ export function DropdownMenuTrigger({ children, asChild }: DropdownMenuTriggerPr
     setOpen(!open);
   };
 
+  // Create a callback ref that merges with the existing ref
+  const setTriggerRef = useCallback((node: HTMLElement | null) => {
+    (triggerRef as React.MutableRefObject<HTMLElement | null>).current = node;
+  }, [triggerRef]);
+
   if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children as React.ReactElement<{ onClick?: () => void; ref?: React.Ref<HTMLElement | null> }>, {
+    return React.cloneElement(children as React.ReactElement<{ onClick?: () => void; ref?: (node: HTMLElement | null) => void }>, {
       onClick: handleClick,
-      ref: triggerRef as React.Ref<HTMLElement | null>,
+      ref: setTriggerRef,
     });
   }
 
@@ -130,12 +135,15 @@ export function DropdownMenuContent({ className = '', children }: DropdownMenuCo
   const [mounted, setMounted] = useState(false);
   const [coords, setCoords] = useState({ top: 0, left: 0 });
 
-  useEffect(() => {
+  // Use layout effect for hydration check to avoid SSR issues
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     setMounted(true);
   }, []);
 
-  // Calculate position
-  useEffect(() => {
+  // Calculate position using layout effect to measure DOM before paint
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     if (!open || !triggerRef.current || !contentRef.current) return;
 
     const trigger = triggerRef.current.getBoundingClientRect();

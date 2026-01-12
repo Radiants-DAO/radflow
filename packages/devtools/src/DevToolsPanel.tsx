@@ -32,9 +32,11 @@ export function DevToolsPanel() {
     isTextEditActive,
     isComponentIdActive,
     isHelpActive,
+    isSearchOpen,
     toggleTextEditMode,
     toggleComponentIdMode,
     toggleHelpMode,
+    setSearchOpen,
     isSettingsOpen,
     openSettings,
     closeSettings,
@@ -46,14 +48,16 @@ export function DevToolsPanel() {
   const [componentTabs, setComponentTabs] = useState<Array<{ id: string; label: string }>>([]);
 
   // Determine active tool
-  const activeTool: Tool | null = 
+  const activeTool: Tool | null =
+    isSearchOpen ? 'search' :
     isComponentIdActive ? 'componentId' :
     isTextEditActive ? 'textEdit' :
     isHelpActive ? 'help' :
     null;
 
   const handleToolToggle = (tool: Tool) => {
-    if (tool === 'componentId') toggleComponentIdMode();
+    if (tool === 'search') setSearchOpen(!isSearchOpen);
+    else if (tool === 'componentId') toggleComponentIdMode();
     else if (tool === 'textEdit') toggleTextEditMode();
     else if (tool === 'help') toggleHelpMode();
   };

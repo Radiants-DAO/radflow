@@ -13,6 +13,7 @@ interface LeftRailProps {
 }
 
 const TOOLS: Array<{ id: Tool; icon: string; label: string; shortcut: string }> = [
+  { id: 'search', icon: 'search', label: 'Search', shortcut: '⌘K' },
   { id: 'componentId', icon: 'crosshair1', label: 'Component ID', shortcut: '⌘⇧I' },
   { id: 'textEdit', icon: 'pencil', label: 'Text Edit', shortcut: '⌘⇧T' },
   { id: 'help', icon: 'question', label: 'Help', shortcut: '⌘⇧?' },

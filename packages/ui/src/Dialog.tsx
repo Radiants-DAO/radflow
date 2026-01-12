@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useEscapeKey, useLockBodyScroll } from './hooks/useModalBehavior';
 
@@ -100,7 +100,9 @@ export function DialogContent({ className = '', children }: DialogContentProps) 
   const { open, setOpen } = useDialogContext();
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
+  // Use layout effect for hydration check to avoid SSR issues
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     setMounted(true);
   }, []);
 

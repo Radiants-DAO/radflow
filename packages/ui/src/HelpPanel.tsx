@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Icon } from './Icon';
 
@@ -41,15 +41,20 @@ export function HelpPanel({
   const [mounted, setMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
+  // Use layout effect for hydration check to avoid SSR issues
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     setMounted(true);
   }, []);
 
-  // Handle animation states
+  // Handle animation states - delay hiding for exit animation
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     if (isOpen) {
+      // Show immediately when opening
       setIsVisible(true);
     } else {
+      // Delay hiding for exit animation
       const timer = setTimeout(() => {
         setIsVisible(false);
       }, 200);

@@ -60,14 +60,14 @@ export function StylesSubTab({ codes, searchQuery }: StylesSubTabProps) {
           return (
             <div
               key={srefCode.id}
-              className="bg-surface-secondary/10 border border-edge-primary/10 rounded-lg overflow-hidden hover:border-edge-primary/20 transition-colors"
+              className="bg-surface-elevated border border-edge-primary/20 rounded-md overflow-hidden hover:border-edge-focus transition-colors"
             >
               {/* Preview Grid - 2x2 thumbnails */}
-              <div className="grid grid-cols-2 gap-1 bg-surface-primary/50">
+              <div className="grid grid-cols-2 gap-1 bg-surface-primary">
                 {srefCode.previewImages.slice(0, 4).map((imageSrc, idx) => (
                   <div
                     key={idx}
-                    className="aspect-square bg-surface-secondary/20 flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity"
+                    className="aspect-square bg-surface-tertiary/30 flex items-center justify-center cursor-pointer hover:bg-surface-tertiary/50 transition-colors"
                     onClick={() => toggleExpand(srefCode.id)}
                   >
                     {/* Placeholder for image - replace with actual image once assets are available */}
@@ -80,11 +80,11 @@ export function StylesSubTab({ codes, searchQuery }: StylesSubTabProps) {
               <div className="p-4">
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div className="flex-1">
-                    <code className="text-sm font-mono text-content-primary bg-surface-secondary/20 px-2 py-1 rounded">
+                    <code className="text-sm font-mono text-content-primary bg-surface-tertiary/50 px-2 py-1 rounded-xs">
                       --sref {srefCode.code}
                     </code>
                     {srefCode.description && (
-                      <p className="text-sm text-content-secondary mt-2">{srefCode.description}</p>
+                      <p className="text-sm text-content-primary mt-2">{srefCode.description}</p>
                     )}
                   </div>
                   <div className="flex items-center gap-1">
@@ -109,12 +109,12 @@ export function StylesSubTab({ codes, searchQuery }: StylesSubTabProps) {
 
                 {/* Expanded Preview */}
                 {isExpanded && (
-                  <div className="mt-3 pt-3 border-t border-edge-primary/10">
+                  <div className="mt-3 pt-3 border-t border-edge-primary/20">
                     <div className="grid grid-cols-2 gap-2">
                       {srefCode.previewImages.map((imageSrc, idx) => (
                         <div
                           key={idx}
-                          className="aspect-square bg-surface-secondary/20 rounded flex items-center justify-center"
+                          className="aspect-square bg-surface-tertiary/30 rounded-sm flex items-center justify-center"
                         >
                           {/* Placeholder for full-size preview */}
                           <Icon name="image" size={64} className="text-content-tertiary opacity-30" />
@@ -133,15 +133,15 @@ export function StylesSubTab({ codes, searchQuery }: StylesSubTabProps) {
       </div>
 
       {/* Usage Instructions */}
-      <div className="mt-6 p-4 bg-surface-secondary/5 border border-edge-primary/10 rounded-lg">
+      <div className="mt-6 p-4 bg-surface-tertiary/20 border border-edge-primary/20 rounded-md">
         <h3 className="text-sm font-semibold text-content-primary mb-2">
           How to use SREF codes with Midjourney
         </h3>
-        <ol className="text-sm text-content-secondary space-y-1 list-decimal list-inside">
+        <ol className="text-sm text-content-primary space-y-1 list-decimal list-inside">
           <li>Copy an SREF code by clicking the copy button</li>
           <li>
             In Midjourney, add the code to your prompt:{' '}
-            <code className="font-mono bg-surface-secondary/20 px-1 rounded">
+            <code className="font-mono bg-surface-tertiary/50 px-1 rounded-xs">
               /imagine your prompt here --sref [code]
             </code>
           </li>

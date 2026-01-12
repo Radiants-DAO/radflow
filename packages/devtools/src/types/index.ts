@@ -120,7 +120,7 @@ export interface TypographyStyle {
 }
 
 // Tool Types
-export type Tool = 'componentId' | 'textEdit' | 'help';
+export type Tool = 'search' | 'componentId' | 'textEdit' | 'help';
 
 // Dock Position Types
 export type DockPosition = 'right' | 'left' | 'undocked';

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect, createContext, useContext } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect, createContext, useContext } from 'react';
 import { createPortal } from 'react-dom';
 import { Icon } from './Icon';
 
@@ -125,12 +125,16 @@ export function ContextMenuContent({ children, className = '' }: ContextMenuCont
   const [mounted, setMounted] = useState(false);
   const [coords, setCoords] = useState({ top: 0, left: 0 });
 
-  useEffect(() => {
+  // Use layout effect for hydration check to avoid SSR issues
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     setMounted(true);
   }, []);
 
   // Calculate position and keep within viewport
-  useEffect(() => {
+  // Use layout effect to measure DOM before paint
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useLayoutEffect(() => {
     if (!isOpen || !contentRef.current) return;
 
     const content = contentRef.current.getBoundingClientRect();

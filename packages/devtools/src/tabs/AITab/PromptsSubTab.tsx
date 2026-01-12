@@ -79,7 +79,7 @@ export function PromptsSubTab({ prompts, searchQuery }: PromptsSubTabProps) {
                 return (
                   <div
                     key={prompt.id}
-                    className="bg-surface-secondary/10 border border-edge-primary/10 rounded-lg p-4 hover:border-edge-primary/20 transition-colors"
+                    className="bg-surface-elevated border border-edge-primary/20 rounded-md p-4 hover:border-edge-focus transition-colors"
                   >
                     <div className="flex items-start justify-between gap-3 mb-2">
                       <div className="flex-1">
@@ -89,7 +89,7 @@ export function PromptsSubTab({ prompts, searchQuery }: PromptsSubTabProps) {
                             {prompt.tags.map((tag) => (
                               <span
                                 key={tag}
-                                className="px-2 py-0.5 text-xs bg-surface-secondary/20 text-content-secondary rounded"
+                                className="px-2 py-0.5 text-xs bg-surface-tertiary/50 text-content-primary rounded-xs"
                               >
                                 {tag}
                               </span>
@@ -119,7 +119,7 @@ export function PromptsSubTab({ prompts, searchQuery }: PromptsSubTabProps) {
 
                     {isExpanded && (
                       <div className="mt-3 pt-3 border-t border-edge-primary/10">
-                        <pre className="text-sm text-content-secondary whitespace-pre-wrap font-mono bg-surface-primary/50 p-3 rounded border border-edge-primary/10">
+                        <pre className="text-sm text-content-primary whitespace-pre-wrap font-mono bg-surface-primary p-3 rounded-sm border border-edge-primary/20">
                           {prompt.content}
                         </pre>
                       </div>
