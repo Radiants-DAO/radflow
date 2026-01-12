@@ -109,19 +109,19 @@ function ToastViewport({ toasts, removeToast }: ToastViewportProps) {
 // ============================================================================
 
 const variantStyles: Record<ToastVariant, string> = {
-  default: 'bg-[rgba(20,20,30,0.95)] text-[#f3eed9] border border-[rgba(243,238,217,0.2)]',
-  success: 'bg-[rgba(20,20,30,0.95)] text-[#f3eed9] border border-[rgba(142,242,217,0.3)]',
-  warning: 'bg-[rgba(20,20,30,0.95)] text-[#f3eed9] border border-[rgba(252,225,132,0.3)]',
-  error: 'bg-[rgba(20,20,30,0.95)] text-[#f3eed9] border border-[rgba(255,100,100,0.3)]',
-  info: 'bg-[rgba(20,20,30,0.95)] text-[#f3eed9] border border-[rgba(128,208,255,0.3)]',
+  default: 'bg-[var(--color-surface-overlay)] text-content-primary border border-[var(--glass-border)]',
+  success: 'bg-[var(--color-surface-overlay)] text-content-primary border border-[var(--glass-border-green)]',
+  warning: 'bg-[var(--color-surface-overlay)] text-content-primary border border-[var(--glass-border-gold)]',
+  error: 'bg-[var(--color-surface-overlay)] text-content-primary border border-[var(--glass-border-error)]',
+  info: 'bg-[var(--color-surface-overlay)] text-content-primary border border-[var(--glass-border-blue)]',
 };
 
 const variantBorderColors: Record<ToastVariant, string> = {
-  default: 'border-l-[rgba(243,238,217,0.5)]',
-  success: 'border-l-[#8ef2d9]',
-  warning: 'border-l-[#fce184]',
-  error: 'border-l-[#ff6464]',
-  info: 'border-l-[#80d0ff]',
+  default: 'border-l-[var(--color-content-tertiary)]',
+  success: 'border-l-success',
+  warning: 'border-l-[var(--color-gold)]',
+  error: 'border-l-[var(--color-error-red)]',
+  info: 'border-l-[var(--color-blue)]',
 };
 
 const variantIconMap: Record<ToastVariant, string | null> = {
@@ -159,18 +159,18 @@ function Toast({ toast, onClose }: ToastProps) {
         {/* Icon */}
         {displayIconName && (
           <span className="flex-shrink-0">
-            <Icon name={displayIconName} size={ICON_SIZES.md} className="text-[#f3eed9]" />
+            <Icon name={displayIconName} size={ICON_SIZES.md} className="text-content-primary" />
           </span>
         )}
 
         {/* Content */}
         <div className="flex-1 min-w-0">
-          <p className="font-kodemono text-xs uppercase text-[#f3eed9] font-bold">{toast.title}</p>
-          {toast.description && <p className="font-outfit text-sm text-[rgba(243,238,217,0.8)] mt-1">{toast.description}</p>}
+          <p className="font-kodemono text-xs uppercase text-content-primary font-bold">{toast.title}</p>
+          {toast.description && <p className="font-outfit text-sm text-[var(--color-content-medium)] mt-1">{toast.description}</p>}
         </div>
 
         {/* Close Button */}
-        <button onClick={onClose} className="text-[rgba(243,238,217,0.5)] hover:text-[#f3eed9] flex-shrink-0 -mt-1 transition-colors" aria-label="Close">
+        <button onClick={onClose} className="text-[var(--color-content-tertiary)] hover:text-content-primary flex-shrink-0 -mt-1 transition-colors" aria-label="Close">
           <Icon name="close" size={ICON_SIZES.md} />
         </button>
       </div>

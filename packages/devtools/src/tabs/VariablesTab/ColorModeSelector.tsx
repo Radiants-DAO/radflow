@@ -2,8 +2,7 @@
 
 import { useEffect } from 'react';
 import { useDevToolsStore } from '../../store';
-import { Button } from '@radflow/ui/Button';
-import { useToast } from '@radflow/ui/Toast';
+import { Button, useToast } from '@radflow/ui';
 
 export function ColorModeSelector() {
   const { colorModes, activeColorMode, setActiveColorMode, baseColors } = useDevToolsStore();

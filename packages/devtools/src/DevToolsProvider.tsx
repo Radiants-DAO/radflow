@@ -1,13 +1,18 @@
 'use client';
 
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { DevToolsPanel } from './DevToolsPanel';
 import { TextEditMode } from './components/TextEditMode';
 import { HelpMode } from './components/HelpMode';
 import { ComponentIdMode } from './components/ComponentIdMode';
 import { useDevToolsStore } from './store';
-import { ToastProvider } from '@radflow/ui';
+import { ToastProvider, IconProvider, IconLibrary, PhosphorWeight } from '@radflow/ui';
 import type { Tab } from './types';
+
+interface IconConfig {
+  library: IconLibrary;
+  weight: PhosphorWeight;
+}
 
 interface DevToolsProviderProps {
   children: ReactNode;
@@ -26,9 +31,28 @@ export function DevToolsProvider({ children }: DevToolsProviderProps) {
     isTextEditActive,
   } = useDevToolsStore();
 
-  // Initialize: fetch available themes on mount
+  // Icon configuration from active theme
+  const [iconConfig, setIconConfig] = useState<IconConfig>({ library: 'svg', weight: 'regular' });
+
+  // Initialize: fetch available themes and icon config on mount
   useEffect(() => {
     fetchAvailableThemes();
+
+    // Fetch icon configuration from active theme
+    fetch('/api/devtools/icons')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.iconLibrary?.library) {
+          setIconConfig({
+            library: data.iconLibrary.library.toLowerCase() as IconLibrary,
+            weight: (data.iconLibrary.style as PhosphorWeight) || 'regular',
+          });
+        }
+      })
+      .catch(() => {
+        // Fallback to SVG icons
+        setIconConfig({ library: 'svg', weight: 'regular' });
+      });
   }, [fetchAvailableThemes]);
 
   // Keyboard shortcuts
@@ -143,13 +167,15 @@ export function DevToolsProvider({ children }: DevToolsProviderProps) {
   }
 
   return (
-    <ToastProvider>
-      {children}
-      {isOpen && <DevToolsPanel />}
-      <TextEditMode />
-      <HelpMode />
-      <ComponentIdMode />
-    </ToastProvider>
+    <IconProvider library={iconConfig.library} weight={iconConfig.weight}>
+      <ToastProvider>
+        {children}
+        {isOpen && <DevToolsPanel />}
+        <TextEditMode />
+        <HelpMode />
+        <ComponentIdMode />
+      </ToastProvider>
+    </IconProvider>
   );
 }
 

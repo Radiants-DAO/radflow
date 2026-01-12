@@ -2,7 +2,7 @@
 
 import { createPortal } from 'react-dom';
 import { useEffect, useState } from 'react';
-import { Button } from '@radflow/ui/Button';
+import { Button } from '@radflow/ui';
 import { ThemeIcon as Icon } from '../../components/ThemeIcon';
 import { useDevToolsStore } from '../../store';
 import type { PendingChanges } from './index';

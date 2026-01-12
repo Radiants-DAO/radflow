@@ -7,9 +7,7 @@ import { ColorModeSelector } from './ColorModeSelector';
 import { BorderRadiusDisplay } from './BorderRadiusDisplay';
 import { ShadowDisplay } from './ShadowDisplay';
 import { LivePreview } from './LivePreview';
-import { Button } from '@radflow/ui/Button';
-import { Divider } from '@radflow/ui/Divider';
-import { useToast } from '@radflow/ui/Toast';
+import { Button, Divider, useToast } from '@radflow/ui';
 
 // Color type for added colors
 export interface AddedColor {

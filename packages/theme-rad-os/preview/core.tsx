@@ -23,16 +23,43 @@ import {
   ContextMenuItem,
   ContextMenuSeparator,
   ContextMenuTrigger,
+  Dialog,
+  DialogBody,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
   Divider,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
   HelpPanel,
   Input,
   Label,
   NumberField,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   Progress,
   Radio,
   RadioGroup,
   ScrollArea,
   Select,
+  Sheet,
+  SheetBody,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
   Skeleton,
   Slider,
   Spinner,
@@ -51,49 +78,16 @@ import {
   ToastProvider,
   Tooltip,
   useToast
-} from '@radflow/ui';
-import {
-  Dialog,
-  DialogBody,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from '@radflow/ui/Dialog';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@radflow/ui/DropdownMenu';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@radflow/ui/Popover';
-import {
-  Sheet,
-  SheetBody,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger
-} from '@radflow/ui/Sheet';
+} from '../components/core';
 
-// DevTools internal components
-import { SearchableColorDropdown } from '../../components/SearchableColorDropdown';
-import { TokenDropdown } from '../../components/TokenDropdown';
-import { ColorPicker } from '../../components/ColorPicker';
-import { PropDisplay } from './PropDisplay';
-import { useDevToolsStore } from '../../store';
+// DevTools preview utilities
+import {
+  SearchableColorDropdown,
+  TokenDropdown,
+  ColorPicker,
+  PropDisplay,
+  useDevToolsStore
+} from '@radflow/devtools/preview';
 
 // ============================================================================
 // Section Component

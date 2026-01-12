@@ -31,15 +31,41 @@
      ============================================ */
 
   --glass-bg: rgba(243, 238, 217, 0.05);
+  --glass-bg-hover: rgba(243, 238, 217, 0.1);
+  --glass-bg-active: rgba(243, 238, 217, 0.15);
+  --glass-bg-subtle: rgba(243, 238, 217, 0.02);
   --glass-border: rgba(243, 238, 217, 0.2);
+  --glass-border-hover: rgba(243, 238, 217, 0.3);
+  --glass-border-subtle: rgba(243, 238, 217, 0.1);
   --glass-bg-blue: rgba(128, 208, 255, 0.1);
+  --glass-bg-blue-hover: rgba(128, 208, 255, 0.15);
+  --glass-bg-blue-active: rgba(128, 208, 255, 0.2);
   --glass-border-blue: rgba(128, 208, 255, 0.5);
+  --glass-border-blue-hover: rgba(128, 208, 255, 0.6);
   --glass-bg-purple: rgba(153, 163, 255, 0.1);
+  --glass-bg-purple-hover: rgba(153, 163, 255, 0.15);
+  --glass-bg-purple-active: rgba(153, 163, 255, 0.2);
+  --glass-bg-purple-checked: rgba(153, 163, 255, 0.3);
   --glass-border-purple: rgba(153, 163, 255, 0.5);
   --glass-bg-green: rgba(142, 242, 217, 0.1);
-  --glass-border-green: rgba(142, 242, 217, 0.5);
+  --glass-bg-green-hover: rgba(142, 242, 217, 0.15);
+  --glass-bg-green-active: rgba(142, 242, 217, 0.2);
+  --glass-border-green: rgba(142, 242, 217, 0.3);
+  --glass-border-green-strong: rgba(142, 242, 217, 0.5);
   --glass-bg-gold: rgba(252, 225, 132, 0.1);
-  --glass-border-gold: rgba(252, 225, 132, 0.5);
+  --glass-bg-gold-hover: rgba(252, 225, 132, 0.15);
+  --glass-bg-gold-active: rgba(252, 225, 132, 0.2);
+  --glass-bg-gold-subtle: rgba(252, 225, 132, 0.03);
+  --glass-bg-gold-minimal: rgba(252, 225, 132, 0.05);
+  --glass-border-gold: rgba(252, 225, 132, 0.3);
+  --glass-border-gold-strong: rgba(252, 225, 132, 0.5);
+  --glass-bg-error: rgba(255, 100, 100, 0.1);
+  --glass-border-error: rgba(255, 100, 100, 0.3);
+  --glass-border-error-strong: rgba(255, 100, 100, 0.5);
+  --glass-border-error-focus: rgba(255, 100, 100, 0.7);
+
+  /* Pattern colors for decorative backgrounds */
+  --pattern-gold: rgba(252, 225, 132, 0.7);
 
   /* ============================================
      SEMANTIC TOKENS (themes override these)
@@ -92,18 +118,27 @@
   --color-surface-tertiary: var(--glass-bg-purple);
   --color-surface-elevated: var(--glass-bg);
   --color-surface-sunken: rgba(0, 0, 0, 0.3);
+  --color-surface-overlay: rgba(20, 20, 30, 0.95);
+  --color-surface-input-focus: rgba(243, 238, 217, 0.08);
 
   /* Content/text colors */
   --color-content-primary: var(--color-cream);
   --color-content-secondary: var(--color-grey);
   --color-content-tertiary: rgba(243, 238, 217, 0.5);
+  --color-content-muted: rgba(243, 238, 217, 0.4);
+  --color-content-subtle: rgba(243, 238, 217, 0.6);
+  --color-content-soft: rgba(243, 238, 217, 0.7);
+  --color-content-medium: rgba(243, 238, 217, 0.8);
   --color-content-inverted: var(--color-black);
   --color-content-link: var(--color-blue);
 
   /* Edge/border colors */
   --color-edge-primary: var(--glass-border);
   --color-edge-secondary: rgba(243, 238, 217, 0.1);
+  --color-edge-tertiary: rgba(243, 238, 217, 0.3);
   --color-edge-focus: var(--color-blue);
+  --color-edge-focus-purple: rgba(153, 163, 255, 0.5);
+  --color-edge-dark: #262626;
 
   /* Fonts */
   --font-audiowide: 'Audiowide', sans-serif;

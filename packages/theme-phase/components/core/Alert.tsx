@@ -29,19 +29,19 @@ interface AlertProps {
 // ============================================================================
 
 const variantStyles: Record<AlertVariant, string> = {
-  default: 'bg-[rgba(243,238,217,0.05)] text-[#f3eed9] border border-[rgba(243,238,217,0.2)]',
-  success: 'bg-[rgba(142,242,217,0.1)] text-[#f3eed9] border border-[rgba(142,242,217,0.3)]',
-  warning: 'bg-[rgba(252,225,132,0.1)] text-[#f3eed9] border border-[rgba(252,225,132,0.3)]',
-  error: 'bg-[rgba(255,100,100,0.1)] text-[#f3eed9] border border-[rgba(255,100,100,0.3)]',
-  info: 'bg-[rgba(128,208,255,0.1)] text-[#f3eed9] border border-[rgba(128,208,255,0.3)]',
+  default: 'bg-[var(--glass-bg)] text-content-primary border border-[var(--glass-border)]',
+  success: 'bg-[var(--glass-bg-green)] text-content-primary border border-[var(--glass-border-green)]',
+  warning: 'bg-[var(--glass-bg-gold)] text-content-primary border border-[var(--glass-border-gold)]',
+  error: 'bg-[var(--glass-bg-error)] text-content-primary border border-[var(--glass-border-error)]',
+  info: 'bg-[var(--glass-bg-blue)] text-content-primary border border-[var(--glass-border-blue)]',
 };
 
 const variantBorderColors: Record<AlertVariant, string> = {
-  default: 'border-l-[rgba(243,238,217,0.5)]',
-  success: 'border-l-[#8ef2d9]',
-  warning: 'border-l-[#fce184]',
-  error: 'border-l-[#ff6464]',
-  info: 'border-l-[#80d0ff]',
+  default: 'border-l-[var(--color-content-tertiary)]',
+  success: 'border-l-success',
+  warning: 'border-l-[var(--color-gold)]',
+  error: 'border-l-[var(--color-error-red)]',
+  info: 'border-l-[var(--color-blue)]',
 };
 
 const variantIconMap: Record<AlertVariant, string> = {
@@ -77,18 +77,18 @@ export function Alert({ variant = 'default', title, children, closable = false, 
       <div className="flex items-start gap-3">
         {/* Icon */}
         <span className="flex-shrink-0">
-          <Icon name={displayIconName} size={ICON_SIZES.md} className="text-[#f3eed9]" />
+          <Icon name={displayIconName} size={ICON_SIZES.md} className="text-content-primary" />
         </span>
 
         {/* Content */}
         <div className="flex-1 min-w-0">
-          {title && <p className="font-kodemono text-xs uppercase text-[#f3eed9] font-bold mb-1">{title}</p>}
-          <div className="font-outfit text-sm text-[rgba(243,238,217,0.8)]">{children}</div>
+          {title && <p className="font-kodemono text-xs uppercase text-content-primary font-bold mb-1">{title}</p>}
+          <div className="font-outfit text-sm text-[var(--color-content-medium)]">{children}</div>
         </div>
 
         {/* Close Button */}
         {closable && (
-          <button onClick={onClose} className="text-[rgba(243,238,217,0.5)] hover:text-[#f3eed9] flex-shrink-0 -mt-1 transition-colors" aria-label="Close">
+          <button onClick={onClose} className="text-[var(--color-content-tertiary)] hover:text-content-primary flex-shrink-0 -mt-1 transition-colors" aria-label="Close">
             <Icon name="close" size={ICON_SIZES.md} />
           </button>
         )}

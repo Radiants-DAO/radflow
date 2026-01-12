@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useDevToolsStore } from '../../store';
-import { useToast } from '@radflow/ui/Toast';
+import { useToast } from '@radflow/ui';
 
 const RADIUS_KEYS = ['none', 'xs', 'sm', 'md', 'lg', 'full'] as const;
 

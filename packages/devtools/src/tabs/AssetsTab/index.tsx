@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button } from '@radflow/ui/Button';
+import { Button } from '@radflow/ui';
 import { IconsSubTab } from './IconsSubTab';
 import { LogosSubTab } from './LogosSubTab';
 import { ImagesSubTab } from './ImagesSubTab';

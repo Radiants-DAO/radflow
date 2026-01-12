@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useDevToolsStore } from '../../store';
 import { UploadDropzone } from './UploadDropzone';
 import { ThemeIcon as Icon } from '../../components/ThemeIcon';
-import { Button } from '@radflow/ui/Button';
+import { Button } from '@radflow/ui';
 
 interface ImageFile {
   name: string;

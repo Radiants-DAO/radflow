@@ -130,7 +130,7 @@ export function TabList({ children, className = '' }: TabListProps) {
   }
 
   return (
-    <div className={`${baseClasses} bg-[rgba(243,238,217,0.05)] border border-[rgba(243,238,217,0.2)] ${className}`}>
+    <div className={`${baseClasses} bg-[var(--glass-bg)] border border-[var(--glass-border)] ${className}`}>
       {children}
     </div>
   );
@@ -144,9 +144,9 @@ export function TabTrigger({ value, children, iconName, tooltip, className = '' 
   const isActive = activeTab === value;
 
   if (variant === 'manila') {
-    const manilaBaseClasses = 'flex-1 px-3 h-8 text-xs font-kodemono cursor-pointer outline-none border border-[rgba(243,238,217,0.2)] border-b-0 -mr-px last:mr-0 flex items-center justify-center transition-all duration-200';
-    const manilaActiveClasses = 'bg-[rgba(243,238,217,0.1)] relative z-20 text-[#f3eed9] h-[33px] -mb-px border-[rgba(153,163,255,0.5)]';
-    const manilaInactiveClasses = 'bg-[rgba(243,238,217,0.05)] hover:bg-[rgba(243,238,217,0.08)] z-10 text-[rgba(243,238,217,0.6)]';
+    const manilaBaseClasses = 'flex-1 px-3 h-8 text-xs font-kodemono cursor-pointer outline-none border border-[var(--glass-border)] border-b-0 -mr-px last:mr-0 flex items-center justify-center transition-all duration-200';
+    const manilaActiveClasses = 'bg-[var(--glass-bg-hover)] relative z-20 text-content-primary h-[33px] -mb-px border-[var(--color-edge-focus-purple)]';
+    const manilaInactiveClasses = 'bg-[var(--glass-bg)] hover:bg-[var(--glass-bg-hover)] z-10 text-[var(--color-content-subtle)]';
 
     const manilaButton = (
       <button onClick={() => setActiveTab(value)} className={`${manilaBaseClasses} ${isActive ? manilaActiveClasses : manilaInactiveClasses} ${className}`} aria-selected={isActive} role="tab">
@@ -199,13 +199,13 @@ export function TabContent({ value, children, className = '' }: TabContentProps)
 
   if (variant === 'manila') {
     return (
-      <div role="tabpanel" className={`bg-[rgba(243,238,217,0.05)] border border-[rgba(243,238,217,0.2)] ${className}`}>
+      <div role="tabpanel" className={`bg-[var(--glass-bg)] border border-[var(--glass-border)] ${className}`}>
         {children}
       </div>
     );
   }
 
-  const contentClasses = variant === 'line' ? `bg-[rgba(243,238,217,0.02)] border-r border-[rgba(243,238,217,0.1)] ${className}` : className;
+  const contentClasses = variant === 'line' ? `bg-[var(--glass-bg-subtle)] border-r border-[var(--glass-border-subtle)] ${className}` : className;
 
   return (
     <div role="tabpanel" className={contentClasses}>

@@ -123,8 +123,8 @@ export function DialogContent({ className = '', children }: DialogContentProps) 
         className={`
           relative z-10
           w-full max-w-lg mx-4
-          bg-[rgba(20,20,30,0.95)]
-          border border-[rgba(243,238,217,0.2)]
+          bg-[var(--color-surface-overlay)]
+          border border-[var(--glass-border)]
           backdrop-blur-md
           animate-scaleIn
           flex flex-col
@@ -148,7 +148,7 @@ interface DialogHeaderProps {
 }
 
 export function DialogHeader({ className = '', children }: DialogHeaderProps) {
-  return <div className={`px-6 pt-6 pb-4 border-b border-[rgba(243,238,217,0.1)] ${className}`.trim()}>{children}</div>;
+  return <div className={`px-6 pt-6 pb-4 border-b border-[var(--glass-border-subtle)] ${className}`.trim()}>{children}</div>;
 }
 
 interface DialogTitleProps {
@@ -157,7 +157,7 @@ interface DialogTitleProps {
 }
 
 export function DialogTitle({ className = '', children }: DialogTitleProps) {
-  return <h2 className={`font-audiowide text-base text-[#f3eed9] ${className}`.trim()}>{children}</h2>;
+  return <h2 className={`font-audiowide text-base text-content-primary ${className}`.trim()}>{children}</h2>;
 }
 
 interface DialogDescriptionProps {
@@ -166,7 +166,7 @@ interface DialogDescriptionProps {
 }
 
 export function DialogDescription({ className = '', children }: DialogDescriptionProps) {
-  return <p className={`font-outfit text-base text-[rgba(243,238,217,0.7)] mt-2 ${className}`.trim()}>{children}</p>;
+  return <p className={`font-outfit text-base text-[var(--color-content-soft)] mt-2 ${className}`.trim()}>{children}</p>;
 }
 
 // ============================================================================
@@ -188,7 +188,7 @@ interface DialogFooterProps {
 }
 
 export function DialogFooter({ className = '', children }: DialogFooterProps) {
-  return <div className={`px-6 pb-6 pt-4 border-t border-[rgba(243,238,217,0.1)] flex justify-end gap-2 ${className}`.trim()}>{children}</div>;
+  return <div className={`px-6 pb-6 pt-4 border-t border-[var(--glass-border-subtle)] flex justify-end gap-2 ${className}`.trim()}>{children}</div>;
 }
 
 // ============================================================================

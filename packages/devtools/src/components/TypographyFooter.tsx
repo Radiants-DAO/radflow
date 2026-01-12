@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Input } from '@radflow/ui/Input';
+import { Input } from '@radflow/ui';
 import { TYPOGRAPHY_SEARCH_INDEX, type TypographySearchableItem } from '../lib/searchIndexes';
 
 interface TypographyFooterProps {

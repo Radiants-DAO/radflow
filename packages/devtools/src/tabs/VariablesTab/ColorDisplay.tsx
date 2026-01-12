@@ -2,9 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useDevToolsStore } from '../../store';
-import { useToast } from '@radflow/ui/Toast';
+import { useToast, Button } from '@radflow/ui';
 import { ThemeIcon as Icon } from '../../components/ThemeIcon';
-import { Button } from '@radflow/ui/Button';
 import type { BaseColor, SemanticToken } from '../../types';
 import type { AddedColor } from './index';
 
@@ -547,7 +546,7 @@ export function ColorDisplay({
             <div className="flex items-center gap-3">
               <div
                 className="w-6 h-6 rounded-xs border border-edge-primary flex-shrink-0"
-                style={{ backgroundColor: newColorValue || '#cccccc' }}
+                style={{ backgroundColor: newColorValue || 'var(--color-surface-tertiary)' }}
               />
               <input
                 type="text"

@@ -62,20 +62,20 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
         <div
           className={`
             w-5 h-5
-            bg-[rgba(243,238,217,0.05)]
-            border border-[rgba(243,238,217,0.2)]
-            peer-checked:bg-[rgba(153,163,255,0.2)] peer-checked:border-[rgba(153,163,255,0.5)]
-            peer-focus:ring-1 peer-focus:ring-[rgba(153,163,255,0.5)]
+            bg-[var(--glass-bg)]
+            border border-[var(--glass-border)]
+            peer-checked:bg-[var(--glass-bg-purple-checked)] peer-checked:border-[var(--glass-border-purple)]
+            peer-focus:ring-1 peer-focus:ring-[var(--color-edge-focus-purple)]
             flex items-center justify-center
             transition-all duration-200
           `}
         />
         {/* Checkmark - visible when checkbox is checked */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none">
-          <Icon name="checkmark" size={14} className="text-[#f3eed9]" />
+          <Icon name="checkmark" size={14} className="text-content-primary" />
         </div>
       </div>
-      {label && <span className="font-outfit text-base text-[#f3eed9] select-none">{label}</span>}
+      {label && <span className="font-outfit text-base text-content-primary select-none">{label}</span>}
     </label>
   );
 });
@@ -129,19 +129,19 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio({ l
         <div
           className={`
             w-5 h-5
-            bg-[rgba(243,238,217,0.05)]
-            border border-[rgba(243,238,217,0.2)]
+            bg-[var(--glass-bg)]
+            border border-[var(--glass-border)]
             rounded-full
-            peer-checked:bg-[rgba(153,163,255,0.2)] peer-checked:border-[rgba(153,163,255,0.5)]
-            peer-focus:ring-1 peer-focus:ring-[rgba(153,163,255,0.5)]
+            peer-checked:bg-[var(--glass-bg-purple-checked)] peer-checked:border-[var(--glass-border-purple)]
+            peer-focus:ring-1 peer-focus:ring-[var(--color-edge-focus-purple)]
             flex items-center justify-center
             transition-all duration-200
           `}
         />
         {/* Inner dot when checked */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-[#f3eed9] rounded-full opacity-0 peer-checked:opacity-100 pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-content-primary rounded-full opacity-0 peer-checked:opacity-100 pointer-events-none" />
       </div>
-      {label && <span className="font-outfit text-base text-[#f3eed9] select-none">{label}</span>}
+      {label && <span className="font-outfit text-base text-content-primary select-none">{label}</span>}
     </label>
   );
 });

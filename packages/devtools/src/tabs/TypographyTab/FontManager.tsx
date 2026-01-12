@@ -3,7 +3,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDevToolsStore } from '../../store';
 import { ThemeIcon as Icon } from '../../components/ThemeIcon';
-import { useToast } from '@radflow/ui/Toast';
+import { useToast } from '@radflow/ui';
 import { detectFontPropertiesFromFilename } from '../../lib/cssParser';
 import type { FontDefinition, FontFile } from '../../types';
 

@@ -2,20 +2,22 @@
 
 import React, { useState, useEffect, useMemo, useCallback, Suspense, lazy, ComponentType } from 'react';
 import { useToast, Spinner } from '@radflow/ui';
-import { UITab as DefaultUITab } from './UITab';
 import { DynamicFolderTab } from './DynamicFolderTab';
-import { AddTabButton } from './AddTabButton';
-import { COMPONENT_TABS, type ComponentTabConfig } from './tabConfig';
+import { type ComponentTabConfig } from './tabConfig';
 import { ComponentsSecondaryNav } from '../../components/ComponentsSecondaryNav';
 import { useDevToolsStore } from '../../store';
 
 // Theme-specific preview components by folder (lazy loaded)
 // Format: { [themeId]: { [folderName]: LazyComponent } }
+// Preview files are named to match their folder (preview/core.tsx for components/core/)
 const themePreviewsByFolder: Record<string, Record<string, React.LazyExoticComponent<ComponentType<object>>>> = {
+  'rad-os': {
+    core: lazy(() => import('@radflow/theme-rad-os/preview/core')),
+  },
   phase: {
     core: lazy(() => import('@radflow/theme-phase/preview/core')),
+    landing: lazy(() => import('@radflow/theme-phase/preview/landing')),
   },
-  // Default RadOS theme uses the built-in UITab for 'ui' folder
 };
 
 // Loading fallback for theme previews
@@ -40,33 +42,6 @@ function getThemePreviewForFolder(
   return themePreviews[folderName] || null;
 }
 
-const STORAGE_KEY = 'devtools-dynamic-component-tabs';
-
-/**
- * Load dynamic tabs from localStorage
- */
-function loadDynamicTabs(): ComponentTabConfig[] {
-  if (typeof window === 'undefined') return [];
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : [];
-  } catch {
-    return [];
-  }
-}
-
-/**
- * Save dynamic tabs to localStorage
- */
-function saveDynamicTabs(tabs: ComponentTabConfig[]) {
-  if (typeof window === 'undefined') return;
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tabs));
-  } catch {
-    // Ignore storage errors
-  }
-}
-
 interface ComponentsTabProps {
   activeSubTab?: string;
   onTabsChange?: (tabs: Array<{ id: string; label: string }>) => void;
@@ -76,70 +51,49 @@ interface ComponentsTabProps {
 }
 
 export function ComponentsTab({
-  activeSubTab = 'ui',
+  activeSubTab = 'core',
   onTabsChange,
   onAddFolder,
   componentTabs = [],
   onComponentSubTabChange,
 }: ComponentsTabProps) {
-  const [dynamicTabs, setDynamicTabs] = useState<ComponentTabConfig[]>([]);
+  const [folderTabs, setFolderTabs] = useState<ComponentTabConfig[]>([]);
   const { addToast } = useToast();
   const activeTheme = useDevToolsStore((state) => state.activeTheme);
 
-  // Load dynamic tabs on mount and auto-discover folders
+  // Auto-discover folders from API on mount
   useEffect(() => {
-    const loadTabs = async () => {
-      // First, load saved tabs from localStorage
-      const savedTabs = loadDynamicTabs();
-
-      // Then, fetch available folders from API
+    const discoverFolders = async () => {
       try {
         const response = await fetch('/api/devtools/components/folders');
         if (response.ok) {
           const data = await response.json();
-          const discoveredFolders = data.folders || [];
+          const folders: string[] = data.folders || [];
 
-          // Create tabs for discovered folders that don't already exist
-          const existingFolderIds = new Set(savedTabs.map(tab => tab.id));
-          const newTabs: ComponentTabConfig[] = discoveredFolders
-            .filter((folder: string) => !existingFolderIds.has(`folder-${folder}`))
-            .map((folder: string) => ({
-              id: `folder-${folder}`,
-              label: folder,
-              description: `Components from /components/${folder}/`,
-            }));
+          // Create tabs from discovered folders
+          // Tab ID = folder name (e.g., 'core', 'forms')
+          const tabs: ComponentTabConfig[] = folders.map((folder) => ({
+            id: folder,
+            label: folder.charAt(0).toUpperCase() + folder.slice(1), // Capitalize
+            description: `Components from /components/${folder}/`,
+          }));
 
-          // Merge saved tabs with newly discovered tabs
-          const allDiscoveredTabs = [...savedTabs, ...newTabs];
-          setDynamicTabs(allDiscoveredTabs);
-
-          // Save the updated tabs list
-          if (newTabs.length > 0) {
-            saveDynamicTabs(allDiscoveredTabs);
-          }
-        } else {
-          // If API fails, just use saved tabs
-          setDynamicTabs(savedTabs);
+          setFolderTabs(tabs);
         }
       } catch (error) {
-        // If fetch fails, just use saved tabs
-        console.warn('Failed to auto-discover folders:', error);
-        setDynamicTabs(savedTabs);
+        console.warn('Failed to discover component folders:', error);
       }
     };
 
-    loadTabs();
+    discoverFolders();
   }, []);
 
-  // Memoize allTabs to prevent unnecessary re-renders
-  const allTabs = useMemo(() => [...COMPONENT_TABS, ...dynamicTabs], [dynamicTabs]);
-  
-  // Memoize the mapped tabs array to prevent unnecessary effect runs
+  // Memoize tabs for parent
   const tabsForParent = useMemo(
-    () => allTabs.map((tab) => ({ id: tab.id, label: tab.label })),
-    [allTabs]
+    () => folderTabs.map((tab) => ({ id: tab.id, label: tab.label })),
+    [folderTabs]
   );
-  
+
   // Notify parent of tabs change
   useEffect(() => {
     if (onTabsChange) {
@@ -159,7 +113,7 @@ export function ComponentsTab({
     }
 
     // Check if folder already exists
-    if (dynamicTabs.some((tab) => tab.id === `folder-${folderName}`)) {
+    if (folderTabs.some((tab) => tab.id === folderName)) {
       addToast({
         title: 'Folder exists',
         description: 'A tab for this folder already exists',
@@ -183,14 +137,12 @@ export function ComponentsTab({
 
       // Add new tab
       const newTab: ComponentTabConfig = {
-        id: `folder-${folderName}`,
-        label: folderName,
+        id: folderName,
+        label: folderName.charAt(0).toUpperCase() + folderName.slice(1),
         description: `Components from /components/${folderName}/`,
       };
 
-      const updatedTabs = [...dynamicTabs, newTab];
-      setDynamicTabs(updatedTabs);
-      saveDynamicTabs(updatedTabs);
+      setFolderTabs((prev) => [...prev, newTab]);
     } catch (error) {
       console.error('Failed to create folder:', error);
       addToast({
@@ -199,7 +151,7 @@ export function ComponentsTab({
         variant: 'error',
       });
     }
-  }, [dynamicTabs, addToast]);
+  }, [folderTabs, addToast]);
 
   // Expose handleAddFolder for footer access
   useEffect(() => {
@@ -209,6 +161,9 @@ export function ComponentsTab({
       delete windowWithHandler.__componentsTabAddFolder;
     };
   }, [handleAddFolder]);
+
+  // Get the currently active tab
+  const activeTab = folderTabs.find((tab) => tab.id === activeSubTab);
 
   return (
     <div className="flex flex-col h-full">
@@ -230,44 +185,30 @@ export function ComponentsTab({
 
       {/* Tab Content */}
       <div className="flex flex-col h-full overflow-auto pt-6 pb-4 pl-4 pr-2 bg-surface-elevated border border-edge-primary rounded space-y-4">
-        {allTabs.map((tab: ComponentTabConfig) => {
-          // UI tab (default RadFlow UI preview)
-          if (tab.id === 'ui' && activeSubTab === 'ui') {
-            // Check if active theme has a 'core' preview (Phase theme uses 'core' instead of 'ui')
-            const themePreview = getThemePreviewForFolder(activeTheme, 'core');
-            if (themePreview) {
-              const ThemePreviewComponent = themePreview;
-              return (
-                <Suspense key={`ui-${activeTheme}`} fallback={<PreviewLoadingFallback />}>
-                  <ThemePreviewComponent />
-                </Suspense>
-              );
-            }
-            // Fall back to default UITab
-            return <DefaultUITab key={tab.id} />;
-          }
-
-          // Dynamic folder tabs
-          if (tab.id.startsWith('folder-') && activeSubTab === tab.id) {
-            const folderName = tab.id.replace('folder-', '');
-
-            // Check if active theme has a preview for this folder
+        {activeTab ? (
+          (() => {
+            const folderName = activeTab.id;
             const themePreview = getThemePreviewForFolder(activeTheme, folderName);
+
             if (themePreview) {
               const ThemePreviewComponent = themePreview;
               return (
-                <Suspense key={`${tab.id}-${activeTheme}`} fallback={<PreviewLoadingFallback />}>
+                <Suspense key={`${folderName}-${activeTheme}`} fallback={<PreviewLoadingFallback />}>
                   <ThemePreviewComponent />
                 </Suspense>
               );
             }
 
-            // Fall back to dynamic folder component list
-            return <DynamicFolderTab key={tab.id} folderName={folderName} />;
-          }
-
-          return null;
-        })}
+            // No preview file - show dynamic component list
+            return <DynamicFolderTab key={folderName} folderName={folderName} />;
+          })()
+        ) : (
+          <div className="text-center py-8 text-content-primary/60 font-mondwest">
+            {folderTabs.length === 0
+              ? 'No component folders discovered'
+              : 'Select a tab to view components'}
+          </div>
+        )}
       </div>
     </div>
   );

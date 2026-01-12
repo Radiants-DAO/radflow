@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect, useRef, ElementType, ComponentPropsWithoutRef } from 'react';
 import clsx from 'clsx';
 import { Icon, ICON_SIZES } from './Icon';

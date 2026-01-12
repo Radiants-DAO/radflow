@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Icon } from './Icon';
 import { createSafeContext } from './hooks/createSafeContext';

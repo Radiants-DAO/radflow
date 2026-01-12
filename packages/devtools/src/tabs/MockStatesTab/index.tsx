@@ -1,7 +1,7 @@
 'use client';
 
 import { useDevToolsStore } from '../../store';
-import { Button } from '@radflow/ui/Button';
+import { Button } from '@radflow/ui';
 
 export function MockStatesTab() {
   const { mockStates, toggleMockState } = useDevToolsStore();

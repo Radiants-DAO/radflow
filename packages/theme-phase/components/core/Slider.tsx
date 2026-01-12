@@ -148,8 +148,8 @@ export function Slider({ value, onChange, min = 0, max = 100, step = 1, size = '
       {/* Label & Value */}
       {(label || showValue) && (
         <div className="flex items-center justify-between">
-          {label && <span className="font-outfit text-base text-[#f3eed9]">{label}</span>}
-          {showValue && <span className="font-kodemono text-sm text-[rgba(243,238,217,0.6)]">{value}</span>}
+          {label && <span className="font-outfit text-base text-content-primary">{label}</span>}
+          {showValue && <span className="font-kodemono text-sm text-[var(--color-content-subtle)]">{value}</span>}
         </div>
       )}
 
@@ -167,16 +167,16 @@ export function Slider({ value, onChange, min = 0, max = 100, step = 1, size = '
         className={`
           relative w-full
           ${styles.track}
-          border border-[rgba(243,238,217,0.2)]
-          bg-[rgba(243,238,217,0.05)]
+          border border-[var(--glass-border)]
+          bg-[var(--glass-bg)]
           ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-          focus:outline-none focus:ring-1 focus:ring-[rgba(153,163,255,0.5)]
+          focus:outline-none focus:ring-1 focus:ring-[var(--color-edge-focus-purple)]
           transition-all duration-200
         `.trim()}
       >
         {/* Filled Track */}
         <div
-          className="absolute top-0 left-0 h-full bg-[rgba(153,163,255,0.1)]"
+          className="absolute top-0 left-0 h-full bg-[var(--glass-bg-purple)]"
           style={{ width: `${percentage}%` }}
         />
 
@@ -185,7 +185,7 @@ export function Slider({ value, onChange, min = 0, max = 100, step = 1, size = '
           className={`
             absolute top-1/2
             ${styles.thumb}
-            bg-[#f3eed9]
+            bg-content-primary
             transform -translate-y-1/2
             ${isDragging ? 'scale-110' : ''}
             transition-transform duration-200

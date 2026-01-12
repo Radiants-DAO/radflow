@@ -109,7 +109,7 @@ export function resolveComponentNavigation(componentName: string): NavigationTar
   if (COMPONENT_TO_SUBSECTION[nameLower]) {
     return {
       tabId: 'components',
-      subTabId: 'design-system',
+      subTabId: 'core',
       subsectionId: COMPONENT_TO_SUBSECTION[nameLower],
     };
   }
@@ -118,7 +118,7 @@ export function resolveComponentNavigation(componentName: string): NavigationTar
   if (SECTION_TO_FIRST_SUBSECTION[nameLower]) {
     return {
       tabId: 'components',
-      subTabId: 'design-system',
+      subTabId: 'core',
       sectionId: nameLower,
       subsectionId: SECTION_TO_FIRST_SUBSECTION[nameLower],
     };
@@ -129,7 +129,7 @@ export function resolveComponentNavigation(componentName: string): NavigationTar
   if (SECTION_TO_FIRST_SUBSECTION[pluralName]) {
     return {
       tabId: 'components',
-      subTabId: 'design-system',
+      subTabId: 'core',
       sectionId: pluralName,
       subsectionId: SECTION_TO_FIRST_SUBSECTION[pluralName],
     };
@@ -138,7 +138,7 @@ export function resolveComponentNavigation(componentName: string): NavigationTar
   // 5. Fallback: default to components tab
   return {
     tabId: 'components',
-    subTabId: 'design-system',
+    subTabId: 'core',
   };
 }
 

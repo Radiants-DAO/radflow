@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { Icon } from '@radflow/ui/Icon';
+import { Icon } from '@radflow/ui';
 
 interface IconData {
   name: string;

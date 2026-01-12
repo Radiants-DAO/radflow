@@ -69,7 +69,7 @@ export function DevToolsPanel() {
   } = useDevToolsStore();
 
   // Footer state
-  const [componentSubTab, setComponentSubTab] = useState<string>('design-system');
+  const [componentSubTab, setComponentSubTab] = useState<string>('core');
   const [componentTabs, setComponentTabs] = useState<Array<{ id: string; label: string }>>([]);
 
   // Handle pending sub-tab navigation from search
@@ -118,7 +118,7 @@ export function DevToolsPanel() {
 
   const getPositionStyles = (): React.CSSProperties => {
     return {
-      background: 'linear-gradient(0deg, var(--color-surface-tertiary) 0%, var(--color-surface-primary) 100%)',
+      backgroundColor: 'var(--color-surface-primary)',
       width: `${panelWidth}px`,
       borderLeft: '1px solid var(--color-edge-primary)',
     };

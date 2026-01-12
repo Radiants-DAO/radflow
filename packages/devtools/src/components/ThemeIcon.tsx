@@ -1,17 +1,28 @@
 'use client';
 
 import { memo, useEffect, useState } from 'react';
-import { Icon as RadFlowIcon } from '@radflow/ui/Icon';
+import { Icon as RadFlowIcon } from '@radflow/ui';
 import * as PhosphorIcons from '@phosphor-icons/react';
 
 type PhosphorIconName = keyof typeof PhosphorIcons;
 type PhosphorWeight = 'thin' | 'light' | 'regular' | 'bold' | 'fill' | 'duotone';
 
+/** Semantic size options for icons */
+type IconSize = 'sm' | 'md' | 'lg' | 'xl';
+
+/** Size mapping from semantic names to pixels */
+const ICON_SIZES: Record<IconSize, number> = {
+  sm: 16,
+  md: 20,
+  lg: 32,
+  xl: 48,
+};
+
 interface ThemeIconProps {
   /** Icon name - will be mapped to theme-appropriate icon */
   name: string;
-  /** Icon size in pixels */
-  size?: number;
+  /** Icon size - semantic (sm, md, lg, xl) or pixels */
+  size?: IconSize | number;
   /** Additional CSS classes */
   className?: string;
   /** Phosphor weight (only used for Phosphor icons) */
@@ -46,6 +57,14 @@ const PHOSPHOR_MAP: Record<string, PhosphorIconName> = {
   document: 'FileText',
   code: 'Code',
   terminal: 'Terminal',
+
+  // Arrows
+  'arrow-right': 'ArrowRight',
+  'arrow-left': 'ArrowLeft',
+  'arrow-up': 'ArrowUp',
+  'arrow-down': 'ArrowDown',
+  'go-forward': 'ArrowRight',
+  'arrow-up-right': 'ArrowUpRight',
 
   // UI elements
   menu: 'List',
@@ -120,7 +139,8 @@ async function getThemeConfig(): Promise<ThemeConfig> {
   return configPromise;
 }
 
-function ThemeIconComponent({ name, size = 20, className = '', weight }: ThemeIconProps) {
+function ThemeIconComponent({ name, size = 'md', className = '', weight }: ThemeIconProps) {
+  const pixelSize = typeof size === 'string' ? ICON_SIZES[size] : size;
   const [themeConfig, setThemeConfig] = useState<ThemeConfig | null>(cachedThemeConfig);
 
   useEffect(() => {
@@ -135,8 +155,8 @@ function ThemeIconComponent({ name, size = 20, className = '', weight }: ThemeIc
       <span
         className={className}
         style={{
-          width: size,
-          height: size,
+          width: pixelSize,
+          height: pixelSize,
           display: 'inline-block',
         }}
       />
@@ -154,15 +174,15 @@ function ThemeIconComponent({ name, size = 20, className = '', weight }: ThemeIc
 
     if (PhosphorComponent) {
       const iconWeight = weight || (themeConfig.iconStyle as PhosphorWeight) || 'regular';
-      return <PhosphorComponent size={size} weight={iconWeight} className={className} />;
+      return <PhosphorComponent size={pixelSize} weight={iconWeight} className={className} />;
     }
 
     // Fallback to Circle if icon not found
-    return <PhosphorIcons.Circle size={size} weight="regular" className={className} />;
+    return <PhosphorIcons.Circle size={pixelSize} weight="regular" className={className} />;
   }
 
   // Default: use RadFlow Icon (SVG-based)
-  return <RadFlowIcon name={name} size={size} className={className} />;
+  return <RadFlowIcon name={name} size={pixelSize} className={className} />;
 }
 
 export const ThemeIcon = memo(ThemeIconComponent);

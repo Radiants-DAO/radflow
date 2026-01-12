@@ -37,12 +37,12 @@ interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 
 const baseStyles = `
   font-outfit
-  bg-[rgba(243,238,217,0.05)] text-[#f3eed9]
-  border border-[rgba(243,238,217,0.2)]
-  placeholder:text-[rgba(243,238,217,0.4)]
+  bg-[var(--glass-bg)] text-content-primary
+  border border-[var(--glass-border)]
+  placeholder:text-[var(--color-content-muted)]
   focus:outline-none
-  focus:bg-[rgba(243,238,217,0.08)]
-  focus:border-[rgba(153,163,255,0.5)]
+  focus:bg-[var(--color-surface-input-focus)]
+  focus:border-[var(--color-edge-focus-purple)]
   disabled:opacity-50 disabled:cursor-not-allowed
   transition-all duration-200
 `;
@@ -54,8 +54,8 @@ const sizeStyles: Record<InputSize, string> = {
 };
 
 const errorStyles = `
-  border-[rgba(255,100,100,0.5)]
-  focus:border-[rgba(255,100,100,0.7)]
+  border-[var(--glass-border-error-strong)]
+  focus:border-[var(--glass-border-error-focus)]
 `;
 
 // ============================================================================
@@ -84,7 +84,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ s
     return (
       <div className="relative h-full">
         <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-          <Icon name={iconName} size={iconSize} className="text-[rgba(243,238,217,0.4)]" />
+          <Icon name={iconName} size={iconSize} className="text-[var(--color-content-muted)]" />
         </div>
         {input}
       </div>
@@ -111,7 +111,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(function 
     return (
       <div className="relative">
         <div className="absolute left-3 top-3 pointer-events-none">
-          <Icon name={iconName} size={16} className="text-[rgba(243,238,217,0.4)]" />
+          <Icon name={iconName} size={16} className="text-[var(--color-content-muted)]" />
         </div>
         {textarea}
       </div>
@@ -138,7 +138,7 @@ export function Label({ children, required, className = '', ...props }: LabelPro
   return (
     <label className={className} {...props}>
       {children}
-      {required && <span className="text-[#ff6464] ml-1">*</span>}
+      {required && <span className="text-[var(--color-error-red)] ml-1">*</span>}
     </label>
   );
 }

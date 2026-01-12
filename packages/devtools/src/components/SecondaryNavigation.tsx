@@ -23,7 +23,7 @@ export function SecondaryNavigation({
   if (activeTab === 'components') {
     return (
       <ComponentsSecondaryNav
-        activeSubTab={componentSubTab || 'design-system'}
+        activeSubTab={componentSubTab || 'core'}
         onSubTabChange={onComponentSubTabChange || (() => {})}
         tabs={componentTabs || []}
         onAddFolder={onAddComponentFolder || (() => {})}

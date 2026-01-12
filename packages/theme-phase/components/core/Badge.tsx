@@ -52,19 +52,19 @@ const sizeStyles: Record<BadgeSize, string> = {
 };
 
 const variantStyles: Record<BadgeVariant, string> = {
-  default: 'bg-[rgba(243,238,217,0.05)] text-[rgba(243,238,217,0.6)] border border-[rgba(243,238,217,0.2)]',
-  outline: 'bg-transparent text-[#f3eed9] border border-[rgba(243,238,217,0.3)]',
-  success: 'bg-[rgba(142,242,217,0.1)] text-[#8ef2d9] border border-[rgba(142,242,217,0.3)]',
-  warning: 'bg-[rgba(252,225,132,0.1)] text-[#fce184] border border-[rgba(252,225,132,0.3)]',
-  error: 'bg-[rgba(255,100,100,0.1)] text-[#ff6464] border border-[rgba(255,100,100,0.3)]',
-  info: 'bg-[rgba(128,208,255,0.1)] text-[#80d0ff] border border-[rgba(128,208,255,0.3)]',
+  default: 'bg-[var(--glass-bg)] text-[var(--color-content-subtle)] border border-[var(--glass-border)]',
+  outline: 'bg-transparent text-content-primary border border-[var(--glass-border-tertiary)]',
+  success: 'bg-[var(--glass-bg-green)] text-success border border-[var(--glass-border-green)]',
+  warning: 'bg-[var(--glass-bg-gold)] text-[var(--color-gold)] border border-[var(--glass-border-gold)]',
+  error: 'bg-[var(--glass-bg-error)] text-[var(--color-error-red)] border border-[var(--glass-border-error)]',
+  info: 'bg-[var(--glass-bg-blue)] text-[var(--color-blue)] border border-[var(--glass-border-blue)]',
 };
 
 const interactiveStyles = `
   cursor-pointer
-  hover:bg-[rgba(243,238,217,0.1)] hover:border-[rgba(243,238,217,0.4)]
-  active:bg-[rgba(243,238,217,0.15)]
-  focus:outline-none focus-visible:ring-1 focus-visible:ring-[rgba(153,163,255,0.5)]
+  hover:bg-[var(--glass-bg-hover)] hover:border-[var(--glass-border-hover)]
+  active:bg-[var(--glass-bg-active)]
+  focus:outline-none focus-visible:ring-1 focus-visible:ring-[var(--color-edge-focus-purple)]
 `;
 
 // ============================================================================

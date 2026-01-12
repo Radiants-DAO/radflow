@@ -86,18 +86,18 @@ export function Switch({ checked, onChange, size = 'md', disabled = false, label
       className={`
         relative inline-flex items-center
         ${styles.track}
-        border border-[rgba(243,238,217,0.2)]
+        border border-[var(--glass-border)]
         transition-all duration-200
-        ${checked ? 'bg-[rgba(153,163,255,0.3)] border-[rgba(153,163,255,0.5)]' : 'bg-[rgba(243,238,217,0.1)]'}
+        ${checked ? 'bg-[var(--glass-bg-purple-checked)] border-[var(--glass-border-purple)]' : 'bg-[var(--glass-bg-hover)]'}
         ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-        focus:outline-none focus:ring-1 focus:ring-[rgba(153,163,255,0.5)]
+        focus:outline-none focus:ring-1 focus:ring-[var(--color-edge-focus-purple)]
       `.trim()}
     >
       {/* Thumb */}
       <span
         className={`
           ${styles.thumb}
-          bg-[#f3eed9]
+          bg-content-primary
           transform transition-transform duration-200
           ${checked ? styles.translate : 'translate-x-0.5'}
         `.trim()}
@@ -116,7 +116,7 @@ export function Switch({ checked, onChange, size = 'md', disabled = false, label
         <label
           htmlFor={switchId}
           className={`
-            font-outfit text-base text-[#f3eed9]
+            font-outfit text-base text-content-primary
             ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
           `.trim()}
         >
@@ -130,7 +130,7 @@ export function Switch({ checked, onChange, size = 'md', disabled = false, label
         <label
           htmlFor={switchId}
           className={`
-            font-outfit text-base text-[#f3eed9]
+            font-outfit text-base text-content-primary
             ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
           `.trim()}
         >

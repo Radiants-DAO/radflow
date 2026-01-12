@@ -1,4 +1,9 @@
-import { memo, useEffect, useState } from 'react';
+'use client';
+
+import { memo } from 'react';
+import * as PhosphorIcons from '@phosphor-icons/react';
+import type { IconProps as PhosphorIconProps } from '@phosphor-icons/react';
+import { useIconConfig } from './IconContext';
 
 /** Semantic size options for icons */
 export type IconSize = 'sm' | 'md' | 'lg' | 'xl';
@@ -12,7 +17,7 @@ export const ICON_SIZES: Record<IconSize, number> = {
 };
 
 interface IconProps {
-  /** Icon name (filename without .svg extension) */
+  /** Icon name - use Phosphor icon names (kebab-case) */
   name: string;
   /** Icon size - semantic (sm, md, lg, xl) or pixels */
   size?: IconSize | number;
@@ -20,110 +25,172 @@ interface IconProps {
   className?: string;
   /** Accessible label for screen readers */
   'aria-label'?: string;
-  /** Base path for icons (default: /assets/icons) */
-  basePath?: string;
 }
 
-// Icon name aliases for backward compatibility
-const ICON_ALIASES: Record<string, string> = {
-  refresh: 'refresh1',
-  settings: 'settings-cog',
-  lightning: 'electric',
-  'information-circle': 'info-filled',
-  expand: 'full-screen',
-  collapse: 'minus',
-  'checkmark-filled': 'checkmark',
+// Map common/legacy icon names to Phosphor component names
+// Phase theme uses Phosphor icons exclusively
+const PHOSPHOR_MAP: Record<string, string> = {
+  // Navigation & actions
+  'chevron-down': 'CaretDown',
+  'chevron-up': 'CaretUp',
+  'chevron-left': 'CaretLeft',
+  'chevron-right': 'CaretRight',
+  close: 'X',
+  checkmark: 'Check',
+  check: 'Check',
+  plus: 'Plus',
+  add: 'Plus',
+  minus: 'Minus',
+  refresh: 'ArrowClockwise',
+  refresh1: 'ArrowClockwise',
+  search: 'MagnifyingGlass',
+  filter: 'Funnel',
+  edit: 'PencilSimple',
+  pencil: 'PencilSimple',
+  delete: 'Trash',
+  trash: 'Trash',
+  copy: 'Copy',
+  'copy-to-clipboard': 'Copy',
+  'copied-to-clipboard': 'Check',
+  paste: 'ClipboardText',
+  download: 'DownloadSimple',
+  upload: 'UploadSimple',
+
+  // Arrows
+  'arrow-right': 'ArrowRight',
+  'arrow-left': 'ArrowLeft',
+  'arrow-up': 'ArrowUp',
+  'arrow-down': 'ArrowDown',
+  'go-forward': 'ArrowRight',
+  'arrow-up-right': 'ArrowUpRight',
+
+  // Objects
+  cube: 'Cube',
+  folder: 'Folder',
+  'folder-open': 'FolderOpen',
+  'folder-closed': 'Folder',
+  file: 'File',
+  image: 'Image',
+  document: 'FileText',
+  code: 'Code',
+  terminal: 'Terminal',
+
+  // UI elements
+  menu: 'List',
+  hamburger: 'List',
+  'dots-vertical': 'DotsThreeVertical',
+  'dots-horizontal': 'DotsThree',
+  grip: 'DotsSixVertical',
+  'external-link': 'ArrowSquareOut',
+  external: 'ArrowSquareOut',
+  expand: 'ArrowsOut',
+  'full-screen': 'ArrowsOut',
+  collapse: 'ArrowsIn',
+  link: 'Link',
+
+  // Status & feedback
+  info: 'Info',
+  'info-filled': 'Info',
+  warning: 'Warning',
+  error: 'WarningCircle',
+  success: 'CheckCircle',
+  question: 'Question',
+  'question-filled': 'Question',
+
+  // Media
+  play: 'Play',
+  pause: 'Pause',
+  stop: 'Stop',
+  'skip-forward': 'SkipForward',
+  'skip-back': 'SkipBack',
+
+  // Settings
+  settings: 'Gear',
+  'settings-cog': 'Gear',
+  sliders: 'Sliders',
+
+  // Misc
+  eye: 'Eye',
+  'eye-off': 'EyeSlash',
+  'eye-hidden': 'EyeSlash',
+  lock: 'Lock',
+  'lock-closed': 'Lock',
+  unlock: 'LockOpen',
+  'lock-open': 'LockOpen',
+  star: 'Star',
+  trophy: 'Trophy',
+  heart: 'Heart',
+  bookmark: 'BookmarkSimple',
+  electric: 'Lightning',
+  lightning: 'Lightning',
+  sun: 'Sun',
+  moon: 'Moon',
+  globe: 'Globe',
+  home: 'House',
+  home2: 'House',
+  user: 'User',
+  usericon: 'User',
+  'envelope-closed': 'Envelope',
+  email: 'Envelope',
+  clock: 'Clock',
+  calendar: 'Calendar',
+  save: 'FloppyDisk',
+  print: 'Printer',
+  share: 'ShareNetwork',
+  cut: 'Scissors',
 };
+
+/**
+ * Convert kebab-case to PascalCase for Phosphor icons
+ * e.g., "arrow-right" -> "ArrowRight"
+ */
+function toPascalCase(str: string): string {
+  return str
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join('');
+}
 
 function IconComponent({
   name,
   size = 'md',
   className = '',
   'aria-label': ariaLabel,
-  basePath = '/assets/icons',
 }: IconProps) {
-  const [svgContent, setSvgContent] = useState<string | null>(null);
+  const iconConfig = useIconConfig();
   const pixelSize = typeof size === 'string' ? ICON_SIZES[size] : size;
-  const resolvedName = ICON_ALIASES[name] || name;
-  const iconPath = `${basePath}/${resolvedName}.svg`;
 
-  useEffect(() => {
-    fetch(iconPath)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Failed to load icon: ${name} (${res.status})`);
-        }
-        return res.text();
-      })
-      .then((text) => {
-        const cleanedText = text.replace(/<\?xml[^>]*\?>\s*/i, '').trim();
+  // Default to regular weight for Phase theme
+  const weight = iconConfig?.weight || 'regular';
 
-        if (!cleanedText.startsWith('<svg')) {
-          throw new Error(`Invalid icon format: ${name}`);
-        }
+  // Look up in map first, then try PascalCase conversion
+  const phosphorName = PHOSPHOR_MAP[name] || toPascalCase(name);
 
-        const widthMatch = cleanedText.match(/width=["'](\d+)["']/i);
-        const heightMatch = cleanedText.match(/height=["'](\d+)["']/i);
-        const originalWidth = widthMatch ? parseInt(widthMatch[1]) : 16;
-        const originalHeight = heightMatch ? parseInt(heightMatch[1]) : 16;
+  // Get the icon component from Phosphor
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const PhosphorComponent = (PhosphorIcons as any)[phosphorName] as React.ComponentType<PhosphorIconProps> | undefined;
 
-        let svgProcessed = cleanedText.replace(/\s+(width|height)=["'][^"']*["']/gi, '');
-
-        svgProcessed = svgProcessed.replace(/fill=["'](?!none)[^"']*["']/gi, 'fill="currentColor"');
-        svgProcessed = svgProcessed.replace(
-          /stroke=["'](?!none)[^"']*["']/gi,
-          'stroke="currentColor"'
-        );
-
-        if (!svgProcessed.includes('viewBox=')) {
-          svgProcessed = svgProcessed.replace(
-            /<svg([^>]*)>/,
-            `<svg$1 viewBox="0 0 ${originalWidth} ${originalHeight}">`
-          );
-        }
-
-        const svgWithSize = svgProcessed.replace(
-          /<svg([^>]*)>/,
-          `<svg$1 width="100%" height="auto" preserveAspectRatio="xMidYMid meet" style="display: block; fill: currentColor;">`
-        );
-        setSvgContent(svgWithSize);
-      })
-      .catch((err) => {
-        console.error(`Failed to load icon: ${name} (resolved: ${resolvedName})`, err);
-      });
-  }, [name, resolvedName, iconPath]);
-
-  if (!svgContent) {
+  if (PhosphorComponent) {
     return (
-      <span
+      <PhosphorComponent
+        size={pixelSize}
+        weight={weight}
         className={className}
         aria-label={ariaLabel}
         aria-hidden={!ariaLabel}
-        style={{
-          width: pixelSize,
-          height: pixelSize,
-          display: 'inline-block',
-        }}
       />
     );
   }
 
+  // Fallback to Circle if icon not found
+  console.warn(`Icon "${name}" not found in Phosphor. Tried: ${phosphorName}`);
   return (
-    <span
+    <PhosphorIcons.Circle
+      size={pixelSize}
+      weight={weight}
       className={className}
       aria-label={ariaLabel}
       aria-hidden={!ariaLabel}
-      style={{
-        width: pixelSize,
-        height: pixelSize,
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        verticalAlign: 'middle',
-        lineHeight: 0,
-        color: 'inherit',
-      }}
-      dangerouslySetInnerHTML={{ __html: svgContent }}
     />
   );
 }

@@ -7,7 +7,7 @@ import { ThemePromptsSubTab } from './ThemePromptsSubTab';
 import { StylesSubTab } from './StylesSubTab';
 import { radflowPrompts } from '../../data/prompts';
 import { srefCodes } from '../../data/srefCodes';
-import { Button } from '@radflow/ui/Button';
+import { Button } from '@radflow/ui';
 
 type AISubTab = 'radflow-prompts' | 'theme-prompts' | 'styles';
 

@@ -15,20 +15,16 @@ export interface ComponentTabConfig {
 }
 
 /**
- * Default component tabs configuration
+ * Component tabs are dynamically discovered from theme folders.
+ * Each theme has a components/ directory with subfolders (e.g., core/, forms/).
+ * Tabs are auto-generated from these folders.
  *
- * To add a new tab:
- * 1. Add an entry here with a unique id and label
- * 2. Create a corresponding component in the ComponentsTab folder
- * 3. Update the ComponentsTab index.tsx to render the new component
+ * To add a preview for a folder:
+ * 1. Create preview/[folderName].tsx in the theme package
+ * 2. Add the lazy import to themePreviewsByFolder in ComponentsTab/index.tsx
  */
 export const COMPONENT_TABS: ComponentTabConfig[] = [
-  {
-    id: 'ui',
-    label: 'UI',
-    description: 'Components from @radflow/ui package',
-  },
-  // Dynamic folder tabs are added via localStorage and the Add button
+  // All tabs are dynamically discovered from component folders
 ];
 
 /**

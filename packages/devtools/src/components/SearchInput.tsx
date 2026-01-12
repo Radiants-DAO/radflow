@@ -11,10 +11,14 @@ import type { SearchResult, Tab, DiscoveredComponent } from '../types';
 const TYPOGRAPHY_SECTIONS = ['headings', 'text', 'lists', 'code'];
 
 function getTabIdFromSearchItem(itemTabId: string): Tab {
-  if (itemTabId === 'design-system' || itemTabId === 'ui' || itemTabId.startsWith('folder-')) {
-    return 'components';
+  // Main tabs that are NOT component folders
+  const MAIN_TABS = ['variables', 'typography', 'components', 'assets', 'ai', 'mock-states'];
+  // If it's a main tab, return it directly
+  if (MAIN_TABS.includes(itemTabId)) {
+    return itemTabId as Tab;
   }
-  return itemTabId as Tab;
+  // Otherwise it's a component folder (core, forms, etc.) - map to 'components' tab
+  return 'components';
 }
 
 function getTypeFromSectionId(sectionId: string | undefined): SearchResult['type'] {

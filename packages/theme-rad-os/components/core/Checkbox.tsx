@@ -1,3 +1,5 @@
+'use client';
+
 import React, { forwardRef, createContext, useContext } from 'react';
 import { Icon } from './Icon';
 

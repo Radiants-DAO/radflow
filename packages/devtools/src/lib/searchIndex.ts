@@ -9,7 +9,7 @@ export type { SearchableItem };
  * Extended searchable item that includes tab information for cross-tab navigation
  */
 export interface ExtendedSearchableItem extends SearchableItem {
-  tabId: string; // e.g., 'design-system', 'folder-UI', 'folder-Rad_os', 'assets'
+  tabId: string; // e.g., 'core', 'folder-forms', 'folder-feedback', 'assets'
   componentName?: string; // For discovered components
   iconName?: string; // For icons
 }
@@ -30,7 +30,7 @@ async function fetchIcons(): Promise<string[]> {
 
 /**
  * Build a dynamic search index from multiple sources:
- * 1. DesignSystemTab SEARCH_INDEX (static)
+ * 1. Core components SEARCH_INDEX (static)
  * 2. Component registry (from API)
  * 3. Folder contents (from API)
  * 4. Icons (from API)
@@ -41,39 +41,39 @@ export async function buildSearchIndex(
 ): Promise<ExtendedSearchableItem[]> {
   const index: ExtendedSearchableItem[] = [];
 
-  // 1. Add UI tab items
+  // 1. Add Core tab items
   UI_SEARCH_INDEX.forEach((item) => {
     index.push({
       ...item,
-      tabId: 'ui',
+      tabId: 'core',
     });
   });
 
-  // 2. Add registry components (for UI tab or similar)
+  // 2. Add registry components
   registryComponents.forEach((comp) => {
     index.push({
       text: comp.name,
       sectionId: 'components',
-      type: 'button', // Generic type for components
-      tabId: 'folder-UI', // Default to UI folder, or could be determined by component path
+      type: 'button',
+      tabId: 'core', // Default to core folder
       componentName: comp.name,
     });
   });
 
-  // 4. Add folder components
+  // 3. Add folder components
   Object.entries(folderContents).forEach(([folderName, components]) => {
     components.forEach((comp) => {
       index.push({
         text: comp.name,
         sectionId: 'components',
         type: 'button',
-        tabId: `folder-${folderName}`,
+        tabId: folderName, // Tab ID = folder name
         componentName: comp.name,
       });
     });
   });
 
-  // 5. Add icons
+  // 4. Add icons
   const icons = await fetchIcons();
   icons.forEach((iconName) => {
     index.push({

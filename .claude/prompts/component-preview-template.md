@@ -180,7 +180,7 @@ import {
   {YourComponent}Header,
   {YourComponent}Body,
   {YourComponent}Footer
-} from '@radflow/ui/{YourComponent}';
+} from '@radflow/ui';
 ```
 
 ---

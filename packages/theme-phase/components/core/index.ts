@@ -120,6 +120,9 @@ export { HelpPanel, HelpSection, HelpItem, HelpShortcut } from './HelpPanel';
 export { Icon, ICON_SIZES } from './Icon';
 export type { IconSize, IconProps } from './Icon';
 
+export { IconProvider, useIconConfig } from './IconContext';
+export type { IconLibrary, PhosphorWeight, IconConfig, IconProviderProps } from './IconContext';
+
 // ============================================================================
 // Hooks
 // ============================================================================

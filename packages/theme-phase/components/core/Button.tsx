@@ -7,7 +7,7 @@ import { Spinner } from './Progress';
 // Types
 // ============================================================================
 
-type ButtonVariant = 'default' | 'blue' | 'purple' | 'green' | 'gold' | 'ghost';
+type ButtonVariant = 'default' | 'blue' | 'purple' | 'green' | 'gold' | 'ghost' | 'text';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface BaseButtonProps {
@@ -44,63 +44,84 @@ type PolymorphicButtonProps<C extends ElementType = 'button'> = BaseButtonProps 
 
 const baseStyles = `
   inline-flex items-center
-  font-outfit
+  font-outfit font-bold uppercase
   whitespace-nowrap
   cursor-pointer select-none
-  border
+  border overflow-clip
   transition-all duration-200
-  disabled:opacity-50 disabled:cursor-not-allowed
-  focus:outline-none focus-visible:ring-1 focus-visible:ring-[rgba(153,163,255,0.5)]
+  disabled:opacity-25 disabled:cursor-not-allowed
+  focus:outline-none focus-visible:ring-1 focus-visible:ring-[var(--color-edge-focus-purple)]
 `;
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: 'h-8 px-3 text-xs gap-3',
-  md: 'h-8 px-3 text-xs gap-3',
-  lg: 'h-8 px-3 text-sm gap-3',
+  sm: 'h-[40px] pl-3 pr-0 text-sm gap-0',
+  md: 'h-[40px] pl-3 pr-0 text-[0.875rem] gap-0',
+  lg: 'h-[40px] pl-3 pr-0 text-[0.875rem] gap-0',
 };
 
 const iconOnlySizeStyles: Record<ButtonSize, string> = {
-  sm: 'w-8 h-8 p-0',
-  md: 'w-8 h-8 p-0',
-  lg: 'w-8 h-8 p-0',
+  sm: 'w-[40px] h-[40px] p-0',
+  md: 'w-[40px] h-[40px] p-0',
+  lg: 'w-[40px] h-[40px] p-0',
 };
+
+// Icon box styles for the bordered icon container on the right
+const iconBoxStyles = `
+  flex items-center justify-center
+  w-[40px] h-[40px]
+  bg-[var(--glass-bg)] border border-[var(--glass-border)]
+  ml-3 -mr-px -my-px
+`;
 
 const variantStyles: Record<ButtonVariant, string> = {
   default: `
-    bg-[rgba(243,238,217,0.05)] border-[rgba(243,238,217,0.2)] text-[#f3eed9]
-    hover:bg-[rgba(243,238,217,0.1)] hover:border-[rgba(243,238,217,0.3)]
-    active:bg-[rgba(243,238,217,0.15)]
+    bg-[var(--glass-bg)] border-[var(--glass-border)] text-content-primary
+    hover:bg-[var(--glass-bg-hover)] hover:border-[var(--glass-border-hover)]
+    active:bg-[var(--glass-bg-active)]
   `,
   blue: `
-    bg-[rgba(128,208,255,0.1)] border-[rgba(128,208,255,0.5)] text-[#f3eed9]
-    hover:bg-[rgba(128,208,255,0.15)] hover:border-[rgba(128,208,255,0.6)]
-    active:bg-[rgba(128,208,255,0.2)]
+    bg-[var(--glass-bg-blue)] border-[var(--glass-border-blue)] text-content-primary
+    hover:bg-[var(--glass-bg-blue-hover)] hover:border-[var(--glass-border-blue-hover)]
+    active:bg-[var(--glass-bg-blue-active)]
   `,
   purple: `
-    bg-[rgba(153,163,255,0.1)] border-[rgba(153,163,255,0.5)] text-[#f3eed9]
-    hover:bg-[rgba(153,163,255,0.15)] hover:border-[rgba(153,163,255,0.6)]
-    active:bg-[rgba(153,163,255,0.2)]
+    bg-[var(--glass-bg-purple)] border-[var(--glass-border-purple)] text-content-primary
+    hover:bg-[var(--glass-bg-purple-hover)] hover:border-[var(--glass-border-purple)]
+    active:bg-[var(--glass-bg-purple-active)]
   `,
   green: `
-    bg-[rgba(142,242,217,0.1)] border-[rgba(142,242,217,0.5)] text-[#f3eed9]
-    hover:bg-[rgba(142,242,217,0.15)] hover:border-[rgba(142,242,217,0.6)]
-    active:bg-[rgba(142,242,217,0.2)]
+    bg-[var(--glass-bg-green)] border-[var(--glass-border-green-strong)] text-content-primary
+    hover:bg-[var(--glass-bg-green-hover)] hover:border-[var(--glass-border-green-strong)]
+    active:bg-[var(--glass-bg-green-active)]
   `,
   gold: `
-    bg-[rgba(252,225,132,0.1)] border-[rgba(252,225,132,0.5)] text-[#f3eed9]
-    hover:bg-[rgba(252,225,132,0.15)] hover:border-[rgba(252,225,132,0.6)]
-    active:bg-[rgba(252,225,132,0.2)]
+    bg-[var(--glass-bg-gold)] border-[var(--glass-border-gold-strong)] text-content-primary
+    hover:bg-[var(--glass-bg-gold-hover)] hover:border-[var(--glass-border-gold-strong)]
+    active:bg-[var(--glass-bg-gold-active)]
   `,
   ghost: `
-    bg-transparent border-transparent text-[#f3eed9]
-    hover:bg-[rgba(243,238,217,0.05)] hover:border-[rgba(243,238,217,0.1)]
-    active:bg-[rgba(243,238,217,0.1)]
+    bg-transparent border-transparent text-content-primary
+    hover:bg-[var(--glass-bg)] hover:border-[var(--glass-border-subtle)]
+    active:bg-[var(--glass-bg-hover)]
+  `,
+  text: `
+    bg-transparent border-transparent text-content-primary
+    hover:opacity-80
+    active:opacity-70
+    font-kodemono font-normal normal-case
   `,
 };
 
 // ============================================================================
 // Helper Functions
 // ============================================================================
+
+// Text variant size styles (inline icon, regular padding)
+const textVariantSizeStyles: Record<ButtonSize, string> = {
+  sm: 'h-auto px-0 text-sm gap-4',
+  md: 'h-auto px-0 text-sm gap-4',
+  lg: 'h-auto px-0 text-sm gap-4',
+};
 
 function getButtonClasses(
   variant: ButtonVariant,
@@ -117,7 +138,12 @@ function getButtonClasses(
     justifyClass = 'justify-between';
   }
 
-  return [baseStyles, iconOnly ? iconOnlySizeStyles[size] : sizeStyles[size], justifyClass, variantStyles[variant], fullWidth ? 'w-full' : '', className]
+  // Text variant uses inline icons and no icon box
+  const sizeClass = variant === 'text'
+    ? textVariantSizeStyles[size]
+    : (iconOnly ? iconOnlySizeStyles[size] : sizeStyles[size]);
+
+  return [baseStyles, sizeClass, justifyClass, variantStyles[variant], fullWidth ? 'w-full' : '', className]
     .join(' ')
     .replace(/\s+/g, ' ')
     .trim();
@@ -187,18 +213,48 @@ export function Button<C extends ElementType = 'button'>({
     }
   };
 
+  // Icon box wrapper for the bordered icon container (not used in text variant)
+  const IconBox = ({ children: iconChildren }: { children: React.ReactNode }) => (
+    <div className={iconBoxStyles.replace(/\s+/g, ' ').trim()}>
+      {iconChildren}
+    </div>
+  );
+
+  // Text variant renders icons inline without the box
+  const isTextVariant = variant === 'text';
+
   const content = showLoading ? (
-    <>
-      {!iconOnly && children}
+    iconOnly ? (
       <Spinner size={iconSize} />
-    </>
+    ) : isTextVariant ? (
+      <>
+        {children}
+        <Spinner size={iconSize} />
+      </>
+    ) : (
+      <>
+        <span className="flex-1 text-left pr-3">{children}</span>
+        <IconBox><Spinner size={iconSize} /></IconBox>
+      </>
+    )
   ) : effectiveIconName ? (
-    <>
-      {!iconOnly && children}
+    iconOnly ? (
       <Icon name={effectiveIconName} size={iconSize} />
-    </>
-  ) : (
+    ) : isTextVariant ? (
+      <>
+        {children}
+        <Icon name={effectiveIconName} size={iconSize} />
+      </>
+    ) : (
+      <>
+        <span className="flex-1 text-left pr-3">{children}</span>
+        <IconBox><Icon name={effectiveIconName} size={iconSize} /></IconBox>
+      </>
+    )
+  ) : isTextVariant ? (
     children
+  ) : (
+    <span className="pr-3">{children}</span>
   );
 
   const Component = as || 'button';

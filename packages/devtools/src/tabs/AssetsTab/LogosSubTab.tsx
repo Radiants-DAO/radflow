@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { ThemeIcon as Icon } from '../../components/ThemeIcon';
-import { Button } from '@radflow/ui/Button';
+import { Button } from '@radflow/ui';
 
 interface LogoData {
   name: string;

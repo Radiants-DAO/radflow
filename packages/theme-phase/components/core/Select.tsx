@@ -115,28 +115,28 @@ export function Select({
           flex items-center justify-between gap-2
           w-full h-10 px-3
           font-outfit text-base
-          bg-[rgba(243,238,217,0.05)] text-[#f3eed9]
+          bg-[var(--glass-bg)] text-content-primary
           border
-          ${error ? 'border-[rgba(255,100,100,0.5)]' : 'border-[rgba(243,238,217,0.2)]'}
+          ${error ? 'border-[var(--glass-border-error-strong)]' : 'border-[var(--glass-border)]'}
           ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-          ${isOpen ? 'border-[rgba(153,163,255,0.5)] bg-[rgba(243,238,217,0.08)]' : ''}
+          ${isOpen ? 'border-[var(--color-edge-focus-purple)] bg-[var(--color-surface-input-focus)]' : ''}
           transition-all duration-200
-          focus:outline-none focus:ring-1 focus:ring-[rgba(153,163,255,0.5)]
+          focus:outline-none focus:ring-1 focus:ring-[var(--color-edge-focus-purple)]
           ${iconName ? 'pl-10' : ''}
         `}
       >
         {iconName && (
           <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-            <Icon name={iconName} size={16} className="text-[rgba(243,238,217,0.4)]" />
+            <Icon name={iconName} size={16} className="text-[var(--color-content-muted)]" />
           </div>
         )}
-        <span className={`flex-1 min-w-0 text-left truncate ${selectedOption ? 'text-[#f3eed9]' : 'text-[rgba(243,238,217,0.4)]'}`}>
+        <span className={`flex-1 min-w-0 text-left truncate ${selectedOption ? 'text-content-primary' : 'text-[var(--color-content-muted)]'}`}>
           {selectedOption?.label || placeholder}
         </span>
         <Icon
           name="chevron-down"
           size={16}
-          className={`text-[#f3eed9] flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          className={`text-content-primary flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
         />
       </button>
 
@@ -145,8 +145,8 @@ export function Select({
         <div
           className={`
             absolute z-50 top-full left-0 right-0 mt-1
-            bg-[rgba(20,20,30,0.95)]
-            border border-[rgba(243,238,217,0.2)]
+            bg-[var(--color-surface-overlay)]
+            border border-[var(--glass-border)]
             backdrop-blur-sm
             overflow-hidden
             max-h-[300px] flex flex-col
@@ -157,7 +157,7 @@ export function Select({
               if (isOptionGroup(item)) {
                 return (
                   <div key={item.label}>
-                    <div className="px-3 py-1.5 text-[rgba(243,238,217,0.5)] font-kodemono text-xs uppercase tracking-wider bg-[rgba(243,238,217,0.05)]">
+                    <div className="px-3 py-1.5 text-[var(--color-content-tertiary)] font-kodemono text-xs uppercase tracking-wider bg-[var(--glass-bg)]">
                       {item.label}
                     </div>
                     {item.options.map((option) => (
@@ -206,7 +206,7 @@ function SelectItem({
         flex items-center gap-2
         font-outfit text-base text-left
         transition-all duration-150
-        ${isSelected ? 'bg-[rgba(153,163,255,0.2)] text-[#f3eed9]' : 'text-[#f3eed9] hover:bg-[rgba(243,238,217,0.1)]'}
+        ${isSelected ? 'bg-[var(--glass-bg-purple-checked)] text-content-primary' : 'text-content-primary hover:bg-[var(--glass-bg-hover)]'}
         ${option.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
       `}
     >
@@ -214,7 +214,7 @@ function SelectItem({
         <Icon
           name={option.iconName}
           size={16}
-          className={`flex-shrink-0 ${isSelected ? 'text-[#f3eed9]' : 'text-[rgba(243,238,217,0.6)]'}`}
+          className={`flex-shrink-0 ${isSelected ? 'text-content-primary' : 'text-[var(--color-content-subtle)]'}`}
         />
       )}
       <span className="flex-1 min-w-0 truncate">{option.label}</span>

@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { useDevToolsStore } from '../../store';
 import { PromptTemplate } from '../../store/slices/aiSlice';
-import { Button } from '@radflow/ui/Button';
+import { Button } from '@radflow/ui';
 import { ThemeIcon as Icon } from '../../components/ThemeIcon';
 
 interface PromptsSubTabProps {

@@ -4,8 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useDevToolsStore } from '../../store';
 import { FontManager } from './FontManager';
 import { TypographyStylesDisplay } from './TypographyStylesDisplay';
-import { Button } from '@radflow/ui/Button';
-import { Divider } from '@radflow/ui/Divider';
+import { Button, Divider } from '@radflow/ui';
 
 interface TypographyTabProps {
   searchQuery?: string;

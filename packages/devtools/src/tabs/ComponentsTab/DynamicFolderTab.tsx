@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useDevToolsStore } from '../../store';
 import { ComponentList } from './ComponentList';
-import { Button } from '@radflow/ui/Button';
+import { Button } from '@radflow/ui';
 import type { DiscoveredComponent } from '../../types';
 
 interface DynamicFolderTabProps {

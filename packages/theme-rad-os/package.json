@@ -13,14 +13,29 @@
     "./typography": "./typography.css",
     "./base": "./base.css",
     "./scrollbar": "./scrollbar.css",
-    "./animations": "./animations.css"
+    "./animations": "./animations.css",
+    "./components/core": "./components/core/index.ts",
+    "./preview/*": "./preview/*.tsx"
   },
   "files": [
     "*.css",
-    "agents"
+    "agents",
+    "components/**/*",
+    "preview/**/*"
   ],
+  "dependencies": {
+    "clsx": "^2.1.1"
+  },
   "peerDependencies": {
-    "tailwindcss": "^4.0.0"
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "tailwindcss": "^4.0.0",
+    "@radflow/devtools": "^0.1.0"
+  },
+  "devDependencies": {
+    "@radflow/devtools": "workspace:*",
+    "@types/react": "^19",
+    "typescript": "^5"
   },
   "keywords": [
     "radflow",

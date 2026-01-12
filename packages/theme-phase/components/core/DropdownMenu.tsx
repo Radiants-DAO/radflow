@@ -313,8 +313,8 @@ export function DropdownMenuLabel({ children, className = '' }: DropdownMenuLabe
       style={{
         backgroundColor: 'var(--color-surface-sunken)',
         backgroundImage: `
-          radial-gradient(circle, rgba(252, 225, 132, 0.7) 0.5px, transparent 0.5px),
-          radial-gradient(circle, rgba(252, 225, 132, 0.7) 0.5px, transparent 0.5px)
+          radial-gradient(circle, var(--pattern-gold) 0.5px, transparent 0.5px),
+          radial-gradient(circle, var(--pattern-gold) 0.5px, transparent 0.5px)
         `,
         backgroundSize: 'var(--pattern-surface-sunken-size)',
         backgroundPosition: 'var(--pattern-surface-sunken-position)',
