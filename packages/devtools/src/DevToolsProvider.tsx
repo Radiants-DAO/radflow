@@ -23,7 +23,13 @@ export function DevToolsProvider({ children }: DevToolsProviderProps) {
     panelWidth,
     setActiveTab,
     setSearchOpen,
+    fetchAvailableThemes,
   } = useDevToolsStore();
+
+  // Initialize: fetch available themes on mount
+  useEffect(() => {
+    fetchAvailableThemes();
+  }, [fetchAvailableThemes]);
 
   // Keyboard shortcuts
   useEffect(() => {

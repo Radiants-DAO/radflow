@@ -22,6 +22,7 @@ export interface ThemeSlice {
   addTheme: (theme: Theme) => void;
   deleteTheme: (themeId: string) => void;
   setAvailableThemes: (themes: Theme[]) => void;
+  fetchAvailableThemes: () => Promise<void>;
   isThemeWriteLocked: (themeId: string) => boolean;
 }
 
@@ -138,6 +139,33 @@ export const createThemeSlice: StateCreator<ThemeSlice, [], [], ThemeSlice> = (s
 
   setAvailableThemes: (themes) => {
     set({ availableThemes: themes });
+  },
+
+  fetchAvailableThemes: async () => {
+    try {
+      const response = await fetch('/api/devtools/themes/list');
+
+      if (!response.ok) {
+        console.error('Failed to fetch available themes:', response.statusText);
+        return;
+      }
+
+      const data = await response.json();
+      const themes: Theme[] = data.themes.map((themeConfig: any) => ({
+        id: themeConfig.id,
+        name: themeConfig.name,
+        packageName: themeConfig.packageName,
+        version: themeConfig.version,
+        description: themeConfig.description,
+        cssFiles: themeConfig.cssFiles,
+        componentFolders: themeConfig.componentFolders,
+        isActive: themeConfig.id === get().activeTheme,
+      }));
+
+      set({ availableThemes: themes });
+    } catch (error) {
+      console.error('Error fetching available themes:', error);
+    }
   },
 
   isThemeWriteLocked: (themeId) => {

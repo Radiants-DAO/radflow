@@ -17,6 +17,7 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
     availableThemes,
     switchTheme,
     deleteTheme,
+    fetchAvailableThemes,
     dockPosition,
     setDockPosition,
   } = useDevToolsStore();
@@ -56,6 +57,9 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
 
       const result = await response.json();
       console.log('Theme created successfully:', result);
+
+      // Refresh available themes to include newly created theme
+      await fetchAvailableThemes();
 
       // Close wizard
       setIsWizardOpen(false);

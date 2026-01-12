@@ -45,6 +45,7 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
   - `switchTheme(themeId: string)` action
   - `addTheme(config: ThemeConfig)` action
   - `deleteTheme(themeId: string)` action
+  - `fetchAvailableThemes()` action (calls `/api/devtools/themes/list`)
   - `writeLockedThemes: string[]` (non-active themes are read-only)
   - Integrated into main store with persistence
 
@@ -190,7 +191,7 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 - ✅ Wizard accessible from Settings Panel
 - ✅ All 6 steps functional with form validation
 - ✅ New theme scaffolded in `packages/theme-[id]/`
-- ⏳ Theme appears in theme switcher dropdown (requires theme discovery refresh)
+- ✅ Theme appears in theme switcher dropdown (fetchAvailableThemes implemented)
 
 ---
 
