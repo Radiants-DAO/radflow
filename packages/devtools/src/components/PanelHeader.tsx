@@ -27,7 +27,7 @@ export function PanelHeader({
   return (
     <div
       className="flex items-center justify-between px-3 py-2 border-b border-edge-primary/20 select-none"
-      style={{ background: 'rgba(0,0,0,0.05)' }}
+      style={{ backgroundColor: 'color-mix(in srgb, var(--color-surface-secondary) 5%, transparent)' }}
     >
       {/* Left: Icon + Title */}
       <div className="flex items-center gap-2">

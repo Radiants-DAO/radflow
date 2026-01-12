@@ -98,9 +98,9 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
   - Visual preview: theme logo + primary color swatch
 
 ### 2.5 DevTools Theme Styling (~2 iterations)
-- [ ] Update `packages/devtools/src/DevToolsPanel.tsx` to apply active theme's CSS
-- [ ] Ensure panel background, text colors, and UI components use semantic tokens
-- [ ] Test with rad-os theme (verify yellow/cream/black palette applies)
+- [x] Update `packages/devtools/src/DevToolsPanel.tsx` to apply active theme's CSS
+- [x] Ensure panel background, text colors, and UI components use semantic tokens
+- [x] Test with rad-os theme (verify yellow/cream/black palette applies)
 
 **Completion Criteria:**
 - Settings button accessible in LeftRail
