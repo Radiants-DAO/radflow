@@ -21,7 +21,7 @@ export function AssetsTab() {
   return (
     <div className="flex flex-col h-full">
       {/* Header with sub-tabs and search */}
-      <div className="flex-shrink-0 border-b border-edge-primary/10 bg-surface-secondary/5">
+      <div className="flex-shrink-0 border-b border-edge-primary/10">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex gap-2">
             {subTabs.map((tab) => (

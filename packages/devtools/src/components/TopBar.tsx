@@ -59,7 +59,6 @@ export function TopBar({
   return (
     <div
       className="flex items-center justify-between px-3 py-2 border-b border-edge-primary/20 select-none"
-      style={{ backgroundColor: 'color-mix(in srgb, var(--color-surface-secondary) 5%, transparent)' }}
     >
       {/* Left: Theme Indicator + Dropdown */}
       <div className="flex items-center gap-2">

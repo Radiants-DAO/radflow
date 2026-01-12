@@ -32,7 +32,7 @@ export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle, onS
   const pendingChangeCount = pendingChanges.length;
 
   return (
-    <div className="flex flex-col items-center bg-surface-secondary/5 border-r border-edge-primary/10 py-2 px-1">
+    <div className="flex flex-col items-center border-r border-edge-primary/10 py-2 px-1">
       {/* Tools Section */}
       <div className="flex flex-col gap-1 mb-2">
         {TOOLS.map((tool) => (
