@@ -17,7 +17,6 @@ import { ComponentsTab } from './tabs/ComponentsTab';
 import { AssetsTab } from './tabs/AssetsTab';
 import { AITab } from './tabs/AITab';
 import { MockStatesTab } from './tabs/MockStatesTab';
-import { ContextualFooter } from './components/ContextualFooter';
 
 export function DevToolsPanel() {
   const {
@@ -186,25 +185,6 @@ export function DevToolsPanel() {
             </div>
           )}
         </div>
-
-        {/* Contextual Footer */}
-        <ContextualFooter
-          activeTab={activeTab}
-          onTabChange={handleTabChange}
-          componentSubTab={componentSubTab}
-          onComponentSubTabChange={setComponentSubTab}
-          componentTabs={componentTabs}
-          onAddComponentFolder={async (folderName) => {
-            // Trigger folder creation via ComponentsTab's exposed handler
-            if ((window as any).__componentsTabAddFolder) {
-              (window as any).__componentsTabAddFolder(folderName);
-              // Switch to the new tab
-              setComponentSubTab(`folder-${folderName}`);
-            }
-          }}
-          typographySearchQuery={typographySearchQuery}
-          onTypographySearchChange={setTypographySearchQuery}
-        />
       </div>
 
       {/* Resize Handle - for left dock, handle goes on the right edge */}

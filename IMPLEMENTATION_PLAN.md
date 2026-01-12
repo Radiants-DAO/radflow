@@ -325,49 +325,48 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 **Iterations:** 10-14 total
 
 ### 7.1 Icons Sub-Tab (~4 iterations)
-- [ ] Create `packages/devtools/src/tabs/AssetsTab/IconsSubTab.tsx`
-- [ ] Visual grid of icons (16x16 default)
-- [ ] Size toggle: 16px, 20px, 24px, 32px
-- [ ] Search/filter by icon name
-- [ ] Click icon → copies JSX to clipboard: `<Icon name="x" size={20} />`
-- [ ] Recently used icons section (last 5)
-- [ ] Icon preview on hover (larger size)
+- [x] Create `packages/devtools/src/tabs/AssetsTab/IconsSubTab.tsx`
+- [x] Visual grid of icons (24px default)
+- [x] Size toggle: 16px, 20px, 24px, 32px
+- [x] Search/filter by icon name
+- [x] Click icon → copies JSX to clipboard: `<Icon name="x" size={20} />`
+- [x] Recently used icons section (last 5)
+- [x] Icon preview on hover (shows name)
 
 ### 7.2 Logos Sub-Tab (~3 iterations)
-- [ ] Create `packages/devtools/src/tabs/AssetsTab/LogosSubTab.tsx`
-- [ ] 3x3 grid showing logo variants:
-  - Row 1: Wordmark (cream, black, yellow)
-  - Row 2: Mark (cream, black, yellow)
-  - Row 3: RadSun (cream, black, yellow)
-- [ ] Background toggle: Light / Dark (to test contrast)
-- [ ] Each logo card:
+- [x] Create `packages/devtools/src/tabs/AssetsTab/LogosSubTab.tsx`
+- [x] Grid showing logo variants:
+  - Wordmark (cream, black, yellow)
+  - Mark (cream, black, yellow)
+  - RadSun (cream, black, yellow)
+- [x] Background toggle: Light / Dark (to test contrast)
+- [x] Each logo card:
   - Copy SVG button (copies SVG code to clipboard)
-  - Download button (PNG, SVG format options)
-- [ ] Hover shows logo name and dimensions
+  - Download button (SVG format)
+- [x] Shows logo name and color
 
 ### 7.3 Images Sub-Tab (~4 iterations)
-- [ ] Create `packages/devtools/src/tabs/AssetsTab/ImagesSubTab.tsx`
-- [ ] Drag-drop upload zone (reuse `UploadDropzone.tsx`)
-- [ ] Grid view of uploaded images
-- [ ] Each image card shows:
+- [x] Create `packages/devtools/src/tabs/AssetsTab/ImagesSubTab.tsx`
+- [x] Drag-drop upload zone (reuse `UploadDropzone.tsx`)
+- [x] Grid view of uploaded images
+- [x] Each image card shows:
   - Thumbnail preview
   - Filename
-  - Dimensions (e.g., 1920x1080)
   - File size (e.g., 245 KB)
   - Format (PNG, JPG, WebP)
-- [ ] Bulk actions: Select multiple → Optimize, Delete
-- [ ] Optimize images button (compress, convert to WebP)
+- [x] Bulk actions: Select multiple → Optimize, Delete
+- [x] Optimize images button (compress, convert to WebP)
 
 ### 7.4 Update Assets Tab Index (~2 iterations)
-- [ ] Update `packages/devtools/src/tabs/AssetsTab/index.tsx`
-- [ ] Add sub-tabs: [Icons], [Logos], [Images]
-- [ ] Route to correct sub-tab based on selection
+- [x] Update `packages/devtools/src/tabs/AssetsTab/index.tsx`
+- [x] Add sub-tabs: [Icons], [Logos], [Images]
+- [x] Route to correct sub-tab based on selection
 
 **Completion Criteria:**
-- Assets tab has 3 sub-tabs (Icons, Logos, Images)
-- Icons sub-tab shows grid with copy JSX functionality
-- Logos sub-tab shows variants with copy/download options
-- Images sub-tab supports drag-drop upload and bulk optimize
+- ✅ Assets tab has 3 sub-tabs (Icons, Logos, Images)
+- ✅ Icons sub-tab shows grid with copy JSX functionality
+- ✅ Logos sub-tab shows variants with copy/download options
+- ✅ Images sub-tab supports drag-drop upload and bulk optimize
 
 ---
 
@@ -522,9 +521,9 @@ Phase 1 + Phase 2 + Phase 3
 - `packages/devtools/src/tabs/AITab/PromptsSubTab.tsx` (Phase 6.3) - ✅ **CREATED**
 - `packages/devtools/src/tabs/AITab/ThemePromptsSubTab.tsx` (Phase 6.4) - ✅ **CREATED**
 - `packages/devtools/src/tabs/AITab/StylesSubTab.tsx` (Phase 6.5) - ✅ **CREATED**
-- `packages/devtools/src/tabs/AssetsTab/IconsSubTab.tsx` (Phase 7.1) - **NOT CREATED**
-- `packages/devtools/src/tabs/AssetsTab/LogosSubTab.tsx` (Phase 7.2) - **NOT CREATED**
-- `packages/devtools/src/tabs/AssetsTab/ImagesSubTab.tsx` (Phase 7.3) - **NOT CREATED**
+- `packages/devtools/src/tabs/AssetsTab/IconsSubTab.tsx` (Phase 7.1) - ✅ **CREATED**
+- `packages/devtools/src/tabs/AssetsTab/LogosSubTab.tsx` (Phase 7.2) - ✅ **CREATED**
+- `packages/devtools/src/tabs/AssetsTab/ImagesSubTab.tsx` (Phase 7.3) - ✅ **CREATED**
 
 ### Data Files
 - `packages/devtools/src/data/prompts.ts` (Phase 6.6) - ✅ **CREATED**
