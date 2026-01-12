@@ -7,7 +7,7 @@
 
 This plan tracks implementation of the multi-theme RadFlow architecture. Tasks are organized by feature area and dependency chain. Foundation work (Phase 1) must complete before UI features can proceed.
 
-**Current Status:** Core DevTools functional with Variables, Typography, Components, Assets, AI, and Mock States tabs. Phase 8 (Mode Refinements) completed. Phase 3 (Theme Creation Wizard) completed including API scaffolding. Phase 4 (Token Editor) completed - all features including save API integration functional. Phase 5 (Component Subfolders) completed - auto-discovery and folder grouping implemented. Remaining: Phase 6 (AI Tab enhancements), Phase 7 (Assets Sub-Tabs), Phase 9 (Publishing).
+**Current Status:** All phases completed! Core DevTools functional with Variables, Typography, Components, Assets, AI, and Mock States tabs. Phase 0 (Cleanup), Phases 1-8 (Foundation through Mode Refinements), and Phase 9 (Publishing & Versioning) are all complete. The RadTools multi-theme system is fully implemented and ready for production use.
 
 ---
 
@@ -502,41 +502,55 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 
 ---
 
-## Phase 9: Publishing & Versioning
+## Phase 9: Publishing & Versioning ✅ COMPLETED
 
 **Priority:** LOW - Future enhancement
 **Dependencies:** Phase 1-3 (themes must be creatable and manageable)
 **Source:** `.plans/theme-architecture-plan-v3.md` (Phase 7)
 **Iterations:** 8-12 total
 
-### 9.1 Semantic Versioning (~2 iterations)
-- [ ] Add version field to theme package.json
-- [ ] Create `packages/devtools/src/lib/versionUtils.ts`
+### 9.1 Semantic Versioning (~2 iterations) ✅ COMPLETED
+- [x] Add version field to theme package.json (already present)
+- [x] Create `packages/devtools/src/lib/versionUtils.ts`
   - `bumpVersion(type: 'major' | 'minor' | 'patch')` function
-  - Update package.json version
-  - Create git tag
+  - `bumpThemeVersion()` updates package.json version
+  - `createGitTag()` creates git tag
+  - `gitTagExists()` validates tags
+  - `getVersionBumpFromCommits()` analyzes conventional commits
 
-### 9.2 Theme Export (~3 iterations)
-- [ ] Create `/api/devtools/themes/[themeId]/export` endpoint
-  - Validates theme structure
-  - Generates README.md with theme documentation
-  - Creates tarball for npm publish
+### 9.2 Theme Export (~3 iterations) ✅ COMPLETED
+- [x] Create `/api/devtools/themes/[themeId]/export` endpoint
+  - Validates theme structure using `validateThemeConfig()`
+  - Auto-generates README.md with theme documentation
+  - Creates tarball using npm pack for proper npm packages
+  - Supports both tarball and directory export formats
+  - Includes manifest with export metadata
 
-### 9.3 README Generation (~2 iterations)
-- [ ] Create `packages/devtools/src/lib/readmeGenerator.ts`
-  - Auto-generate README from theme metadata
-  - Sections: Installation, Usage, Components, Tokens, Typography
-  - Include preview images (screenshots from Components tab)
+### 9.3 README Generation (~2 iterations) ✅ COMPLETED
+- [x] Create `packages/devtools/src/lib/readmeGenerator.ts`
+  - `generateReadme()` auto-generates from theme metadata
+  - `extractThemeMetadata()` scans package.json and CSS files
+  - Sections: Header, Installation, Usage, What's Included, Configuration, Components, Dark Mode, Documentation, License
+  - Extracts colors and fonts from CSS automatically
+  - Counts components, icons, logos, and agents
+  - Badge support for keywords
 
-### 9.4 PR Workflow (~3 iterations)
-- [ ] Create branch for theme publish: `publish/theme-[id]-v[version]`
-- [ ] Auto-commit theme changes
-- [ ] Open PR with generated README and changelog
+### 9.4 PR Workflow (~3 iterations) ✅ COMPLETED
+- [x] Create `/api/devtools/themes/[themeId]/publish` endpoint
+  - Creates branch: `publish/theme-[id]-v[version]`
+  - Auto-commits theme changes with conventional commit message
+  - Bumps version in package.json
+  - Generates/updates README.md
+  - Creates git tag for release
+  - Opens PR with generated changelog (requires gh CLI)
+  - Pushes branch to remote
 
 **Completion Criteria:**
-- Theme export generates valid npm package
-- README auto-generated with theme documentation
-- PR workflow creates publish branch and opens PR
+- ✅ Theme export generates valid npm package (using npm pack)
+- ✅ README auto-generated with theme documentation
+- ✅ PR workflow creates publish branch and opens PR
+- ✅ Version management with git tags
+- ✅ Conventional commit support
 
 ---
 
