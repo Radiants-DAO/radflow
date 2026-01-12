@@ -1,9 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, DialogBody, DialogFooter, DialogClose } from '@radflow/ui';
 import { useDevToolsStore } from '../store';
 import type { DockPosition } from '../types';
+import { ThemeCreationWizard } from './ThemeCreationWizard';
 
 interface SettingsPanelProps {
   open: boolean;
@@ -20,6 +21,8 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
     setDockPosition,
   } = useDevToolsStore();
 
+  const [isWizardOpen, setIsWizardOpen] = useState(false);
+
   const handleThemeSwitch = async (themeId: string) => {
     if (themeId === activeTheme) return;
     await switchTheme(themeId);
@@ -35,20 +38,36 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
     setDockPosition(position);
   };
 
-  return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
-          <DialogTitle>Settings</DialogTitle>
-        </DialogHeader>
+  const handleWizardComplete = (config: any) => {
+    // TODO: Call API to create theme scaffolding
+    console.log('Creating theme with config:', config);
+    setIsWizardOpen(false);
+  };
 
-        <DialogBody className="space-y-6">
-          {/* Theme Management Section */}
-          <section>
-            <h3 className="font-joystix text-sm uppercase text-content-primary mb-3">
-              Theme Management
-            </h3>
-            <div className="space-y-2">
+  return (
+    <>
+      <Dialog open={open} onOpenChange={onClose}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Settings</DialogTitle>
+          </DialogHeader>
+
+          <DialogBody className="space-y-6">
+            {/* Theme Management Section */}
+            <section>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-joystix text-sm uppercase text-content-primary">
+                  Theme Management
+                </h3>
+                <Button
+                  size="sm"
+                  variant="primary"
+                  onClick={() => setIsWizardOpen(true)}
+                >
+                  Create New Theme
+                </Button>
+              </div>
+              <div className="space-y-2">
               {availableThemes.map((theme) => (
                 <div
                   key={theme.id}
@@ -173,5 +192,13 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
         </DialogFooter>
       </DialogContent>
     </Dialog>
+
+    {/* Theme Creation Wizard */}
+    <ThemeCreationWizard
+      open={isWizardOpen}
+      onClose={() => setIsWizardOpen(false)}
+      onComplete={handleWizardComplete}
+    />
+  </>
   );
 }

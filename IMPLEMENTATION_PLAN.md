@@ -118,13 +118,13 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 **Iterations:** 15-20 total
 
 ### 3.1 Wizard Component (~2 iterations)
-- [ ] Create `packages/devtools/src/components/ThemeCreationWizard.tsx`
+- [x] Create `packages/devtools/src/components/ThemeCreationWizard.tsx`
   - Multi-step modal (6 steps)
   - Navigation: Back, Next, Cancel buttons
   - Progress indicator (Step 1/6)
 
 ### 3.2 Wizard Steps (~10 iterations, ~2 per step)
-- [ ] **Step 1: Basic Info**
+- [x] **Step 1: Basic Info**
   - Theme name, ID (auto-slugified), description
   - Package name (e.g., `@radflow/theme-phase`)
 - [ ] **Step 2: Colors**
@@ -153,8 +153,8 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
   - Add theme to `availableThemes` in store
 
 ### 3.4 Launch Wizard from Settings (~1 iteration)
-- [ ] Add "Create New Theme" button in Settings Panel
-- [ ] Opens ThemeCreationWizard modal
+- [x] Add "Create New Theme" button in Settings Panel
+- [x] Opens ThemeCreationWizard modal
 
 **Completion Criteria:**
 - Wizard accessible from Settings Panel
@@ -518,10 +518,10 @@ Phase 1 + Phase 2 + Phase 3
 - `packages/devtools/src/store/slices/aiSlice.ts` (Phase 6.1) - ✅ **CREATED**
 
 ### Components
-- `packages/devtools/src/components/SettingsPanel.tsx` (Phase 2.1) - ✅ **CREATED**
+- `packages/devtools/src/components/SettingsPanel.tsx` (Phase 2.1) - ✅ **CREATED** and **UPDATED** (added wizard integration)
 - `packages/devtools/src/components/TopBar.tsx` (Phase 2.3) - ✅ **CREATED**
 - `packages/devtools/src/components/ThemeSwitcher.tsx` (Phase 2.4) - **NOT NEEDED** (integrated into TopBar)
-- `packages/devtools/src/components/ThemeCreationWizard.tsx` (Phase 3.1) - **NOT CREATED**
+- `packages/devtools/src/components/ThemeCreationWizard.tsx` (Phase 3.1) - ✅ **CREATED** (Step 1 complete)
 - `packages/devtools/src/components/TokenEditor.tsx` (Phase 4.1) - **NOT CREATED**
 
 ### Tabs
