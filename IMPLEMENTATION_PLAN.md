@@ -52,9 +52,9 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 - [x] Update `themeSlice.switchTheme()` to call API and reload page
 
 ### 1.5 Component Theme Targeting (~3 iterations)
-- [ ] Add `data-theme` attribute support to component scanner
-- [ ] Update component discovery to group by theme
-- [ ] Filter component list by active theme in Components tab
+- [x] Add `data-theme` attribute support to component scanner
+- [x] Update component discovery to group by theme
+- [x] Filter component list by active theme in Components tab
 
 **Completion Criteria:**
 - Theme store slice exists and functional

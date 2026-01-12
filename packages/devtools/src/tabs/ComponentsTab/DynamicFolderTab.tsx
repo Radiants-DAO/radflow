@@ -11,7 +11,7 @@ interface DynamicFolderTabProps {
 }
 
 export function DynamicFolderTab({ folderName }: DynamicFolderTabProps) {
-  const { components, isLoading, scanComponents } = useDevToolsStore();
+  const { components, isLoading, scanComponents, activeTheme } = useDevToolsStore();
   const [folderComponents, setFolderComponents] = useState<DiscoveredComponent[]>([]);
 
   // Scan components from this specific folder
@@ -80,7 +80,11 @@ export function DynamicFolderTab({ folderName }: DynamicFolderTabProps) {
       )}
 
       {folderComponents.length > 0 && (
-        <ComponentList components={folderComponents} folderName={folderName} />
+        <ComponentList
+          components={folderComponents}
+          folderName={folderName}
+          activeThemeId={activeTheme}
+        />
       )}
     </div>
   );

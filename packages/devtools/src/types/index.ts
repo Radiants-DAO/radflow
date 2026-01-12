@@ -44,6 +44,8 @@ export interface DiscoveredComponent {
   name: string;
   path: string;
   props: PropDefinition[];
+  theme?: string; // Theme package name (e.g., '@radflow/theme-rad-os')
+  themeId?: string; // Theme ID (e.g., 'rad-os')
 }
 
 export interface PropDefinition {

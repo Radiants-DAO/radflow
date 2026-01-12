@@ -7,6 +7,7 @@ import type { DiscoveredComponent } from '../../types';
 interface ComponentListProps {
   components: DiscoveredComponent[];
   folderName: string;
+  activeThemeId?: string; // Optional: Filter components by active theme
 }
 
 // Section component matching DesignSystemTab style
@@ -100,6 +101,11 @@ If the preview file doesn't exist, create it with the necessary imports.`;
                 <div className="font-mondwest text-sm text-content-primary/60 font-mono">
                   {component.path}
                 </div>
+                {component.theme && (
+                  <div className="font-mondwest text-xs text-content-primary/50 font-mono">
+                    Theme: {component.theme}
+                  </div>
+                )}
                 {component.props.length > 0 && (
                   <PropsDisplay props={propsString} />
                 )}
@@ -112,13 +118,26 @@ If the preview file doesn't exist, create it with the necessary imports.`;
   );
 }
 
-export function ComponentList({ components, folderName }: ComponentListProps) {
+export function ComponentList({ components, folderName, activeThemeId }: ComponentListProps) {
   const [search, setSearch] = useState('');
 
-  const filtered = components.filter((c) =>
-    c.name.toLowerCase().includes(search.toLowerCase()) ||
-    c.path.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = components.filter((c) => {
+    // Filter by search query
+    const matchesSearch =
+      c.name.toLowerCase().includes(search.toLowerCase()) ||
+      c.path.toLowerCase().includes(search.toLowerCase());
+
+    // Filter by active theme if specified
+    // Components with no theme are always shown (local components)
+    // Components from @radflow/ui are always shown (shared library)
+    const matchesTheme =
+      !activeThemeId ||
+      !c.themeId ||
+      c.themeId === 'ui' ||
+      c.themeId === activeThemeId;
+
+    return matchesSearch && matchesTheme;
+  });
 
   return (
     <div className="space-y-4">

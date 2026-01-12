@@ -8,6 +8,8 @@ interface DiscoveredComponent {
   name: string;
   path: string;
   props: PropDefinition[];
+  theme?: string; // Theme package name (e.g., '@radflow/theme-rad-os')
+  themeId?: string; // Theme ID (e.g., 'rad-os')
 }
 
 interface PropDefinition {
@@ -86,7 +88,7 @@ function parseComponent(content: string, filePath: string): DiscoveredComponent 
   // Check for default export
   const hasDefaultExport = /export\s+default\s+function\s+(\w+)/.test(content) ||
                            /export\s+default\s+(\w+)/.test(content);
-  
+
   if (!hasDefaultExport) return null;
 
   // Extract component name
@@ -96,11 +98,11 @@ function parseComponent(content: string, filePath: string): DiscoveredComponent 
   // Extract props interface
   const propsMatch = content.match(/interface\s+(\w+Props)\s*\{([^}]+)\}/);
   const props: PropDefinition[] = [];
-  
+
   if (propsMatch) {
     const propsBody = propsMatch[2];
     const propLines = propsBody.split('\n').filter((l) => l.trim());
-    
+
     for (const line of propLines) {
       const propMatch = line.match(/(\w+)(\?)?:\s*([^;]+)/);
       if (propMatch) {
@@ -119,7 +121,7 @@ function parseComponent(content: string, filePath: string): DiscoveredComponent 
     if (inlineMatch) {
       const propsBody = inlineMatch[2];
       const propLines = propsBody.split(/[,;]/).filter((l) => l.trim());
-      
+
       for (const line of propLines) {
         const propMatch = line.trim().match(/(\w+)(\?)?:\s*(.+)/);
         if (propMatch) {
@@ -147,10 +149,32 @@ function parseComponent(content: string, filePath: string): DiscoveredComponent 
     }
   }
 
+  // Extract theme information from file path
+  // Path format: /packages/theme-[id]/... or /packages/ui/...
+  let theme: string | undefined;
+  let themeId: string | undefined;
+
+  const themeMatch = filePath.match(/\/packages\/(theme-[^/]+)\//);
+  if (themeMatch) {
+    const themePackageId = themeMatch[1]; // e.g., 'theme-rad-os'
+    themeId = themePackageId.replace('theme-', ''); // e.g., 'rad-os'
+    theme = `@radflow/${themePackageId}`; // e.g., '@radflow/theme-rad-os'
+  } else if (filePath.includes('/packages/ui/')) {
+    // Components from @radflow/ui package
+    theme = '@radflow/ui';
+    themeId = 'ui'; // Special ID for shared UI components
+  } else if (filePath.includes('/components/')) {
+    // Local components (no theme)
+    theme = undefined;
+    themeId = undefined;
+  }
+
   return {
     name,
     path: filePath,
     props,
+    theme,
+    themeId,
   };
 }
 
