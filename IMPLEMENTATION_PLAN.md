@@ -36,11 +36,11 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
   - Utility functions: `themeConfigToTheme()`, `isThemePackage()`, `extractThemeId()`, `formatThemeName()`
 
 ### 1.3 Theme-Scoped API Routes (~5 iterations)
-- [ ] Update `/api/devtools/read-css` → `/api/devtools/themes/[themeId]/read-css`
-- [ ] Update `/api/devtools/write-css` → `/api/devtools/themes/[themeId]/write-css`
-- [ ] Update `/api/devtools/parse-css` → `/api/devtools/themes/[themeId]/parse-css`
-- [ ] Add write-lock enforcement (reject writes to non-active themes)
-- [ ] Add theme discovery API: `/api/devtools/themes/list`
+- [x] Update `/api/devtools/read-css` → `/api/devtools/themes/[themeId]/read-css`
+- [x] Update `/api/devtools/write-css` → `/api/devtools/themes/[themeId]/write-css`
+- [x] Update `/api/devtools/parse-css` → `/api/devtools/themes/[themeId]/parse-css`
+- [x] Add write-lock enforcement (reject writes to non-active themes)
+- [x] Add theme discovery API: `/api/devtools/themes/list`
 
 ### 1.4 CSS Import Architecture (~3 iterations)
 - [ ] Update `app/globals.css` to support dynamic theme import
@@ -534,10 +534,10 @@ Phase 1 + Phase 2 + Phase 3
 - `packages/devtools/src/lib/readmeGenerator.ts` (Phase 9.3) - **NOT CREATED**
 
 ### API Routes
-- `app/api/devtools/themes/[themeId]/read-css/route.ts` (Phase 1.3) - **NOT CREATED**
-- `app/api/devtools/themes/[themeId]/write-css/route.ts` (Phase 1.3) - **NOT CREATED**
-- `app/api/devtools/themes/[themeId]/parse-css/route.ts` (Phase 1.3) - **NOT CREATED**
-- `app/api/devtools/themes/list/route.ts` (Phase 1.3) - **NOT CREATED**
+- `app/api/devtools/themes/[themeId]/read-css/route.ts` (Phase 1.3) - ✅ **CREATED**
+- `app/api/devtools/themes/[themeId]/write-css/route.ts` (Phase 1.3) - ✅ **CREATED**
+- `app/api/devtools/themes/[themeId]/parse-css/route.ts` (Phase 1.3) - ✅ **CREATED**
+- `app/api/devtools/themes/list/route.ts` (Phase 1.3) - ✅ **CREATED**
 - `app/api/devtools/themes/create/route.ts` (Phase 3.3) - **NOT CREATED**
 - `app/api/devtools/themes/[themeId]/export/route.ts` (Phase 9.2) - **NOT CREATED**
 
