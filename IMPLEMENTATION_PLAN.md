@@ -29,10 +29,11 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
   - Integrated into main store with persistence
 
 ### 1.2 Theme Config Structure (~2 iterations)
-- [ ] Create `packages/devtools/src/lib/themeConfig.ts`
+- [x] Create `packages/devtools/src/lib/themeConfig.ts`
   - Define `ThemeConfig` interface (name, id, version, packageName, cssFiles, componentFolders, assets, prompts)
-  - Parse theme package.json files
-  - Validate theme structure
+  - Parse theme package.json files (`parseThemePackage()`)
+  - Validate theme structure (`validateThemeConfig()`)
+  - Utility functions: `themeConfigToTheme()`, `isThemePackage()`, `extractThemeId()`, `formatThemeName()`
 
 ### 1.3 Theme-Scoped API Routes (~5 iterations)
 - [ ] Update `/api/devtools/read-css` → `/api/devtools/themes/[themeId]/read-css`
@@ -527,7 +528,7 @@ Phase 1 + Phase 2 + Phase 3
 - `packages/devtools/src/data/srefCodes.ts` (Phase 6.6) - **NOT CREATED**
 
 ### Utilities
-- `packages/devtools/src/lib/themeConfig.ts` (Phase 1.2) - **NOT CREATED**
+- `packages/devtools/src/lib/themeConfig.ts` (Phase 1.2) - ✅ **CREATED**
 - `packages/devtools/src/lib/themeUtils.ts` (Phase 1.4) - **NOT CREATED**
 - `packages/devtools/src/lib/versionUtils.ts` (Phase 9.1) - **NOT CREATED**
 - `packages/devtools/src/lib/readmeGenerator.ts` (Phase 9.3) - **NOT CREATED**
