@@ -10,17 +10,19 @@ import { SearchSlice, createSearchSlice } from './slices/searchSlice';
 import { TextEditSlice, createTextEditSlice } from './slices/textEditSlice';
 import { ComponentIdSlice, createComponentIdSlice } from './slices/componentIdSlice';
 import { HelpSlice, createHelpSlice } from './slices/helpSlice';
+import { ThemeSlice, createThemeSlice } from './slices/themeSlice';
 
 type DevToolsState = PanelSlice &
-  VariablesSlice & 
+  VariablesSlice &
   TypographySlice &
-  ComponentsSlice & 
-  AssetsSlice & 
+  ComponentsSlice &
+  AssetsSlice &
   MockStatesSlice &
   SearchSlice &
   TextEditSlice &
   ComponentIdSlice &
-  HelpSlice;
+  HelpSlice &
+  ThemeSlice;
 
 export const useDevToolsStore = create<DevToolsState>()(
   devtools(
@@ -36,6 +38,7 @@ export const useDevToolsStore = create<DevToolsState>()(
         ...createTextEditSlice(set, get, api),
         ...createComponentIdSlice(set, get, api),
         ...createHelpSlice(set, get, api),
+        ...createThemeSlice(set, get, api),
       }),
       {
         name: 'devtools-storage',
@@ -46,6 +49,8 @@ export const useDevToolsStore = create<DevToolsState>()(
           dockPosition: state.dockPosition,
           activeTab: state.activeTab,
           mockStates: state.mockStates,
+          activeTheme: state.activeTheme,
+          availableThemes: state.availableThemes,
         }),
       }
     ),

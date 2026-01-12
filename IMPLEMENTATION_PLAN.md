@@ -19,13 +19,14 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 **Iterations:** 12-18 total
 
 ### 1.1 Theme Store Slice (~2 iterations)
-- [ ] Create `packages/devtools/src/store/slices/themeSlice.ts`
+- [x] Create `packages/devtools/src/store/slices/themeSlice.ts`
   - `activeTheme: string` (currently active theme ID)
   - `availableThemes: Theme[]` (discovered themes)
   - `switchTheme(themeId: string)` action
   - `addTheme(config: ThemeConfig)` action
   - `deleteTheme(themeId: string)` action
   - `writeLockedThemes: string[]` (non-active themes are read-only)
+  - Integrated into main store with persistence
 
 ### 1.2 Theme Config Structure (~2 iterations)
 - [ ] Create `packages/devtools/src/lib/themeConfig.ts`
@@ -502,7 +503,7 @@ Phase 1 + Phase 2 + Phase 3
 ## Quick Reference: File Locations
 
 ### Store Slices
-- `packages/devtools/src/store/slices/themeSlice.ts` (Phase 1.1) - **NOT CREATED**
+- `packages/devtools/src/store/slices/themeSlice.ts` (Phase 1.1) - ✅ **CREATED**
 - `packages/devtools/src/store/slices/aiSlice.ts` (Phase 6.1) - **NOT CREATED**
 
 ### Components
