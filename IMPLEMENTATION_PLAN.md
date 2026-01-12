@@ -72,16 +72,16 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 **Iterations:** 10-15 total
 
 ### 2.1 Settings Panel (~3 iterations)
-- [ ] Create `packages/devtools/src/components/SettingsPanel.tsx`
+- [x] Create `packages/devtools/src/components/SettingsPanel.tsx`
   - Modal overlay with settings sections
   - Theme Management section: List themes, switch active theme, delete theme button
   - DevTools Settings section: Panel position, default tab, keyboard shortcuts reference
   - Styling: Use semantic tokens, match panel theme
 
 ### 2.2 Settings Button (LeftRail) (~1 iteration)
-- [ ] Add Settings button (⚙️) to bottom of LeftRail
-- [ ] Connect to `openSettings()` action in panelSlice
-- [ ] Update `packages/devtools/src/components/LeftRail.tsx`
+- [x] Add Settings button (⚙️) to bottom of LeftRail
+- [x] Connect to `openSettings()` action in panelSlice
+- [x] Update `packages/devtools/src/components/LeftRail.tsx`
 
 ### 2.3 Top Bar (Theme Indicator) (~2 iterations)
 - [ ] Create `packages/devtools/src/components/TopBar.tsx`
@@ -507,10 +507,11 @@ Phase 1 + Phase 2 + Phase 3
 
 ### Store Slices
 - `packages/devtools/src/store/slices/themeSlice.ts` (Phase 1.1) - ✅ **CREATED**
+- `packages/devtools/src/store/slices/panelSlice.ts` (Phase 2.1) - ✅ **UPDATED** (added isSettingsOpen, openSettings, closeSettings)
 - `packages/devtools/src/store/slices/aiSlice.ts` (Phase 6.1) - **NOT CREATED**
 
 ### Components
-- `packages/devtools/src/components/SettingsPanel.tsx` (Phase 2.1) - **NOT CREATED**
+- `packages/devtools/src/components/SettingsPanel.tsx` (Phase 2.1) - ✅ **CREATED**
 - `packages/devtools/src/components/TopBar.tsx` (Phase 2.3) - **NOT CREATED**
 - `packages/devtools/src/components/ThemeSwitcher.tsx` (Phase 2.4) - **NOT CREATED**
 - `packages/devtools/src/components/ThemeCreationWizard.tsx` (Phase 3.1) - **NOT CREATED**

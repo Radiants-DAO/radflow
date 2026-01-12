@@ -8,6 +8,7 @@ interface LeftRailProps {
   activeTool: Tool | null;
   onTabChange: (tab: Tab) => void;
   onToolToggle: (tool: Tool) => void;
+  onSettingsClick: () => void;
 }
 
 const TOOLS: Array<{ id: Tool; icon: string; label: string; shortcut: string }> = [
@@ -24,7 +25,7 @@ const TABS: Array<{ id: Tab; icon: string; label: string; shortcut: string }> = 
   { id: 'mockStates', icon: 'settings-cog', label: 'Mock States', shortcut: '5' },
 ];
 
-export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle }: LeftRailProps) {
+export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle, onSettingsClick }: LeftRailProps) {
   return (
     <div className="flex flex-col items-center bg-surface-secondary/5 border-r border-edge-primary/10 py-2 px-1">
       {/* Tools Section */}
@@ -73,6 +74,26 @@ export function LeftRail({ activeTab, activeTool, onTabChange, onToolToggle }: L
           </Tooltip>
         ))}
       </div>
+
+      {/* Divider */}
+      <div className="w-6 h-px bg-surface-secondary/20 my-2" />
+
+      {/* Settings Button */}
+      <Tooltip
+        content="Settings"
+        position="right"
+        size="sm"
+        delay={300}
+      >
+        <Button
+          variant="ghost"
+          size="sm"
+          iconOnly
+          iconName="settings-cog"
+          onClick={onSettingsClick}
+          data-help-id="settings-button"
+        />
+      </Tooltip>
     </div>
   );
 }

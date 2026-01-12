@@ -8,6 +8,7 @@ import type { Tab, Tool } from './types';
 import { PanelHeader } from './components/PanelHeader';
 import { LeftRail } from './components/LeftRail';
 import { ResizeHandle } from './components/ResizeHandle';
+import { SettingsPanel } from './components/SettingsPanel';
 
 // Import actual tab components
 import { VariablesTab } from './tabs/VariablesTab';
@@ -18,8 +19,8 @@ import { MockStatesTab } from './tabs/MockStatesTab';
 import { ContextualFooter } from './components/ContextualFooter';
 
 export function DevToolsPanel() {
-  const { 
-    activeTab, 
+  const {
+    activeTab,
     setActiveTab,
     panelWidth,
     setPanelWidth,
@@ -33,6 +34,9 @@ export function DevToolsPanel() {
     toggleComponentIdMode,
     toggleHelpMode,
     dockPosition,
+    isSettingsOpen,
+    openSettings,
+    closeSettings,
   } = useDevToolsStore();
 
   // Footer state
@@ -122,6 +126,7 @@ export function DevToolsPanel() {
         activeTool={activeTool}
         onTabChange={handleTabChange}
         onToolToggle={handleToolToggle}
+        onSettingsClick={openSettings}
       />
 
       {/* Main Content */}
@@ -198,13 +203,16 @@ export function DevToolsPanel() {
 
       {/* Resize Handle - for left dock, handle goes on the right edge */}
       {!isFullscreen && resizeHandlePosition === 'right' && (
-        <ResizeHandle 
+        <ResizeHandle
           onResize={setPanelWidth}
           minWidth={300}
           maxWidth={typeof window !== 'undefined' ? window.innerWidth * 0.8 : 1200}
           position="right"
         />
       )}
+
+      {/* Settings Panel */}
+      <SettingsPanel open={isSettingsOpen} onClose={closeSettings} />
     </div>
   );
 }

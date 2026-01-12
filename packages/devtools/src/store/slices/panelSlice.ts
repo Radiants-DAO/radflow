@@ -10,7 +10,8 @@ export interface PanelSlice {
   panelWidth: number; // Width for fixed-right/left panel (default 400px)
   isFullscreen: boolean;
   dockPosition: DockPosition; // Where the panel is docked
-  
+  isSettingsOpen: boolean; // Settings panel visibility
+
   // Actions
   togglePanel: () => void;
   setActiveTab: (tab: Tab) => void;
@@ -20,6 +21,8 @@ export interface PanelSlice {
   toggleFullscreen: () => void;
   setFullscreen: (value: boolean) => void;
   setDockPosition: (position: DockPosition) => void;
+  openSettings: () => void;
+  closeSettings: () => void;
 }
 
 export const createPanelSlice: StateCreator<PanelSlice, [], [], PanelSlice> = (set) => ({
@@ -30,7 +33,8 @@ export const createPanelSlice: StateCreator<PanelSlice, [], [], PanelSlice> = (s
   panelWidth: 400, // Default width for fixed-right/left panel
   isFullscreen: false,
   dockPosition: 'right' as DockPosition,
-  
+  isSettingsOpen: false,
+
   togglePanel: () => set((state) => ({ isOpen: !state.isOpen })),
   setActiveTab: (tab) => set({ activeTab: tab }),
   setPanelPosition: (position) => set({ panelPosition: position }),
@@ -39,4 +43,6 @@ export const createPanelSlice: StateCreator<PanelSlice, [], [], PanelSlice> = (s
   toggleFullscreen: () => set((state) => ({ isFullscreen: !state.isFullscreen })),
   setFullscreen: (value) => set({ isFullscreen: value }),
   setDockPosition: (position) => set({ dockPosition: position }),
+  openSettings: () => set({ isSettingsOpen: true }),
+  closeSettings: () => set({ isSettingsOpen: false }),
 });
