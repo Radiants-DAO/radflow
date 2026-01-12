@@ -127,9 +127,11 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 - [x] **Step 1: Basic Info**
   - Theme name, ID (auto-slugified), description
   - Package name (e.g., `@radflow/theme-phase`)
-- [ ] **Step 2: Colors**
-  - Base colors: Primary, secondary, accent
-  - Upload brand palette or pick from presets
+- [x] **Step 2: Colors**
+  - Base colors: Primary, secondary, accent, surface, text
+  - 6 color presets (RadOS, Midnight, Forest, Ocean, Sunset, Monochrome)
+  - Custom color inputs with native color pickers
+  - Live preview panel with buttons and text
 - [ ] **Step 3: Fonts**
   - Upload custom fonts or select from Google Fonts
   - Define typography scale (h1-h6, body, caption)
