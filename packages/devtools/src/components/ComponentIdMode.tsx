@@ -9,6 +9,9 @@ import type { ComponentInfo } from '../types';
  * Traverses React Fiber tree to find component name and source file
  */
 function findReactComponent(element: HTMLElement): ComponentInfo | null {
+  // Extract data-theme attribute if present
+  const theme = element.getAttribute('data-theme') || undefined;
+
   // Try to find React Fiber node
   const fiberKey = Object.keys(element).find(
     (key) => key.startsWith('__reactFiber$') || key.startsWith('__reactInternalInstance$')
@@ -19,6 +22,7 @@ function findReactComponent(element: HTMLElement): ComponentInfo | null {
     return {
       name: element.tagName.toLowerCase(),
       path: 'DOM Element',
+      theme,
     };
   }
 
@@ -44,6 +48,7 @@ function findReactComponent(element: HTMLElement): ComponentInfo | null {
           return {
             name,
             path: file,
+            theme,
           };
         }
       }
@@ -67,6 +72,7 @@ function findReactComponent(element: HTMLElement): ComponentInfo | null {
         return {
           name: componentType,
           path: 'HTML Element',
+          theme,
         };
       }
     }
@@ -80,6 +86,7 @@ function findReactComponent(element: HTMLElement): ComponentInfo | null {
   return {
     name: element.tagName.toLowerCase(),
     path: 'DOM Element',
+    theme,
   };
 }
 
@@ -186,6 +193,11 @@ export function ComponentIdMode() {
             <div className="text-cream/80 text-xs font-mono">
               {hoveredComponent.path}
             </div>
+            {hoveredComponent.theme && (
+              <div className="text-cream/70 text-xs mt-1">
+                theme: {hoveredComponent.theme}
+              </div>
+            )}
             <div className="text-cream/60 text-[10px] mt-2">
               Click to copy
             </div>
@@ -206,6 +218,11 @@ export function ComponentIdMode() {
             <div className="text-cream/70 text-[10px] mt-1">
               {clickedComponent.path}
             </div>
+            {clickedComponent.theme && (
+              <div className="text-cream/70 text-[10px] mt-1">
+                theme: {clickedComponent.theme}
+              </div>
+            )}
           </div>
         </div>
       )}

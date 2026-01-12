@@ -7,7 +7,7 @@
 
 This plan tracks implementation of the multi-theme RadFlow architecture. Tasks are organized by feature area and dependency chain. Foundation work (Phase 1) must complete before UI features can proceed.
 
-**Current Status:** Core DevTools functional with Variables, Typography, Components, Assets, AI, and Mock States tabs. Phase 8.3 (Help Mode Refactor) completed. Remaining: Token Editor, Theme Creation Wizard, Component Subfolders, and remaining mode refinements.
+**Current Status:** Core DevTools functional with Variables, Typography, Components, Assets, AI, and Mock States tabs. Phase 8 (Mode Refinements) completed. Remaining: Token Editor, Theme Creation Wizard, Component Subfolders.
 
 ---
 
@@ -437,7 +437,7 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
   - Show only if count > 0
 
 ### 8.6 Display data-theme Attribute in Component ID Mode (~1 iteration)
-- [ ] Update `packages/devtools/src/components/ComponentIdMode.tsx`
+- [x] Update `packages/devtools/src/components/ComponentIdMode.tsx`
   - Show `data-theme` attribute value in floating label
   - Format: "Button | @radflow/ui | theme: rad-os"
 
@@ -447,7 +447,7 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 - ✅ Help mode displays as static info bar (not tooltip)
 - ✅ Component ID mode click navigates to Components tab
 - ✅ Text Edit mode button shows pending change count badge
-- Component ID mode shows data-theme attribute
+- ✅ Component ID mode shows data-theme attribute
 
 ---
 

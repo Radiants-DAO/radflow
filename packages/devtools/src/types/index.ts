@@ -151,6 +151,7 @@ export interface SearchResult {
 export interface ComponentInfo {
   name: string;
   path: string;
+  theme?: string; // data-theme attribute value
 }
 
 // Help Types
