@@ -7,7 +7,7 @@
 
 This plan tracks implementation of the multi-theme RadFlow architecture. Tasks are organized by feature area and dependency chain. Foundation work (Phase 1) must complete before UI features can proceed.
 
-**Current Status:** Core DevTools functional with Variables, Typography, Components, Assets, AI, and Mock States tabs. Phase 8 (Mode Refinements) completed. Phase 3 (Theme Creation Wizard) completed including API scaffolding. Remaining: Token Editor, Component Subfolders.
+**Current Status:** Core DevTools functional with Variables, Typography, Components, Assets, AI, and Mock States tabs. Phase 8 (Mode Refinements) completed. Phase 3 (Theme Creation Wizard) completed including API scaffolding. Phase 4.1 and 4.5 (Token Editor modal and launch button) completed. Remaining: Token editing functionality (4.2-4.4), Component Subfolders (Phase 5).
 
 ---
 
@@ -182,10 +182,13 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 **Iterations:** 12-16 total
 
 ### 4.1 Full-Page Token Editor Modal (~2 iterations)
-- [ ] Create `packages/devtools/src/components/TokenEditor.tsx`
+- [x] Create `packages/devtools/src/components/TokenEditor.tsx`
   - Full-screen modal overlay
   - Split panel: Editor (left) + Live Preview (right)
   - Close button (X) and Cancel/Save buttons
+  - Displays all tokens from store (base colors, semantic tokens, radius, shadows)
+  - Search and category filtering functional
+  - Light/dark mode toggle for preview
 
 ### 4.2 Editor Panel (Left) (~4 iterations)
 - [ ] Token list with search/filter
@@ -211,14 +214,14 @@ This plan tracks implementation of the multi-theme RadFlow architecture. Tasks a
 - [ ] Close editor and refresh Variables tab
 
 ### 4.5 Launch from Variables Tab (~1 iteration)
-- [ ] Add "Edit Tokens" button in Variables tab header
-- [ ] Opens TokenEditor modal
+- [x] Add "Edit Tokens" button in Variables tab header
+- [x] Opens TokenEditor modal
 
 **Completion Criteria:**
-- Token editor accessible from Variables tab
-- Live preview functional with real-time updates
-- Prompt-based save writes to active theme's CSS
-- Light/dark mode toggle works in preview
+- ✅ Token editor accessible from Variables tab
+- ✅ Live preview functional with real-time updates
+- ⏳ Prompt-based save writes to active theme's CSS (needs implementation)
+- ✅ Light/dark mode toggle works in preview
 
 ---
 

@@ -129,10 +129,9 @@ export function LogosSubTab({ searchQuery }: LogosSubTabProps) {
               >
                 {/* Logo preview */}
                 <div
-                  className={`flex items-center justify-center p-8 ${
-                    backgroundMode === 'light' ? 'bg-cream' : 'bg-rad-black'
+                  className={`flex items-center justify-center p-8 min-h-[150px] ${
+                    backgroundMode === 'light' ? 'bg-surface-primary' : 'bg-surface-secondary'
                   }`}
-                  style={{ minHeight: '150px' }}
                 >
                   <img
                     src={logo.path}
@@ -153,18 +152,18 @@ export function LogosSubTab({ searchQuery }: LogosSubTabProps) {
                 <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     onClick={() => handleCopySVG(logo.path, logo.name)}
-                    className="p-2 bg-surface-primary/90 border border-edge-primary rounded hover:bg-interactive-primary transition-all"
+                    className="p-2 bg-surface-primary border border-edge-primary rounded-sm shadow-btn hover:-translate-y-0.5 hover:shadow-btn-hover active:translate-y-0.5 active:shadow-none transition-all duration-200"
                     title="Copy SVG"
                   >
                     {copiedLogo === logo.name ? (
-                      <Icon name="checkmark" size={16} className="text-success-green" />
+                      <Icon name="checkmark" size={16} className="text-success" />
                     ) : (
                       <Icon name="copy" size={16} className="text-content-primary" />
                     )}
                   </button>
                   <button
                     onClick={() => handleDownload(logo.path, logo.name, 'svg')}
-                    className="p-2 bg-surface-primary/90 border border-edge-primary rounded hover:bg-interactive-primary transition-all"
+                    className="p-2 bg-surface-primary border border-edge-primary rounded-sm shadow-btn hover:-translate-y-0.5 hover:shadow-btn-hover active:translate-y-0.5 active:shadow-none transition-all duration-200"
                     title="Download SVG"
                   >
                     <Icon name="download" size={16} className="text-content-primary" />

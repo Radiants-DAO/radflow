@@ -148,8 +148,8 @@ export function ImagesSubTab({ searchQuery }: ImagesSubTabProps) {
         <div
           className={`px-3 py-2 font-mondwest text-sm rounded-sm ${
             message.type === 'success'
-              ? 'bg-success-green text-content-primary'
-              : 'bg-error-red text-cream'
+              ? 'bg-success text-content-primary'
+              : 'bg-error text-content-inverse'
           }`}
         >
           {message.text}
@@ -207,16 +207,16 @@ export function ImagesSubTab({ searchQuery }: ImagesSubTabProps) {
                   e.stopPropagation();
                   handleDelete(image.path);
                 }}
-                className="absolute top-2 right-2 p-2 bg-surface-primary/90 border border-edge-primary rounded opacity-0 group-hover:opacity-100 hover:bg-error-red transition-all"
+                className="absolute top-2 right-2 p-2 bg-surface-primary border border-edge-primary rounded-sm shadow-btn opacity-0 group-hover:opacity-100 hover:bg-error hover:text-content-inverse hover:-translate-y-0.5 hover:shadow-btn-hover active:translate-y-0.5 active:shadow-none transition-all duration-200"
                 title="Delete"
               >
-                <Icon name="trash" size={16} className="text-content-primary" />
+                <Icon name="trash" size={16} />
               </button>
 
               {/* Selection indicator */}
               {selectedImages.includes(image.path) && (
-                <div className="absolute top-2 left-2 p-1 bg-interactive-primary rounded">
-                  <Icon name="checkmark" size={16} className="text-cream" />
+                <div className="absolute top-2 left-2 p-1 bg-surface-tertiary border border-edge-primary rounded-sm">
+                  <Icon name="checkmark" size={16} className="text-content-primary" />
                 </div>
               )}
             </div>

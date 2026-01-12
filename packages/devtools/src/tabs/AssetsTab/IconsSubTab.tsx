@@ -130,8 +130,8 @@ export function IconsSubTab({ searchQuery }: IconsSubTabProps) {
                   {icon.name}
                 </span>
                 {copiedIcon === icon.name && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-success-green/90 rounded-md">
-                    <Icon name="checkmark" size={20} className="text-cream" />
+                  <div className="absolute inset-0 flex items-center justify-center bg-success/90 rounded-md">
+                    <Icon name="checkmark" size={20} className="text-content-inverse" />
                   </div>
                 )}
               </button>
@@ -163,8 +163,8 @@ export function IconsSubTab({ searchQuery }: IconsSubTabProps) {
                   {icon.name}
                 </span>
                 {copiedIcon === icon.name && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-success-green/90 rounded-md">
-                    <Icon name="checkmark" size={20} className="text-cream" />
+                  <div className="absolute inset-0 flex items-center justify-center bg-success/90 rounded-md">
+                    <Icon name="checkmark" size={20} className="text-content-inverse" />
                   </div>
                 )}
               </button>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Icon } from '@radflow/ui/Icon';
 import type { AssetFolder, AssetFile } from '../../types';
 
 interface FolderTreeProps {
@@ -17,21 +18,21 @@ export function FolderTree({ folder, selectedFolder, onSelectFolder, depth = 0 }
   const files = folder.children.filter((c): c is AssetFile => !('children' in c));
 
   return (
-    <div style={{ paddingLeft: depth > 0 ? '12px' : '0' }}>
+    <div className={depth > 0 ? 'pl-3' : ''}>
       <button
         onClick={() => {
           setExpanded(!expanded);
           onSelectFolder(folder.path);
         }}
-        className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-xs text-left transition-colors ${
+        className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-sm text-xs text-left transition-colors ${
           selectedFolder === folder.path
             ? 'bg-surface-tertiary text-content-primary'
             : 'hover:bg-surface-tertiary/20 text-content-primary'
         }`}
       >
-        <span>{expanded ? '📂' : '📁'}</span>
+        <Icon name={expanded ? 'folder-open' : 'folder'} size={14} className="text-content-primary" />
         <span className="flex-1">{folder.name}</span>
-        <span className="text-content-primary/60">{files.length}</span>
+        <span className="text-content-secondary">{files.length}</span>
       </button>
 
       {expanded && subfolders.length > 0 && (

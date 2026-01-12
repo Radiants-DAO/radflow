@@ -44,7 +44,7 @@ export function AssetsTab() {
             placeholder={`Search ${activeSubTab}...`}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-3 py-2 bg-surface-primary border border-edge-primary/20 rounded-md text-content-primary placeholder:text-content-tertiary focus:outline-none focus:ring-2 focus:ring-interactive-primary"
+            className="w-full px-3 py-2 bg-surface-primary border border-edge-primary rounded-sm text-content-primary placeholder:text-content-tertiary focus:outline-none focus:ring-2 focus:ring-edge-focus focus:bg-surface-elevated"
           />
         </div>
       </div>
