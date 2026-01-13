@@ -16,10 +16,10 @@ export { StatCard } from './StatCard';
 export type { StatCardVariant, StatCardProps } from './StatCard';
 
 export { ServiceCard } from './ServiceCard';
-export type { ServiceCardProps } from './ServiceCard';
+export type { ServiceCardVariant, ServiceCardAccent, ServiceCardProps } from './ServiceCard';
 
 export { TeamMember } from './TeamMember';
-export type { TeamMemberSize, TeamMemberProps } from './TeamMember';
+export type { TeamMemberSize, TeamMemberLayout, TeamMemberProps } from './TeamMember';
 
 export { ArticleCard } from './ArticleCard';
 export type { ArticleCardVariant, ArticleCardProps } from './ArticleCard';
@@ -43,3 +43,8 @@ export type { SectionHeaderSize, SectionHeaderAlign, SectionHeaderProps } from '
 
 export { LogoGrid } from './LogoGrid';
 export type { LogoItem, LogoGridProps } from './LogoGrid';
+
+export { LogoWithHover } from './LogoWithHover';
+export type { LogoName } from './LogoWithHover';
+
+export { FloatingMenuBar } from './FloatingMenuBar';

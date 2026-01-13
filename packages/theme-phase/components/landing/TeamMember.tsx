@@ -6,6 +6,7 @@ import clsx from 'clsx';
 // ============================================================================
 
 export type TeamMemberSize = 'sm' | 'md' | 'lg';
+export type TeamMemberLayout = 'vertical' | 'horizontal';
 
 export interface TeamMemberProps {
   /** Member name */
@@ -16,6 +17,10 @@ export interface TeamMemberProps {
   avatarUrl?: string;
   /** Size variant */
   size?: TeamMemberSize;
+  /** Layout direction */
+  layout?: TeamMemberLayout;
+  /** Link URL (e.g., Twitter profile) */
+  href?: string;
   /** Additional className */
   className?: string;
 }
@@ -49,24 +54,28 @@ const sizeStyles: Record<TeamMemberSize, { avatar: string; name: string; role: s
 /**
  * TeamMember component for displaying team/staff members
  *
- * Shows avatar with name and role below
+ * Shows avatar with name and role. Supports vertical (stacked) and
+ * horizontal (side-by-side) layouts, and optional link wrapping.
  */
 export function TeamMember({
   name,
   role,
   avatarUrl,
   size = 'md',
+  layout = 'vertical',
+  href,
   className = '',
 }: TeamMemberProps) {
   const styles = sizeStyles[size];
+  const isHorizontal = layout === 'horizontal';
 
-  return (
-    <div className={clsx('flex flex-col gap-[8px] items-start', className)}>
+  const content = (
+    <>
       {/* Avatar */}
       <div
         className={clsx(
           styles.avatar,
-          'bg-[var(--glass-bg-hover)] overflow-hidden',
+          'overflow-hidden shrink-0',
           'flex items-center justify-center'
         )}
       >
@@ -92,8 +101,30 @@ export function TeamMember({
           {role}
         </p>
       </div>
-    </div>
+    </>
   );
+
+  const containerClasses = clsx(
+    'flex gap-[12px]',
+    isHorizontal ? 'flex-row items-center' : 'flex-col items-start',
+    isHorizontal && 'bg-[var(--glass-bg)] border border-[var(--glass-border)] h-[96px] p-[16px] hover:bg-[var(--glass-bg-hover)] transition-colors',
+    className
+  );
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={clsx(containerClasses, 'cursor-pointer')}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return <div className={containerClasses}>{content}</div>;
 }
 
 export default TeamMember;

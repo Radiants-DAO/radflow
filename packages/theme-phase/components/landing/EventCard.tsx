@@ -30,11 +30,14 @@ export interface EventCardProps {
 // ============================================================================
 
 const baseStyles = `
-  flex flex-col gap-[8px]
-  w-[356px]
+  flex flex-col justify-between
+  w-[405px] h-[182px]
+  px-[24px] py-[24px]
+  bg-[var(--glass-bg)]
+  border border-[var(--glass-border)]
   cursor-pointer
-  transition-opacity duration-200
-  hover:opacity-80
+  transition-all duration-200
+  hover:bg-[var(--glass-bg-hover)]
 `;
 
 // ============================================================================
@@ -61,8 +64,8 @@ export function EventCard({
   const content = (
     <>
       {/* Header with icon and date */}
-      <div className="flex items-start justify-between pb-[16px]">
-        <div className="bg-[var(--glass-bg)] rounded-full p-[8px]">
+      <div className="flex items-start justify-between">
+        <div className="w-8 h-8 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-full flex items-center justify-center">
           {thumbnailUrl ? (
             <img
               src={thumbnailUrl}
@@ -70,7 +73,7 @@ export function EventCard({
               className="w-[16px] h-[16px] object-cover"
             />
           ) : (
-            <Icon name={iconName} size={16} className="text-content-primary" />
+            <Icon name={iconName} size={16} className="text-[var(--color-gold)]" />
           )}
         </div>
         {date && (
@@ -86,11 +89,11 @@ export function EventCard({
       </h3>
 
       {/* CTA */}
-      <div className="flex items-center justify-between pt-[16px]">
-        <span className="font-kodemono font-normal text-[12px] text-content-secondary">
+      <div className="flex items-center justify-between">
+        <span className="font-kodemono font-normal text-[12px] text-content-secondary uppercase">
           {ctaText}
         </span>
-        <Icon name="arrow-up-right" size={10} className="text-content-secondary" />
+        <Icon name="external-link" size={10} className="text-content-secondary" />
       </div>
     </>
   );

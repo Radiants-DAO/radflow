@@ -19,8 +19,10 @@ export interface SectionHeaderProps {
   size?: SectionHeaderSize;
   /** Text alignment */
   align?: SectionHeaderAlign;
-  /** Show decorative line */
+  /** Show decorative line below */
   showLine?: boolean;
+  /** Show left border decoration */
+  showLeftBorder?: boolean;
   /** Additional className */
   className?: string;
 }
@@ -54,7 +56,8 @@ const sizeStyles: Record<SectionHeaderSize, { title: string; subtitle: string; l
 /**
  * SectionHeader component for page sections
  *
- * Displays section title with optional label and subtitle
+ * Displays section title with optional label and subtitle.
+ * Use showLeftBorder for the Phase section header style with left border accent.
  */
 export function SectionHeader({
   title,
@@ -63,17 +66,23 @@ export function SectionHeader({
   size = 'md',
   align = 'left',
   showLine = false,
+  showLeftBorder = false,
   className = '',
 }: SectionHeaderProps) {
   const styles = sizeStyles[size];
   const alignClass = align === 'center' ? 'text-center items-center' : 'text-left items-start';
 
   return (
-    <div className={clsx('flex flex-col gap-[12px]', alignClass, className)}>
+    <div className={clsx(
+      'flex flex-col gap-[8px]',
+      alignClass,
+      showLeftBorder && 'border-l border-[var(--glass-border)] pl-[32px]',
+      className
+    )}>
       {/* Label/Eyebrow */}
       {label && (
         <span className={clsx(
-          'font-kodemono font-normal uppercase text-content-secondary',
+          'font-kodemono font-semibold uppercase text-content-secondary',
           styles.label
         )}>
           {label}
@@ -82,7 +91,7 @@ export function SectionHeader({
 
       {/* Title */}
       <h2 className={clsx(
-        'font-audiowide uppercase text-content-primary',
+        'font-audiowide uppercase text-content-primary tracking-[0.3px]',
         styles.title
       )}>
         {title}
