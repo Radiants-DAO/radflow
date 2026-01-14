@@ -1,428 +1,425 @@
 # RadFlow Architecture
 
-## Overview
+RadFlow is a visual design system editor that writes directly to theme package CSS files. It runs locally during development via Claude Code or Cursor.
 
-RadFlow is a **pnpm monorepo platform** for building design systems with visual editing tools. It hosts multiple themes, component libraries, and provides DevTools for visual development — all distributable as npm packages.
+---
+
+## High-Level Structure
 
 ```
-RadFlow Monorepo (Hub)
-    ↓ npm publish
-User Projects (consume packages)
-    ↓ contribute back
-RadFlow Monorepo (gains new themes/components)
+Development Setup (Linked Workspaces)
+======================================
+
+~/dev/
+├── radflow/                    # Core repo (this repo)
+│   ├── packages/
+│   │   ├── devtools/           # @radflow/devtools - Visual editor
+│   │   └── primitives/         # @radflow/primitives - Headless hooks
+│   ├── app/                    # Next.js routes (thin wrappers)
+│   └── pnpm-workspace.yaml     # Links external theme repos
+│
+├── theme-phase/                # Separate repo - Phase theme
+│   ├── package.json            # "name": "@radflow/theme-phase"
+│   ├── radflow.config.json     # DevTools configuration
+│   ├── theme/                  # CSS files (tokens, typography, etc.)
+│   ├── components/             # Styled components using primitives
+│   ├── pages/                  # Page components
+│   └── skills/                 # Theme-specific Claude skills
+│
+└── theme-rad-os/               # Separate repo - RadOS theme
+    └── (same structure)
 ```
 
 ---
 
-## Core Concepts
+## Core Packages
 
-### RadFlow as Platform
+### @radflow/devtools
 
-RadFlow is not just "a component library" — it's a platform that:
+Visual editor that runs in the browser during development.
 
-1. **Hosts multiple themes** - rad-os, solarium, cyberpunk, client-specific
-2. **Hosts multiple component sets** - 25 core UI, theme-specific components
-3. **Provides DevTools** - visual editor that works with any combination
-4. **Enables contribution** - projects build locally, contribute back to the hub
+**Responsibilities:**
+- Parse and display design tokens from active theme
+- Write CSS changes to theme package files
+- Component discovery and preview
+- Typography and font management
+- Theme switching (via globals.css import rewrite)
 
-### Semantic Token Architecture
+**Does NOT deploy publicly.** Consumed as npm dependency by theme repos.
 
-Components use semantic tokens, not brand colors:
+### @radflow/primitives
 
-```tsx
-// CORRECT (semantic - works with any theme):
-className="bg-surface-primary border-edge-primary text-content-primary"
+Headless hooks for complex component behavior.
 
-// WRONG (brand-specific - breaks with other themes):
-className="bg-warm-cloud border-black text-black"
-```
+**Includes:**
+- `useDialog` - Modal behavior, focus trap, escape handling
+- `useSheet` - Side panel variant of dialog
+- `useToast` - Queue management, auto-dismiss timers
+- `useSelect` - Keyboard navigation, filtering
+- `useTabs` - Active state, keyboard nav, ARIA
+- `usePopover` - Positioning, click-outside
+- `useDropdown` - Menu state, submenus
+- `useButton` - Copy state, loading, polymorphic `as`
+- `useAccordion` - Expand/collapse, single/multi mode
+- `useSlider` - Value state, drag handling
 
-This means swapping `@radflow/theme-rad-os` for `@radflow/theme-cyberpunk` changes every component's appearance without touching component code.
+**Themes import these hooks and wrap with their own styling.**
 
 ---
 
-## Three Tiers of Adoption
+## Theme Package Structure
+
+Each theme is a separate git repo that can be linked for development.
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│  TIER 3: Full DevTools Suite                                    │
-│  @radflow/devtools - Visual editor, contribution wizard        │
-├─────────────────────────────────────────────────────────────────┤
-│  TIER 2: Components + Theme                                     │
-│  @radflow/ui + @radflow/components-* - Ready-to-use components │
-├─────────────────────────────────────────────────────────────────┤
-│  TIER 1: Just CSS                                               │
-│  @radflow/theme-* - Design tokens, typography, shadows         │
-└─────────────────────────────────────────────────────────────────┘
+theme-phase/
+├── package.json                 # @radflow/theme-phase
+├── radflow.config.json          # DevTools configuration
+│
+├── theme/                       # CSS source of truth
+│   ├── index.css                # Entry (imports all)
+│   ├── tokens.css               # @theme blocks - colors, shadows, radii
+│   ├── typography.css           # @layer base - element styles
+│   ├── fonts.css                # @font-face declarations
+│   ├── dark.css                 # Color mode overrides
+│   ├── base.css                 # html/body styles
+│   ├── scrollbar.css            # ::-webkit-scrollbar
+│   └── animations.css           # @keyframes
+│
+├── components/
+│   ├── core/                    # 30+ styled components
+│   │   ├── Button.tsx           # Uses usePrimitiveButton + Phase styling
+│   │   ├── Dialog.tsx           # Uses usePrimitiveDialog + Phase styling
+│   │   └── ...
+│   └── landing/                 # Page-specific components
+│       ├── ServiceCard.tsx
+│       ├── NavLink.tsx
+│       └── ...
+│
+├── pages/
+│   ├── landing/                 # Landing page export
+│   │   └── index.tsx
+│   ├── pricing/
+│   └── dashboard/
+│
+├── assets/                      # Theme-specific assets
+│   ├── logos/
+│   ├── icons/
+│   └── avatars/
+│
+├── skills/                      # Theme-specific Claude skills
+│   └── phase-design.md
+│
+└── agents/                      # Theme-specific agents
+    └── phase-compliance.md
 ```
 
-### Tier 1: Just CSS
+---
 
-For developers who want the RadFlow aesthetic with their own components.
+## radflow.config.json
+
+Each theme provides configuration for DevTools.
+
+```json
+{
+  "name": "Phase",
+  "id": "phase",
+
+  "theme": {
+    "root": "./theme",
+    "tokens": "./theme/tokens.css",
+    "typography": "./theme/typography.css",
+    "fonts": "./theme/fonts.css",
+    "dark": "./theme/dark.css"
+  },
+
+  "devtools": {
+    "icons": {
+      "typography": "./assets/icons/typography.svg",
+      "components": "./assets/icons/components.svg",
+      "variables": "./assets/icons/variables.svg"
+    },
+    "fonts": {
+      "heading": "Audiowide",
+      "body": "Outfit",
+      "code": "Kode Mono"
+    },
+    "sref": {
+      "codes": ["sref-phase-001", "sref-phase-002"],
+      "images": "./assets/sref/"
+    }
+  },
+
+  "skills": {
+    "recommended": ["phase-design", "phase-component-create"]
+  }
+}
+```
+
+---
+
+## Development Workflow
+
+### Initial Setup
 
 ```bash
-pnpm add @radflow/theme-rad-os
+# Clone all repos into same parent directory
+mkdir radflow-dev && cd radflow-dev
+git clone git@github.com:org/radflow.git
+git clone git@github.com:org/theme-phase.git
+
+# Install from radflow (links everything)
+cd radflow
+pnpm install
+
+# Start development
+pnpm dev
+```
+
+### pnpm-workspace.yaml
+
+```yaml
+packages:
+  - 'packages/*'
+  # Link external theme repos
+  - '../theme-phase'
+  - '../theme-rad-os'
+```
+
+### Theme Activation
+
+Set environment variable or edit globals.css:
+
+```bash
+# .env.local
+NEXT_PUBLIC_ACTIVE_THEME=phase
 ```
 
 ```css
-/* app/globals.css */
+/* app/globals.css - auto-generated based on env */
 @import "tailwindcss";
-@import "@radflow/theme-rad-os";
+@import "@radflow/theme-phase";
 ```
 
-**What they get:**
-- Brand colors (`--color-sun-yellow`, `--color-warm-cloud`, etc.)
-- Semantic tokens (`--color-surface-primary`, `--color-content-primary`, etc.)
-- Typography scale, font families
-- Shadows, border radius, spacing
-- Dark mode via `.dark` class
+---
 
-### Tier 2: Components + Theme
+## App Router Integration
 
-For developers who want ready-to-use components with customization via tokens.
+Theme pages export components. App router has thin wrappers.
 
-```bash
-pnpm add @radflow/ui @radflow/theme-rad-os
-# Optional: theme-specific components
-pnpm add @radflow/components-rad-os
-```
-
+**Theme package exports:**
 ```tsx
-import { Button, Card, Dialog } from '@radflow/ui'
-import { AppWindow, WindowTitleBar } from '@radflow/components-rad-os'
-```
-
-**Customization options:**
-1. **Props** - variant, size, iconName, etc.
-2. **className overrides** - Tailwind classes
-3. **Token overrides** - Redefine semantic tokens in your CSS
-4. **Theme swap** - Use a different theme package entirely
-5. **Eject** - Copy component source for deep customization
-
-### Tier 3: Full DevTools Suite
-
-For developers who want visual editing, live preview, and AI-assisted workflows.
-
-```bash
-pnpm add @radflow/ui @radflow/theme-rad-os @radflow/devtools
-npx radflow init  # Copies agents + assets
-```
-
-```tsx
-// app/layout.tsx
-import { DevToolsProvider } from '@radflow/devtools'
-
-export default function RootLayout({ children }) {
+// packages/theme-phase/pages/landing/index.tsx
+export default function PhaseLanding() {
   return (
-    <html>
-      <body>
-        <DevToolsProvider>
-          {children}
-        </DevToolsProvider>
-      </body>
-    </html>
-  )
+    <div className="bg-background text-foreground">
+      {/* Full landing page */}
+    </div>
+  );
+}
+```
+
+**App router wrapper:**
+```tsx
+// app/phase/page.tsx
+export { default } from '@radflow/theme-phase/pages/landing';
+```
+
+**App router layout (optional):**
+```tsx
+// app/phase/layout.tsx
+export { metadata } from '@radflow/theme-phase/pages/landing/metadata';
+
+export default function PhaseLayout({ children }) {
+  return children;
 }
 ```
 
 ---
 
-## Package Structure
+## Skills System
 
+### Skill Library
+
+RadFlow maintains a central library of skills in the DevTools AI tab:
+
+| Category | Examples |
+|----------|----------|
+| **Design** | Generate component, Apply design system |
+| **Compliance** | Audit accessibility, Check token usage |
+| **Tools** | Create commit, Review PR |
+
+### Installation Flow
+
+1. User opens DevTools → AI tab
+2. Browse available skills from RadFlow library
+3. Click "Install" on desired skills
+4. Skill is copied to theme's `skills/` directory
+5. Skill persists even if RadFlow is unlinked
+
+### Theme-Specific Skills
+
+Themes can include their own skills:
 ```
-packages/
-├── theme/                      # Base semantic token interface
-├── theme-rad-os/               # Rad OS theme
-│   ├── index.css               # Main entry
-│   ├── tokens.css              # Brand + semantic tokens
-│   └── dark.css                # Dark mode overrides
-│
-├── ui/                         # 25 core components
-│   ├── Accordion.tsx
-│   ├── Alert.tsx
-│   ├── Avatar.tsx              # NEW
-│   ├── Badge.tsx
-│   ├── Breadcrumbs.tsx
-│   ├── Button.tsx
-│   ├── Card.tsx
-│   ├── Checkbox.tsx
-│   ├── ContextMenu.tsx
-│   ├── Dialog.tsx
-│   ├── Divider.tsx
-│   ├── DropdownMenu.tsx
-│   ├── HelpPanel.tsx
-│   ├── Icon.tsx
-│   ├── Input.tsx
-│   ├── Popover.tsx
-│   ├── Progress.tsx
-│   ├── Select.tsx
-│   ├── Sheet.tsx
-│   ├── Skeleton.tsx            # NEW
-│   ├── Slider.tsx
-│   ├── Switch.tsx
-│   ├── Table.tsx               # NEW
-│   ├── Tabs.tsx
-│   ├── Toast.tsx
-│   └── Tooltip.tsx
-│
-├── devtools/                   # Visual editor
-│   ├── DevToolsProvider.tsx
-│   ├── DevToolsPanel.tsx
-│   ├── store/                  # Zustand (11 slices)
-│   │   ├── panelSlice.ts
-│   │   ├── variablesSlice.ts
-│   │   ├── typographySlice.ts
-│   │   ├── assetsSlice.ts
-│   │   ├── clipboardSlice.ts   # NEW
-│   │   ├── componentIdSlice.ts # NEW
-│   │   ├── helpSlice.ts        # NEW
-│   │   ├── statusSlice.ts      # NEW
-│   │   └── textEditSlice.ts    # NEW
-│   ├── tabs/
-│   │   ├── VariablesTab/
-│   │   ├── TypographyTab/
-│   │   ├── ComponentsTab/
-│   │   ├── AssetsTab/
-│   │   └── MockStatesTab/
-│   ├── components/             # 19+ DevTools components
-│   └── lib/
-│       ├── cssParser.ts
-│       ├── componentDiscovery.ts
-│       ├── componentRegistry.ts    # NEW
-│       ├── globalSearchIndex.ts    # NEW
-│       ├── helpRegistry.ts         # NEW
-│       ├── propValueResolver.ts    # NEW
-│       └── searchIndex.ts          # NEW
-│
-└── cli/                        # CLI utilities
-    ├── init                    # Setup agents + assets
-    ├── assets                  # Copy icons/images to public/
-    ├── eject                   # Copy component source locally
-    ├── update                  # Selective sync
-    └── outdated                # Check for updates
+theme-phase/skills/
+├── phase-design.md        # "Generate Phase-styled component"
+└── phase-landing.md       # "Create Phase landing section"
 ```
 
-### Package Responsibilities
-
-| Package | Contains | Writes Files? |
-|---------|----------|---------------|
-| `@radflow/theme` | Base CSS structure, semantic token names | No |
-| `@radflow/theme-*` | Token values, dark mode, theme-specific agents | No |
-| `@radflow/ui` | 25 core React components | No |
-| `@radflow/components-*` | Theme-specific React components | No |
-| `@radflow/devtools` | Visual editor, base agents, contribution wizard | No* |
-| `@radflow/cli` | Init, assets, eject, update commands | Yes (explicit commands only) |
-
-*DevTools can write if optional API route is added for persistence.
+These appear in AI tab when theme is active.
 
 ---
 
-## DevTools
+## Component Architecture
 
-### Tab Overview
-
-| Tab | Purpose | Features |
-|-----|---------|----------|
-| **Variables** | Design tokens | Colors, radius, shadows, color modes |
-| **Typography** | Fonts & styles | Font manager, element styles (h1-h6, p, code) |
-| **Components** | Browse & preview | Auto-discovery, prop editor, live playground |
-| **Assets** | File management | 143 icons, images, logos, drag-drop upload |
-| **Mock States** | Test data | Wallet states, custom presets |
-
-### Interactive Tools
-
-| Tool | Shortcut | Description |
-|------|----------|-------------|
-| Text Edit | `Cmd+Shift+T` | Click any text to edit inline, auto-copies to clipboard |
-| Component ID | `Cmd+Shift+I` | Hover to identify React components, click to copy name |
-| Help Mode | `Cmd+Shift+?` | Hover over any UI element for contextual help |
-| Global Search | — | Search components, variables, and assets |
-| Clipboard History | — | Track copied colors and code snippets |
-
-### Dynamic Component Discovery
-
-DevTools scans and displays components from multiple sources:
-
-```
-Components Tab: [ui] [rad_os] [solarium]
-                 ↑      ↑         ↑
-           npm package  │    local folder
-                   npm package
-```
-
-- **npm packages**: Discovered from `node_modules/@radflow/`
-- **Local folders**: Scanned from `components/[name]/`
-
-### Preview Mode (Default)
-
-DevTools operates in preview mode by default:
-
-1. **Live CSS injection** - Changes apply via JavaScript
-2. **Temporary** - Refresh resets to theme defaults
-3. **Export/Copy** - Generate CSS to paste into your files
-
-### Persistence Mode (Opt-in)
-
-Add the API route to enable saving:
+### Primitives → Themed Components
 
 ```tsx
-// app/api/radflow/route.ts
-export { handler as POST } from '@radflow/devtools/api'
+// @radflow/primitives
+export function useDialog(options) {
+  // Focus trap, escape handling, overlay click
+  // Returns: { isOpen, open, close, triggerProps, dialogProps }
+}
+
+// @radflow/theme-phase/components/core/Dialog.tsx
+import { useDialog } from '@radflow/primitives';
+
+export default function Dialog({ children, ...props }) {
+  const { isOpen, dialogProps } = useDialog(props);
+
+  return (
+    <div
+      {...dialogProps}
+      className="bg-glass-bg border-glass-border backdrop-blur-md"
+    >
+      {children}
+    </div>
+  );
+}
 ```
 
-This enables DevTools to write changes to your project files.
-
----
-
-## Edit Scope Attributes
-
-Components use data attributes to identify edit targets:
-
-| Attribute | Value | Writes To |
-|-----------|-------|-----------|
-| `data-edit-scope` | `layer-base` | `globals.css` → `@layer base { [element-tag] { } }` |
-| `data-edit-scope` | `theme-variables` | `globals.css` → `@theme { }` |
-| `data-edit-scope` | `component-definition` | `/components/*/Component.tsx` |
-| `data-edit-variant` | variant name | Variant-specific styles in Component.tsx |
-| (no attribute) | — | Preview-only, no persistence |
-
-### Examples
+### Component Requirements
 
 ```tsx
-// Typography: edits go to @layer base
-<h1 data-edit-scope="layer-base">Heading 1</h1>
-
-// Component base (affects all variants)
-<Button
-  variant="primary"
-  data-edit-scope="component-definition"
-  data-component="Button"
->
-  Primary
-</Button>
-
-// Component variant (affects only this variant)
-<Button
-  variant="secondary"
-  data-edit-scope="component-definition"
-  data-component="Button"
-  data-edit-variant="secondary"
->
-  Secondary
-</Button>
-```
-
----
-
-## Agent Context
-
-### Base Context (with DevTools)
-
-Every project gets base RadFlow AI context:
-
-```
-.claude/
-├── skills/radflow/           # Component creation, editing
-├── CLAUDE.md                 # Project instructions
-.cursor/
-├── rules/radflow/
-```
-
-### Theme-Specific Context
-
-Themes can include their own AI instructions:
-
-```
-@radflow/theme-solarium/
-└── agents/
-    └── .claude/skills/solarium/
-        └── SKILL.md           # Solarium-specific patterns
-```
-
----
-
-## CLI Commands
-
-```bash
-# Initial setup (copies agents + assets)
-npx radflow init
-
-# Selective updates
-npx radflow update
-npx radflow update --components
-npx radflow update --devtools
-npx radflow update --agents
-
-# Check for updates
-npx radflow outdated
-
-# Copy/update assets only
-npx radflow assets
-
-# Eject components for customization
-npx radflow eject Button Card Dialog
-```
-
----
-
-## Eject Escape Hatch
-
-For deep customization of specific components:
-
-```bash
-npx radflow eject Button Card
-```
-
-Creates:
-```
-components/
-└── radflow/
-    ├── Button.tsx    # You now own this
-    └── Card.tsx      # You now own this
-```
-
-**Behavior:**
-- Ejected components are YOUR code
-- `npm update` won't touch them
-- Non-ejected dependencies stay as package imports
-- Only eject when you truly need deep changes
-
----
-
-## Component Requirements
-
-For components to work in this system:
-
-1. **Use semantic tokens** - `bg-surface-tertiary`, not `bg-sun-yellow`
-2. **Accept className prop** - For Tailwind overrides
-3. **Default export** - Named exports ignored by scanner
-4. **Default prop values** - Required for visual editor
-5. **TypeScript props interface** - Full type safety
-6. **Tree-shakeable** - Unused components don't bloat bundle
-
-```tsx
-// Example: Correct component structure
 interface ButtonProps {
-  variant?: 'primary' | 'secondary'
-  size?: 'sm' | 'md' | 'lg'
-  className?: string
-  children: React.ReactNode
+  variant?: 'primary' | 'secondary';
+  size?: 'sm' | 'md' | 'lg';
+  children: React.ReactNode;
 }
 
 export default function Button({
-  variant = 'primary',
+  variant = 'primary',  // Required: default values for DevTools
   size = 'md',
-  className,
   children
 }: ButtonProps) {
-  return (
-    <button className={cn(
-      'bg-surface-tertiary text-content-primary border-edge-primary',
-      className
-    )}>
-      {children}
-    </button>
-  )
+  // ...
+}
+```
+
+**Rules:**
+1. Default export (DevTools scanner requirement)
+2. Default prop values (visual preview requirement)
+3. TypeScript props interface
+4. Use semantic tokens, never hardcoded colors
+
+---
+
+## Contributing Components to Primitives
+
+When a theme creates a component that would benefit all themes:
+
+1. **Open PR** to radflow repo
+2. **Extract hook logic** into `packages/primitives/src/`
+3. **Add tests** for the primitive
+4. **Update docs** with usage examples
+5. **Theme updates** its component to use the new primitive
+
+---
+
+## Asset Organization
+
+### Shared Assets (in radflow/)
+
+```
+public/assets/
+├── icons/              # System icons (Phosphor-style)
+└── shared/             # Brand-agnostic images
+```
+
+### Theme Assets (in theme repo)
+
+```
+theme-phase/assets/
+├── logos/              # Phase branding
+├── icons/              # Theme-specific icons
+├── avatars/            # Team/user avatars
+├── tokens/             # Crypto token images
+└── sref/               # Midjourney style references
+```
+
+---
+
+## DevTools Theme Awareness
+
+DevTools reads `radflow.config.json` to customize its UI per theme:
+
+| Tab | Theme-Specific |
+|-----|----------------|
+| Variables | Token values from theme CSS |
+| Typography | Font names from config |
+| Components | Discovered from theme package |
+| Mock States | Uses theme semantic tokens |
+| AI | Theme-recommended skills + SREF codes |
+
+**Icon mapping**: DevTools loads icons from paths specified in config. Falls back to neutral icons if not specified.
+
+---
+
+## Write-Lock Enforcement
+
+Only the **active theme** can be edited through DevTools.
+
+```typescript
+// API route check
+const activeTheme = await getCurrentThemeId(); // 'phase'
+if (themeId !== activeTheme) {
+  return Response.json({ error: 'Cannot edit inactive theme' }, { status: 403 });
+}
+```
+
+This prevents accidental edits to wrong theme.
+
+---
+
+## Production Deployment
+
+### Theme Repos Deploy Independently
+
+```bash
+# In theme-phase repo
+pnpm build
+vercel deploy  # or netlify, etc.
+```
+
+### RadFlow Packages Published to npm
+
+```bash
+# In radflow repo
+pnpm --filter @radflow/devtools publish
+pnpm --filter @radflow/primitives publish
+```
+
+### Theme Uses Published Packages
+
+```json
+// theme-phase/package.json (production)
+{
+  "dependencies": {
+    "@radflow/primitives": "^1.0.0"
+  },
+  "devDependencies": {
+    "@radflow/devtools": "^1.0.0"
+  }
 }
 ```
 
@@ -430,15 +427,14 @@ export default function Button({
 
 ## Summary
 
-| Before (File Copying) | After (npm Packages) |
-|-----------------------|----------------------|
-| `npx radtools init` copies files | `pnpm add @radflow/*` |
-| `templates/` folder | `packages/` monorepo |
-| `radtools update` | `npx radflow update` |
-| Merge conflicts on update | No conflicts (source in npm) |
-| Single theme | Multiple themes |
-| No contribution path | Contribution wizard + PR flow |
-| Manual AI setup | Agent context bundled |
-| 22 components | 25 components |
-| 40 icons | 143 icons |
-| npm | pnpm workspaces |
+| Concept | Location | Published |
+|---------|----------|-----------|
+| DevTools | `radflow/packages/devtools` | npm |
+| Primitives | `radflow/packages/primitives` | npm |
+| Theme CSS | `theme-*/theme/` | With theme |
+| Theme Components | `theme-*/components/` | With theme |
+| Theme Pages | `theme-*/pages/` | With theme |
+| Theme Skills | `theme-*/skills/` | With theme |
+| Route Wrappers | `radflow/app/` | Dev only |
+
+RadFlow is the development tool. Themes are the products.

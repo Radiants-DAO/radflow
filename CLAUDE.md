@@ -1,126 +1,120 @@
-# RadFlow Development Rules
+# CLAUDE.md
 
-## Core Principle
+This file provides guidance to Claude Code when working with RadFlow.
 
-**RadFlow is the visual source of truth for all design system changes.**
+## What is RadFlow?
 
-Any modifications to typography, fonts, colors, components, or design tokens MUST be made through RadFlow, not by directly editing source files. Visual changes push directly to source code.
+RadFlow is a visual design system editor that writes directly to theme package CSS files. It runs locally during development and is not deployed publicly.
 
-```
-RadFlow UI  →  Source Files
-  (visual)      (code)
+**See [ARCHITECTURE.md](./ARCHITECTURE.md) for full system design.**
+
+---
+
+## Development Commands
+
+```bash
+# Install dependencies (pnpm monorepo)
+pnpm install
+
+# Development server (Next.js)
+pnpm dev
+
+# Build all packages
+pnpm build
+
+# Build specific package
+pnpm --filter @radflow/devtools build
+
+# Lint
+pnpm lint
 ```
 
 ---
 
-## What RadFlow Manages (DO NOT EDIT DIRECTLY)
-
-| Tab | Reads From | Writes To |
-|-----|------------|-----------|
-| **Variables** | `globals.css` @theme | `globals.css` @theme block |
-| **Typography** | `globals.css` @layer base | `globals.css` @layer base |
-| **Components** | `/components/*/` TSX | Component definition TSX files |
-
-### Files Managed by RadFlow
-
-These sections are managed by RadFlow — do not edit directly:
-- `@theme inline` block (color variables)
-- `@theme` block (design tokens)
-- `@font-face` declarations
-- Typography rules in `@layer base` (h1-h6, p, li, etc.)
-- Component definition files (`/components/*/ComponentName.tsx`)
-
-### Files Safe to Edit Directly
-
-- Base HTML/body styles (outside managed sections)
-- Scrollbar styles (`::-webkit-scrollbar`)
-- Animations (`@keyframes`)
-- Custom utility classes
-- Any CSS not parsed by the cssParser
-
----
-
-## Edit Scope Attributes
-
-Components use data attributes to identify edit targets. **Attributes must be directly on editable elements.**
-
-| Attribute | Value | Writes To |
-|-----------|-------|-----------|
-| `data-edit-scope` | `layer-base` | `globals.css` → `@layer base { [element-tag] { } }` |
-| `data-edit-scope` | `theme-variables` | `globals.css` → `@theme { }` |
-| `data-edit-scope` | `component-definition` | `/components/*/Component.tsx` (requires `data-component`) |
-| `data-edit-variant` | variant name | Variant-specific styles in Component.tsx |
-| (no attribute) | - | Preview-only, no persistence |
-
-### Decision Logic
+## Repository Structure
 
 ```
-IF data-edit-scope="layer-base":
-  → Update @layer base { [element-tag] { } } in globals.css
-  → Changes persist immediately
+radflow/                        # Core repo
+├── packages/
+│   ├── devtools/               # @radflow/devtools - Visual editor
+│   └── primitives/             # @radflow/primitives - Headless hooks (WIP)
+├── app/                        # Next.js routes (thin wrappers to theme pages)
+│   ├── api/devtools/           # DevTools API routes
+│   └── globals.css             # Theme import ONLY
+└── pnpm-workspace.yaml         # Links external theme repos
 
-IF data-edit-scope="theme-variables":
-  → Update @theme { } in globals.css
-  → Requires "Save to CSS" button click
-
-IF data-edit-scope="component-definition":
-  → Read data-component to find target file
-  → IF data-edit-variant exists:
-      → Update variant-specific styles
-  → ELSE:
-      → Update base styles (affects all variants)
-  → Changes persist immediately
-
-IF no data-edit-scope:
-  → Preview-only, no persistence
-```
-
-### Examples
-
-```tsx
-// Typography: edits go to @layer base
-<h1 data-edit-scope="layer-base">Heading 1</h1>
-
-// Component base (affects all variants)
-<Button
-  variant="primary"
-  data-edit-scope="component-definition"
-  data-component="Button"
->
-  Primary
-</Button>
-
-// Component variant (affects only this variant)
-<Button
-  variant="secondary"
-  data-edit-scope="component-definition"
-  data-component="Button"
-  data-edit-variant="secondary"
->
-  Secondary
-</Button>
-
-// Preview-only (no editing power)
-<Button variant="primary" size="lg">
-  Large Button
-</Button>
+# Theme repos (separate, linked via pnpm workspace)
+theme-phase/                    # @radflow/theme-phase
+theme-rad-os/                   # @radflow/theme-rad-os
 ```
 
 ---
 
-## When Modifying RadFlow
+## Linked Workspaces
 
-1. **Never treat preview files as static documentation** — they are the editing interface
-2. **All visual changes must have a write-back path** — if you add editable UI, add the API to persist it
-3. **Data attributes are required** — any editable element needs targeting attributes
-4. **Attributes go on elements, not containers** — no DOM traversal, direct targeting only
+Themes are separate git repos linked during development:
+
+```yaml
+# pnpm-workspace.yaml
+packages:
+  - 'packages/*'
+  - '../theme-phase'
+  - '../theme-rad-os'
+```
+
+Clone all repos into same parent, run `pnpm install` from radflow/.
+
+---
+
+## What DevTools Writes
+
+| Edit Type | Writes To |
+|-----------|-----------|
+| Variables (colors, shadows) | `theme-*/theme/tokens.css` |
+| Typography | `theme-*/theme/typography.css` |
+| Fonts | `theme-*/theme/fonts.css` |
+| Color modes | `theme-*/theme/dark.css` |
+| Theme switching | `app/globals.css` (import line only) |
+
+**Write-lock**: Only the active theme can be edited. Writes to inactive themes return 403.
+
+---
+
+## Theme Package Structure
+
+```
+theme-phase/
+├── radflow.config.json         # DevTools configuration
+├── theme/                      # CSS source of truth
+│   ├── tokens.css              # @theme blocks
+│   ├── typography.css          # @layer base
+│   └── ...
+├── components/
+│   ├── core/                   # Styled components
+│   └── landing/                # Page-specific components
+├── pages/                      # Page exports
+├── skills/                     # Theme-specific Claude skills
+└── assets/                     # Theme-specific assets
+```
+
+---
+
+## globals.css
+
+Contains ONLY the theme import:
+
+```css
+@import "tailwindcss";
+@import "@radflow/theme-phase";
+```
+
+**DO NOT add tokens, typography, or styles here.** They belong in theme packages.
 
 ---
 
 ## Component Requirements
 
 ```tsx
-// From @radflow/ui or /components/ui/Button.tsx
 interface ButtonProps {
   variant?: 'primary' | 'secondary';
   size?: 'sm' | 'md' | 'lg';
@@ -128,56 +122,52 @@ interface ButtonProps {
 }
 
 export default function Button({
-  variant = 'primary',  // REQUIRED: Default values for visual editor
+  variant = 'primary',  // Required: default values for DevTools
   size = 'md',
   children
 }: ButtonProps) {
-  return <button className="...">{children}</button>;
+  return <button className="bg-primary text-foreground">{children}</button>;
 }
 ```
 
 **Rules:**
-1. Default export (named exports ignored by scanner)
-2. Default prop values (visual editor requirement)
+1. Default export (DevTools scanner requirement)
+2. Default prop values (preview requirement)
 3. TypeScript props interface
-4. Location: `/components/` (not `/app/components/`)
-5. Use semantic tokens (`bg-surface-primary`), never hardcoded colors
+4. Semantic tokens only, never hardcoded colors
 
 ---
 
-## Package Structure
+## Semantic Tokens
 
-RadFlow is a pnpm monorepo with 5 packages:
+### Phase Theme (Dark-first, Web3)
 
-| Package | Description |
-|---------|-------------|
-| `@radflow/theme` | Base semantic token interface |
-| `@radflow/theme-rad-os` | RadOS theme (yellow/cream/black) |
-| `@radflow/ui` | 25 core components with tree-shaking |
-| `@radflow/devtools` | Visual editor with preview mode |
-| `@radflow/cli` | Setup utilities (init, assets, eject, update) |
+```css
+--color-background: var(--color-black);
+--color-foreground: var(--color-cream);
+--color-primary: var(--color-gold);
+--glass-bg: rgba(243, 238, 217, 0.05);
+--glass-border: rgba(243, 238, 217, 0.2);
+```
+
+### RadOS Theme (Light-first, Retro)
+
+```css
+--color-background: var(--color-warm-cloud);
+--color-foreground: var(--color-black);
+--color-primary: var(--color-sun-yellow);
+```
 
 ---
 
-## CLI Commands
+## API Routes
 
-```bash
-# Initialize (copies agents + assets)
-npx radflow init
+All `/api/devtools/*` routes are development-only:
 
-# Update to latest (selective updates)
-npx radflow update
-npx radflow update --components
-npx radflow update --devtools
-
-# Check for available updates
-npx radflow outdated
-
-# Update assets only
-npx radflow assets
-
-# Eject components for customization
-npx radflow eject Button Card Dialog
+```typescript
+if (process.env.NODE_ENV !== 'development') {
+  return Response.json({ error: 'Not available' }, { status: 403 });
+}
 ```
 
 ---
@@ -187,8 +177,47 @@ npx radflow eject Button Card Dialog
 | Shortcut | Action |
 |----------|--------|
 | `Cmd+Shift+K` | Toggle DevTools panel |
-| `Cmd+Shift+T` | Toggle Text Edit mode |
+| `Cmd+Shift+T` | Toggle Text Edit mode (clipboard only) |
 | `Cmd+Shift+I` | Toggle Component ID mode |
-| `Cmd+Shift+?` | Toggle Help mode |
-| `1-5` | Quick-switch between tabs |
+| `1-5` | Quick-switch tabs |
 | `Esc` | Close modals / Exit modes |
+
+---
+
+## Known Limitations
+
+1. **Component editing not implemented**: `data-edit-scope="component-definition"` is documented but CSS-to-TSX write is not built
+2. **Text Edit mode**: Copies to clipboard only, does not persist to files
+3. **Skills**: Must be installed manually from AI tab to theme's `skills/` directory
+
+---
+
+## Path Aliases
+
+```typescript
+@/*                  → ./
+@radflow/devtools    → packages/devtools/src
+@radflow/primitives  → packages/primitives/src
+```
+
+---
+
+## Contributing to Primitives
+
+When creating reusable component logic:
+
+1. Build in theme first (working implementation)
+2. Extract hook to `packages/primitives/src/`
+3. Submit PR to radflow repo
+4. Update theme to use primitive
+
+---
+
+## Icons
+
+Both themes use **Phosphor Icons** (`@phosphor-icons/react`):
+
+```tsx
+import { ArrowRight } from '@phosphor-icons/react';
+<ArrowRight size={24} />
+```

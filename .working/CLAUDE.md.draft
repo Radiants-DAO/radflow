@@ -1,0 +1,342 @@
+# CLAUDE.md (DRAFT v2 - Based on Implementation Review)
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Development Commands
+
+```bash
+# Install dependencies (pnpm monorepo)
+pnpm install
+
+# Development server (Next.js 16)
+pnpm dev
+
+# Build all packages
+pnpm build
+
+# Build/watch individual packages
+pnpm --filter @radflow/ui build
+pnpm --filter @radflow/devtools dev
+
+# Lint
+pnpm lint
+```
+
+## Architecture Overview
+
+RadFlow is a pnpm monorepo with a visual design system editor (DevTools) that writes directly to theme package CSS files.
+
+```
+radflow/
+├── app/                          # Next.js 16 App Router
+│   ├── api/devtools/themes/      # Theme-scoped API routes
+│   ├── globals.css               # Theme import ONLY
+│   └── layout.tsx                # DevToolsProvider wrapper
+├── packages/
+│   ├── theme-rad-os/             # RadOS theme (light-first, retro pixel)
+│   ├── theme-phase/              # Phase theme (dark-first, Web3 glass) ← ACTIVE
+│   ├── ui/                       # @radflow/ui - shared component library
+│   └── devtools/                 # @radflow/devtools - visual editor
+└── components/                   # Project-level components
+```
+
+### Path Aliases
+
+```typescript
+@/*                  → ./
+@radflow/ui          → packages/ui/src
+@radflow/devtools    → packages/devtools/src
+```
+
+---
+
+## Theming Architecture
+
+### Theme Packages are the Source of Truth
+
+Each theme is a self-contained npm package in `packages/theme-{name}/`:
+
+```
+packages/theme-phase/
+├── index.css          # Entry (imports all CSS)
+├── tokens.css         # @theme blocks - colors, shadows, radii
+├── typography.css     # @layer base - element typography
+├── fonts.css          # @font-face declarations
+├── dark.css           # Color mode overrides (.dark, .light)
+├── base.css           # html/body styles
+├── scrollbar.css      # ::-webkit-scrollbar
+├── animations.css     # @keyframes
+└── components/        # Theme-specific components (40+)
+    ├── core/          # Button, Card, Input, Dialog, etc.
+    └── landing/       # Theme-specific page components
+```
+
+### globals.css Contains ONLY the Theme Import
+
+```css
+/* app/globals.css - entire file contents */
+@import "tailwindcss";
+@import "@radflow/theme-phase";
+```
+
+**DO NOT add tokens, typography, or styles to globals.css** - they belong in theme packages.
+
+### What DevTools Actually Writes
+
+| Edit Type | API Route | Writes To | Status |
+|-----------|-----------|-----------|--------|
+| Variables (colors, shadows) | `POST /api/devtools/themes/[themeId]/write-css` | `packages/theme-{id}/tokens.css` | ✅ Implemented |
+| Typography | Same | `packages/theme-{id}/typography.css` | ✅ Implemented |
+| Fonts | Same | `packages/theme-{id}/fonts.css` | ✅ Implemented |
+| Color modes | Same | `packages/theme-{id}/dark.css` | ✅ Implemented |
+| Theme switching | `POST /api/devtools/themes/switch` | `app/globals.css` (import line only) | ✅ Implemented |
+| Component styles | — | — | ❌ NOT IMPLEMENTED |
+
+**Important:** `data-edit-scope="component-definition"` is documented but NOT implemented. Component TSX files cannot be edited through DevTools. Text editing via `Cmd+Shift+T` copies to clipboard only.
+
+### Write-Lock Enforcement
+
+Only the **active theme** (currently imported in globals.css) can be edited. Writes to inactive themes return 403.
+
+---
+
+## Two Theme Systems
+
+This codebase has two distinct themes with **completely different design languages**:
+
+### Phase Theme (Currently Active)
+
+Dark-first Web3 aesthetic with glass effects.
+
+| Property | Value |
+|----------|-------|
+| Color Mode | Dark-first (cream on black) |
+| Background | Black `#0f0c0e` |
+| Text | Cream `#f3eed9` |
+| Primary | Gold `#fce184` |
+| Accent | Blue `#80d0ff` |
+| Heading Font | Audiowide (futuristic, UPPERCASE) |
+| Body Font | Outfit (geometric sans) |
+| Code Font | Kode Mono |
+| Shadow Style | Minimal/none, glow effects for focus |
+| Corners | Sharp (0-4px radius) |
+| Signature | Glass effects (`--glass-bg-*`, `--glass-border-*`) |
+
+**Phase Semantic Tokens:**
+```css
+--color-background: var(--color-black);
+--color-foreground: var(--color-cream);
+--color-card: var(--glass-bg);
+--color-primary: var(--color-gold);
+--color-border: var(--glass-border);
+```
+
+**Phase Glass Utilities:**
+```css
+--glass-bg: rgba(243, 238, 217, 0.05);
+--glass-border: rgba(243, 238, 217, 0.2);
+--glass-bg-blue: rgba(128, 208, 255, 0.1);
+--glass-bg-purple: rgba(153, 163, 255, 0.1);
+```
+
+### RadOS Theme
+
+Light-first retro aesthetic inspired by System 7.
+
+| Property | Value |
+|----------|-------|
+| Color Mode | Light-first (black on cream) |
+| Background | Warm Cloud `#FEF8E2` |
+| Text | Black `#0F0E0C` |
+| Primary | Sun Yellow `#FCE184` |
+| Accent | Sky Blue `#95BAD2` |
+| Heading Font | Joystix (monospace, retro) |
+| Body Font | Mondwest (humanist, warm) |
+| Shadow Style | Hard pixel offsets (no blur) |
+| Corners | Hierarchical (16px → 8px → 4px → 2px) |
+| Signature | Lift-and-press interactions |
+
+**RadOS Semantic Tokens:**
+```css
+--color-background: var(--color-sun-yellow);
+--color-card: var(--color-warm-cloud);
+--color-primary: var(--color-sun-yellow);
+--color-secondary: var(--color-black);
+--color-border: var(--color-black);
+```
+
+**RadOS Interaction Pattern:**
+```tsx
+className={cn(
+  "shadow-btn",
+  "hover:-translate-y-0.5 hover:shadow-btn-hover",
+  "active:translate-y-0.5 active:shadow-none",
+  "focus:ring-2 focus:ring-edge-focus",
+  "transition-all duration-200"
+)}
+```
+
+---
+
+## Component Architecture
+
+### Component Locations
+
+| Location | Purpose | Editable via DevTools |
+|----------|---------|----------------------|
+| `packages/theme-{name}/components/` | Theme-specific components | Discovery only (no write) |
+| `packages/ui/src/` | Shared component library | No |
+| `/components/` | Project-level components | No |
+
+### Component Requirements
+
+Components must follow these patterns for DevTools discovery:
+
+```tsx
+interface ButtonProps {
+  variant?: 'primary' | 'secondary';
+  size?: 'sm' | 'md' | 'lg';
+  children: React.ReactNode;
+}
+
+export default function Button({
+  variant = 'primary',  // REQUIRED: default values for scanner
+  size = 'md',
+  children
+}: ButtonProps) {
+  return (
+    <button className="bg-primary text-foreground rounded-sm">
+      {children}
+    </button>
+  );
+}
+```
+
+**Requirements:**
+1. Default export (named exports ignored by scanner)
+2. Default prop values (scanner requirement)
+3. TypeScript props interface
+4. Theme semantic tokens—never hardcoded colors
+
+### Icons
+
+Both themes use **Phosphor Icons** (`@phosphor-icons/react`):
+- RadOS: Bold style
+- Phase: Regular style
+
+```tsx
+import { ArrowRight } from '@phosphor-icons/react';
+<ArrowRight size={24} />
+```
+
+---
+
+## Design Token Architecture
+
+### Tailwind v4 @theme Blocks
+
+Tokens are defined in theme package `tokens.css`:
+
+```css
+@theme inline {
+  /* Brand colors (internal reference) */
+  --color-cream: #f3eed9;
+  --color-gold: #fce184;
+  --color-black: #0f0c0e;
+}
+
+@theme {
+  /* Tailwind generates utilities: bg-cream, text-gold, etc. */
+  --color-cream: #f3eed9;
+  --color-gold: #fce184;
+
+  /* Semantic aliases */
+  --color-background: var(--color-black);
+  --color-foreground: var(--color-cream);
+
+  /* Spacing */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+
+  /* Shadows */
+  --shadow-btn-hover: 0 0 8px rgba(128,208,255,0.3);
+}
+```
+
+### Usage
+
+```tsx
+// Use semantic tokens from active theme
+className="bg-background text-foreground border-border"
+
+// Never hardcode colors
+className="bg-[#f3eed9]"  // ❌ Wrong
+```
+
+---
+
+## Claude Skills
+
+The codebase includes specialized skills in `.claude/skills/`:
+
+| Skill | Purpose |
+|-------|---------|
+| `radflow-design` | Generate RadOS-styled UI components |
+| `radflow-compliance` | Audit code for design system violations |
+| `radflow-component-create` | Create components with DevTools integration |
+| `radflow-figma-sync` | Import design tokens from Figma |
+
+Skills are invoked via `/skill-name` in Claude Code.
+
+---
+
+## API Routes Security
+
+All `/app/api/devtools/*` routes are development-only:
+
+```typescript
+if (process.env.NODE_ENV !== 'development') {
+  return NextResponse.json({ error: 'Not available' }, { status: 403 });
+}
+```
+
+---
+
+## Keyboard Shortcuts (DevTools)
+
+| Shortcut | Action |
+|----------|--------|
+| `Cmd+Shift+K` | Toggle DevTools panel |
+| `Cmd+Shift+T` | Toggle Text Edit mode (clipboard only) |
+| `Cmd+Shift+I` | Toggle Component ID mode |
+| `1-5` | Quick-switch tabs |
+| `Esc` | Close modals / Exit modes |
+
+---
+
+## Known Documentation vs Implementation Gaps
+
+The following are documented but NOT fully implemented:
+
+1. **`data-edit-scope="component-definition"`** - Components are discovered but styles cannot be written back to TSX files
+2. **Text Edit mode** - Copies changes to clipboard, does NOT persist to files
+3. **CLI commands** - May use `radtools` prefix instead of `radflow`
+
+---
+
+## REVIEW NOTES
+
+### Changes from Previous Draft:
+- ✅ Added Phase theme documentation (was missing entirely)
+- ✅ Corrected semantic token names to match actual implementation
+- ✅ Marked component editing as NOT IMPLEMENTED
+- ✅ Added glass effect documentation for Phase
+- ✅ Updated component count (40+ not 25)
+- ✅ Added Phosphor icons documentation
+- ✅ Added skills reference
+- ✅ Added known gaps section
+
+### Still Need Verification:
+- CLI command prefix (`radflow` vs `radtools`)
+- Exact component count per theme
+- Which semantic tokens are shared vs theme-specific
