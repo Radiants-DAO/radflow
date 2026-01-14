@@ -2,289 +2,231 @@
 
 ## Purpose
 
-The Typography Editor manages text styling across the design system. It provides visual control over font families, sizes, weights, line heights, and spacing for all typographic elements, with changes persisting to the typography source files.
+The Typography Editor provides a styleguide view of all HTML text elements and a Properties Panel for quick edits. It's where designers define how base HTML elements look across the entire theme.
+
+**Typography Editor owns:**
+- HTML element base styles (h1-h6, p, a, li, etc.)
+- Font management (add/link/upload fonts)
+- Font assignments (which font for headings vs body)
+
+**What it doesn't own:**
+- Component-specific text styles (Component Browser)
+- Design tokens like colors (Variables Editor)
+- Arbitrary inline styles (not allowed — prompt for custom classes)
 
 ---
 
-## Typography Scale
+## Styleguide View
 
-### Heading Hierarchy
-Semantic heading levels with distinct visual treatments.
+### HTML Elements
+All styleable text elements displayed as a living styleguide.
 
-- **H1** — Page titles, hero text, primary headings
-- **H2** — Section headings, major divisions
-- **H3** — Subsection headings, card titles
-- **H4** — Group headings, list titles
-- **H5** — Minor headings, labels with emphasis
-- **H6** — Smallest headings, overlines, captions
-
-Each level maintains clear visual hierarchy while respecting accessibility requirements for heading structure.
-
-### Body Text
-Standard text elements for content.
-
-- **Paragraph (p)** — Primary body text
-- **List items (li)** — Ordered and unordered list content
-- **Links (a)** — Interactive text with distinct styling
-- **Labels** — Form labels and UI text
-- **Captions** — Supporting text, image captions
-
-### Display Text
-Large-format text for impact.
-
-- **Display Large** — Hero sections, landing pages
-- **Display Medium** — Feature callouts
-- **Display Small** — Emphasized sections
-
----
-
-## Font Management
-
-### Font Families
-Control over typeface selection for different purposes.
-
-**Font Categories:**
-- **Heading Font** — Used for all heading levels
-- **Body Font** — Used for paragraphs and general text
-- **Mono Font** — Used for code and technical content
-- **Display Font** — Optional, for large display text
-
-### Font Sources
-Fonts can come from multiple sources.
-
-**System Fonts:**
-- Pre-installed operating system fonts
-- No loading delay, maximum compatibility
-- Limited design options
-
-**Web Fonts:**
-- Google Fonts, Adobe Fonts, other CDN sources
-- Wide selection, consistent cross-platform
-- Requires network request
-
-**Custom Fonts:**
-- Self-hosted font files
-- Full control over licensing and availability
-- Uploaded and managed within RadFlow
-
-### Font Upload
-Adding custom fonts to the design system.
-
-**Behavior:**
-- Upload font files (woff, woff2, ttf, otf)
-- Specify font family name
-- Define font weights available
-- Indicate style variants (normal, italic)
-- System generates appropriate font-face declarations
-
-### Font Preview
-Fonts are previewed with actual design system text.
-
-**Behavior:**
-- Sample text shows each available weight
-- Preview updates when switching fonts
-- Side-by-side comparison available
-- Shows how font renders at various sizes
-
----
-
-## Style Properties
-
-### Size
-Font size controls with responsive scaling.
-
-**Properties:**
-- Base size value
-- Fluid scaling range (min and max)
-- Viewport-relative scaling factor
-- Preview at multiple viewport widths
-
-### Weight
-Font weight selection from available options.
-
-**Properties:**
-- Numeric weight value (100-900)
-- Named weight mapping (light, regular, medium, bold)
-- Weight constrained to available font weights
-- Fallback behavior for unavailable weights
-
-### Line Height
-Vertical spacing between lines of text.
-
-**Properties:**
-- Unitless ratio (preferred: 1.5)
-- Absolute value option
-- Tighter for headings, looser for body text
-- Affects readability and visual density
-
-### Letter Spacing
-Horizontal space between characters.
-
-**Properties:**
-- Em-relative values
-- Tighter for large text, normal for body
-- Affects readability and visual character
-
-### Text Transform
-Case transformation options.
-
-**Options:**
-- None (preserve original case)
-- Uppercase (all capitals)
-- Lowercase (all lowercase)
-- Capitalize (first letter of each word)
-
----
-
-## Fluid Typography
-
-### Responsive Scaling
-Typography that scales smoothly across viewport sizes.
-
-**Concept:**
-- Minimum size at smallest viewport
-- Maximum size at largest viewport
-- Smooth interpolation between
-- No jarring breakpoint jumps
-
-### Scale Configuration
-Controls for fluid behavior.
-
-**Parameters:**
-- Minimum viewport width (where min size applies)
-- Maximum viewport width (where max size applies)
-- Minimum font size
-- Maximum font size
-- Easing curve (linear or custom)
-
-### Scale Preview
-Visualization of scaling behavior.
-
-**Features:**
-- Slider to simulate viewport width
-- Real-time size display at each width
-- Graph showing scale curve
-- Compare multiple elements simultaneously
-
----
-
-## Editing Experience
+| Element | Description |
+|---------|-------------|
+| `body` | Base font, size, color for all pages |
+| `h1` - `h6` | Heading hierarchy |
+| `p` | Paragraph text |
+| `a` | Links (includes hover, visited states) |
+| `ul`, `ol` | List containers |
+| `li` | List items |
+| `strong` | Bold/important text |
+| `em` | Italic/emphasized text |
+| `blockquote` | Quoted text blocks |
+| `code` | Inline code |
+| `pre` | Code blocks |
+| `label` | Form labels |
+| `figcaption` | Image/figure captions |
 
 ### Live Preview
-Typography changes preview immediately on actual content.
+Each element renders with actual theme styles.
 
-**Behavior:**
-- Edit heading → all headings on page update
-- Changes reflect across all matching elements
-- Preview shows multiple instances for context
-- Scroll through page while editing
+**Display:**
+```
+H1 Heading
+═══════════════════════════════════
 
-### Sample Text Display
-Each typography level shows representative sample text.
+H2 Heading
+───────────────────────────────────
 
-**Features:**
-- Default sample text for each element type
-- Custom sample text option
-- Multiple paragraphs for body text
-- Various lengths to show line breaking
+H3 Heading
 
-### Property Panels
-Grouped controls for related properties.
+Paragraph text that shows how body copy looks.
+This should be long enough to demonstrate line
+height and reading comfort.
 
-**Organization:**
-- Font selection panel
-- Size and scale panel
-- Spacing panel (line height, letter spacing)
-- Style panel (weight, transform)
+• List item one
+• List item two
 
-### Inline Editing
-Click-to-edit for quick adjustments.
+Link text
 
-**Behavior:**
-- Click a property value to edit
-- Slider controls for numeric values
-- Dropdown for enumerated options
-- Enter to commit, Escape to cancel
+**Strong text** and *emphasized text*
+
+> Blockquote showing quoted text
+
+`inline code`
+```
+
+### Click to Select
+Click any element in styleguide → Properties Panel shows its styles.
 
 ---
 
-## Hierarchy Visualization
+## Properties Panel
 
-### Scale Relationship
-Visual display of the complete type scale.
+### Context-Aware Controls
+When an element is selected, show relevant quick-edit controls.
 
-**Features:**
-- All levels displayed together
-- Clear size progression visible
-- Ratio between levels shown
-- Identify gaps or inconsistencies
+**For Text Elements (h1-h6, p, etc.):**
 
-### Contrast with Background
-Typography previewed against various backgrounds.
+| Property | Control | Options |
+|----------|---------|---------|
+| Font family | Dropdown | Available fonts |
+| Font size | Dropdown | From scale (xs, sm, base, lg, xl) |
+| Font weight | Dropdown | Available weights (400, 500, 700) |
+| Line height | Dropdown | From scale (tight, normal, relaxed) |
+| Letter spacing | Dropdown | From scale (tight, normal, wide) |
+| Text align | Buttons | `[L] [C] [R] [J]` |
+| Text transform | Buttons | `[Aa] [AA] [aa]` |
+| Color | Token picker | Content tokens only |
 
-**Combinations:**
-- Text on surface-primary
-- Text on surface-secondary
-- Inverse text on dark backgrounds
-- Accent text colors
+**For Links (a):**
+- Same as above, plus:
+- Text decoration toggle (underline on/off)
+- Hover state section
+
+**For Lists (ul, ol):**
+- List style (disc, decimal, none)
+
+**For Code (code, pre):**
+- Background (surface tokens)
+- Font family (mono fonts)
+
+### Tag Conversion
+Change element type in Properties Panel or via right-click on page.
+
+**Dropdown:**
+```
+Element: [h1 ▼]
+         ├─ h1
+         ├─ h2
+         ├─ h3
+         ├─ p
+         └─ span
+```
+
+**Behavior:**
+- Select new tag
+- Source file updates
+- Inherits new tag's base styles
+- Clean conversion (no style preservation)
+
+### What's NOT in Properties Panel
+
+**Not Available:**
+- Arbitrary pixel values (use scale)
+- Custom hex colors (use tokens)
+- Inline style overrides
+- Custom margins/padding
+
+**Want custom styling?** → Prompt the agent to create a proper class.
+
+---
+
+## Font Manager
+
+### Available Fonts
+View fonts currently in theme.
+
+**Display:**
+```
+FONTS
+─────────────────────────
+Joystix Monospace
+  Weights: 400
+
+Mondwest
+  Weights: 400, 700
+
+[+ Add Font]
+```
+
+### Add Font
+
+**Link (Google Fonts, CDN):**
+1. Click [+ Add Font]
+2. Select "Link from URL"
+3. Paste URL
+4. Font available in dropdowns
+
+**Upload (Local files):**
+1. Click [+ Add Font]
+2. Select "Upload files"
+3. Drop .woff2, .woff, .ttf files
+4. Name the font family
+5. Assign weights to files
+
+### Font Roles
+Which fonts are used where.
+
+```
+Headings:  [Joystix ▼]
+Body:      [Mondwest ▼]
+Mono:      [Joystix ▼]
+```
+
+Changing role updates all elements using that role.
+
+---
+
+## Direct Text Editing
+
+### On-Page Editing
+Edit text content directly on the canvas.
+
+**Behavior:**
+1. Double-click text element
+2. Element becomes editable
+3. Edit text content
+4. Click away or Enter to save
+5. Changes write to source file
+
+### Tag Conversion on Page
+Right-click text element → change tag type.
+
+**Behavior:**
+- Select new tag from context menu
+- Element converts in source
+- Picks up new tag's base styles
 
 ---
 
 ## Persistence
 
-### What Gets Saved
-Typography changes persist to specific locations.
+### Where Styles Save
 
-**Saved Properties:**
-- Font family assignments
-- Size values (including fluid definitions)
-- Weight values
-- Line height values
-- Letter spacing values
-- Text transform rules
-
-### Target Locations
-Different properties save to appropriate files.
-
-**Destinations:**
-- Element styles → base layer definitions
-- Font face declarations → font configuration
-- Font assignments → typography configuration
-- Custom fonts → asset directory
+| Change | Destination |
+|--------|-------------|
+| Element styles | `@layer base { h1 { } }` in typography.css |
+| Font faces | `@font-face { }` in fonts.css |
+| Font files | Theme assets directory |
 
 ### Change Tracking
-Typography modifications tracked like other changes.
-
-**Behavior:**
-- Pending indicator on modified properties
-- Total pending count in tab header
-- Save all commits all typography changes
-- Reset discards all pending typography changes
+- Pending changes indicated
+- Save commits all changes
+- Reset discards changes
 
 ---
 
 ## Ideal Behaviors
 
-### Visual Type Scale Generator
-Given a base size and scale ratio, automatically generate a harmonious type scale for all heading levels.
+### Font Preview
+Preview fonts before applying.
 
-### Accessibility Checking
-Automatic verification that type sizes meet minimum accessibility requirements. Warnings for sizes below recommended minimums.
+### Weight Detection
+Auto-detect weights from uploaded font files.
 
-### Font Pairing Suggestions
-Based on selected heading font, suggest complementary body fonts that pair well typographically.
+### Contrast Preview
+Show contrast ratio when changing text colors.
 
-### Performance Preview
-Indicate font file sizes and estimated loading impact. Suggest system font alternatives for performance-critical situations.
-
-### Character Set Preview
-Show available characters in selected font. Identify missing glyphs for required languages.
-
-### Vertical Rhythm Tools
-Calculate and visualize baseline grid alignment. Suggest line-height and spacing values that maintain consistent vertical rhythm.
-
-### Responsive Testing
-Preview typography at common device breakpoints. Side-by-side comparison of mobile, tablet, desktop rendering.
-
-### Export Options
-Export type scale as design tokens, CSS custom properties, or Tailwind configuration. Share typography decisions across projects.
+### Usage Indicators
+Show which elements use each font. Identify unused fonts.
