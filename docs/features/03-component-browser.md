@@ -263,3 +263,64 @@ Check component accessibility. ARIA compliance. Keyboard navigation. Color contr
 
 ### Documentation Generation
 Auto-generate component docs. Props table. Usage examples. Export as markdown.
+
+---
+
+## Research Notes
+
+### Complexity Assessment
+**High** — TypeScript/TSX parsing and props extraction is technically complex.
+
+### Research Required
+
+**TSX Parsing in Rust**
+- SWC for TypeScript/JSX parsing
+- Extracting props interfaces from TypeScript
+- Detecting default export components
+- Finding variant/size prop enumerations
+
+**React Component Introspection**
+- How to detect component name from file
+- Extracting default prop values
+- Compound component detection (Card, Card.Header, etc.)
+
+**Live Component Rendering**
+- Rendering components in isolation (Storybook-style)
+- Handling component dependencies
+- Props playground implementation
+
+### Search Terms
+```
+"swc typescript ast rust"
+"swc parse props interface"
+"typescript interface extraction ast"
+"react component introspection"
+"storybook component isolation"
+"react component props playground"
+```
+
+### Rust Backend Integration
+
+| Module | Purpose |
+|--------|---------|
+| TSX Parser | Parse component files, extract metadata |
+| Props Extractor | Find TypeScript interface, extract prop definitions |
+| Component Index | Build searchable index of all components |
+| File Watcher | Update index when components change |
+
+**Key Crate:** `swc_ecma_parser` for TypeScript/JSX parsing
+
+**Commands Needed:**
+- `scan_components(theme_path)` → List of component metadata
+- `parse_component(path)` → Full component info (props, variants, etc.)
+- `get_component_source(name)` → Source code for preview
+
+### Technical Challenges
+1. **Props Interface Extraction** — Need to parse TypeScript interfaces, handle union types (variant: 'primary' | 'secondary'), extract default values
+2. **Default Export Detection** — Components must use default export, need to identify the exported component
+3. **Variant Detection** — Find `variant` prop, extract possible values from union type
+
+### Open Questions
+- How to handle components that import other components?
+- Support for styled-components or CSS-in-JS?
+- Manifest file: JSON schema or inferred from code?

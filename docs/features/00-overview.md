@@ -63,3 +63,13 @@ If a feature cannot determine the correct target, it fails visibly with clear gu
 
 ### Undo Everything
 No action is permanent until explicitly saved. Even after saving, the source control integration allows reverting any change. Users should feel safe to experiment.
+
+---
+
+## Research Notes
+
+### Research Required
+**None** — This is an architectural overview document. Individual features have their own research sections.
+
+### Rust Backend Integration
+**None** — This is an index file. See `10-tauri-architecture.md` for backend architecture.

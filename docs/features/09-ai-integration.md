@@ -177,3 +177,97 @@ Post-MVP consideration for built-in AI capabilities.
 - Component ID clipboard format
 - Prompts tab/library
 - SREF codes in themes
+
+---
+
+## Research Notes
+
+### Complexity Assessment
+**Low-Medium** — Mostly UI and clipboard operations. AI execution is external.
+
+### Research Required
+
+**Prompt Builder (Cmd+E)**
+
+*Command Palette UI*
+- Raycast/Alfred-style command palette
+- Contextual suggestions based on selection
+- Keyboard navigation
+- Progressive disclosure
+
+*Context Serialization*
+- Format selected elements for clipboard
+- Include relevant metadata (file, line, theme)
+- Template variable substitution
+
+**Prompt Library**
+
+*Prompt Storage*
+- JSON schema for prompts
+- Variable interpolation
+- Category organization
+- Import/export
+
+*Template System*
+- Mustache/Handlebars-style templates
+- Variable types (selection, theme, file)
+- Preview before copy
+
+**SREF Codes**
+
+*Per-Theme Storage*
+- SREF definitions in theme config
+- Example outputs (images or descriptions)
+- Usage guidelines
+
+**Claude Code Integration**
+
+*Skills API*
+- Claude Code Skills documentation
+- Skill registration and invocation
+- Context passing
+
+### Search Terms
+```
+"command palette ui react"
+"raycast style search ui"
+"prompt template system"
+"mustache template javascript"
+"claude code skills api"
+"tauri clipboard write"
+"context menu prompt builder"
+```
+
+### Rust Backend Integration
+
+| Module | Purpose |
+|--------|---------|
+| Clipboard | Write formatted prompts to clipboard |
+| Prompt Store | Save/load custom prompts |
+| Context Builder | Serialize selection for prompts |
+
+**Minimal Backend:**
+- Clipboard operations (Tauri built-in)
+- File read/write for prompt library
+- No AI processing needed (external)
+
+**Commands Needed:**
+- `copy_to_clipboard(text)` → Success
+- `save_prompt(prompt)` → Prompt ID
+- `load_prompts()` → Prompt list
+- `build_context(selection)` → Context object
+
+### Implementation Notes
+- MVP focuses on prompt building, not AI execution
+- All AI interaction is copy-paste to external tools
+- Claude Code Skills integration is future enhancement
+
+### Reference Implementations
+- Raycast (command palette UX)
+- Webflow's Cmd+E (element quick actions)
+- GitHub Copilot (context injection patterns)
+
+### Open Questions
+- Prompt format: plain text or structured JSON?
+- SREF: text descriptions or actual image references?
+- Claude Code Skills: when will API be available?

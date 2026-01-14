@@ -305,3 +305,57 @@ Toggle effects on/off to see impact. A/B preview of blur levels. Focus ring prev
 
 ### Theme Comparison
 View same tokens across different themes. See how RadOS shadows differ from Phase shadows. Understand theme identity through token differences.
+
+---
+
+## Research Notes
+
+### Complexity Assessment
+**Medium** — Standard UI patterns with some specialized math for accessibility calculations.
+
+### Research Required
+
+**Color Picker Implementation**
+- Native macOS color picker integration via Tauri
+- Custom color picker UI patterns (saturation/brightness square, hue slider)
+- Color space support: hex, RGB, HSL, OKLCH
+
+**WCAG Contrast Calculation**
+- Relative luminance formula
+- Contrast ratio algorithm (WCAG 2.1 AA/AAA thresholds)
+- Real-time contrast checking as colors change
+
+**Animation Token Preview**
+- Bezier curve editor for timing functions
+- Animation duration visualization
+- Side-by-side timing function comparison
+
+### Search Terms
+```
+"tauri native color picker macos"
+"wcag contrast ratio algorithm"
+"relative luminance calculation"
+"css color space conversion rust"
+"bezier curve editor javascript"
+"lightningcss custom properties parsing"
+```
+
+### Rust Backend Integration
+
+| Module | Purpose |
+|--------|---------|
+| CSS Parser | Parse `@theme` block, extract token definitions |
+| File Watcher | Detect external changes to token files |
+| Token Updater | Modify token values, regenerate valid CSS |
+
+**Key Crate:** `lightningcss` for CSS parsing and manipulation
+
+**Commands Needed:**
+- `parse_tokens(path)` → Token list with values
+- `update_token(path, name, value)` → Write updated CSS
+- `validate_contrast(fg, bg)` → Contrast ratio result
+
+### Open Questions
+- Should color picker be native (macOS) or custom (web-based)?
+- How to handle OKLCH color space (newer, better perceptual uniformity)?
+- Animation preview: CSS animations in preview panel, or dedicated visualizer?

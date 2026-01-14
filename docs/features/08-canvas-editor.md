@@ -374,3 +374,137 @@ Connect to Obsidian vault.
 - Sync on file change
 - Component references link to canvas
 - Design decisions documented alongside code
+
+---
+
+## Research Notes
+
+### Complexity Assessment
+**Very High** — The canvas editor is the most complex feature in RadFlow.
+
+### Research Required
+
+**Infinite Canvas**
+
+*Canvas Rendering*
+- React canvas libraries (react-konva, fabric.js, xyflow)
+- Custom WebGL/Canvas2D rendering
+- GPU acceleration for smooth interaction
+- Virtual rendering (only render visible items)
+
+*Figma-Style Interaction*
+- Smooth zoom/pan with momentum
+- Zoom toward cursor position
+- Minimap implementation
+- Section snapping
+
+**Component Grid**
+
+*Grid Layout*
+- Responsive grid for component cards
+- Grouping and collapsing
+- Drag-to-reorder
+- Auto-layout algorithms
+
+*Component Rendering*
+- Live React component preview in cards
+- Consistent sizing across variants
+- Lazy loading for large libraries
+
+**Sorting/Filtering**
+
+*Property-Based Sorting*
+- Extract style properties from components
+- Sort by token usage (semantic) vs hardcoded values
+- Real-time re-sorting on filter change
+
+*AST Analysis*
+- Detect hardcoded values in component code
+- Identify token references
+- Flag violations
+
+**Multi-Select**
+
+*Selection Rectangle*
+- Drawing selection box on canvas
+- Detecting items within bounds
+- Shift+click, Cmd+click behaviors
+
+*Bulk Operations*
+- Batch property editing
+- Copy multiple Component IDs
+- Apply category to selection
+
+**Design System Violations**
+
+*Static Analysis*
+- Parse component AST for hardcoded values
+- Detect non-token color values
+- Flag inline styles
+- Identify non-standard spacing
+
+*Violation UI*
+- "Needs Review" section
+- Violation badges on cards
+- Detail panel with fix suggestions
+
+### Search Terms
+```
+"react infinite canvas library"
+"react-konva vs fabric.js vs xyflow"
+"figma canvas implementation"
+"virtual canvas rendering react"
+"ast detect hardcoded css values"
+"eslint plugin detect hardcoded colors"
+"selection rectangle javascript canvas"
+"drag select multiple items"
+"component library management ui"
+"storybook canvas view"
+```
+
+### Rust Backend Integration
+
+| Module | Purpose |
+|--------|---------|
+| Component Analyzer | AST analysis for violations |
+| Property Extractor | Extract style properties for sorting |
+| Canvas State | Persist zoom, position, groups |
+| Index | Fast component lookup for filtering |
+
+**Key Technical Work:**
+- AST traversal for violation detection (SWC)
+- Property extraction for sorting
+- Efficient state serialization
+
+**Commands Needed:**
+- `analyze_component(path)` → Violations list
+- `extract_properties(path)` → Style properties
+- `save_canvas_state(state)` → Persist layout
+- `load_canvas_state()` → Restore layout
+
+### Technical Challenges
+1. **Performance** — Canvas must stay smooth with 100+ components
+2. **Violation Detection** — AST analysis must be accurate and fast
+3. **Live Preview** — Components must render correctly in cards
+4. **State Management** — Canvas state is complex (zoom, pan, groups, filters)
+
+### Canvas Library Evaluation
+
+| Library | Pros | Cons |
+|---------|------|------|
+| react-konva | Mature, good docs | Canvas-based, not DOM |
+| xyflow | Built for node graphs | May be overkill |
+| fabric.js | Full-featured | Heavy, learning curve |
+| Custom | Full control | More work |
+
+### Reference Implementations
+- Figma (canvas interaction gold standard)
+- Storybook (component library UI)
+- Linear (Kanban-style grouping)
+- Notion (drag-and-drop blocks)
+
+### Open Questions
+- Canvas library or custom implementation?
+- How to render live React components in canvas?
+- Violation detection: real-time or on-demand?
+- Obsidian integration: how deep? (just watch files, or full API?)

@@ -230,3 +230,59 @@ Show contrast ratio when changing text colors.
 
 ### Usage Indicators
 Show which elements use each font. Identify unused fonts.
+
+---
+
+## Research Notes
+
+### Complexity Assessment
+**Medium** — Font file parsing is the main technical challenge.
+
+### Research Required
+
+**Font File Parsing**
+- Detect font weights from .woff2, .ttf, .otf files
+- Extract font family name, style, weight metadata
+- Variable font axis detection (if supporting variable fonts)
+
+**Google Fonts Integration**
+- Google Fonts API for browsing/linking fonts
+- Font preview before adding to theme
+- CDN URL generation
+
+**CSS @font-face Generation**
+- Proper @font-face syntax for different formats
+- Font-display strategies (swap, fallback, optional)
+- Unicode range subsetting (optional optimization)
+
+### Search Terms
+```
+"parse woff2 font metadata rust"
+"ttf font weight detection"
+"google fonts api v2"
+"css font-face generator"
+"variable font axis parsing"
+"font subsetting rust"
+```
+
+### Rust Backend Integration
+
+| Module | Purpose |
+|--------|---------|
+| Font Parser | Extract metadata from font files |
+| File System | Copy uploaded fonts to theme assets |
+| CSS Generator | Generate @font-face declarations |
+
+**Potential Crates:**
+- `ttf-parser` — Parse TrueType/OpenType fonts
+- `woff2` — Decompress WOFF2 files (if needed for parsing)
+
+**Commands Needed:**
+- `parse_font_file(path)` → Font metadata (family, weights, styles)
+- `add_font_to_theme(file, theme_id)` → Copy file, update CSS
+- `generate_font_face(font_config)` → CSS @font-face string
+
+### Open Questions
+- Support variable fonts or just static weights?
+- Font preview: render sample text before adding?
+- Google Fonts: direct link or download to theme?

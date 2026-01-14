@@ -487,3 +487,93 @@ Highlight accessibility issues. Show focus order. Display ARIA attributes. Contr
 
 **Animation Mode**
 Highlight animated elements. Pause/play animations. Adjust animation timing. Preview transitions.
+
+---
+
+## Research Notes
+
+### Complexity Assessment
+**High** — React DevTools integration and source mapping are technically challenging.
+
+### Research Required
+
+**Component ID Mode**
+
+*React Component Detection*
+- React DevTools Fiber internals
+- Detecting component names from rendered elements
+- Mapping DOM elements back to source components
+
+*Source Map Parsing*
+- Parsing .map files in Rust
+- Mapping transpiled code to original line numbers
+- Real-time line number updates as files change
+
+*Selection Rectangle*
+- Rectangle selection implementation
+- Detecting elements within selection bounds
+- Multi-select state management
+
+**Inspect Mode**
+
+*Figma-Style Measurements*
+- Alt+hover measurement implementation
+- Distance calculation between elements
+- Measurement line rendering (SVG overlay)
+
+*Spacing Visualization*
+- getComputedStyle for padding/margin
+- Box model visualization
+- Flexbox/Grid gap detection
+
+**Responsive Preview**
+
+*Device Frames*
+- Viewport resizing in Tauri webview
+- Device frame UI (bezels, status bar)
+- Breakpoint detection from CSS
+
+### Search Terms
+```
+"react devtools fiber api"
+"react element to component mapping"
+"source map parsing rust"
+"source-map-js alternative rust"
+"figma measurement tool implementation"
+"element distance calculation javascript"
+"css box model visualization"
+"tauri webview resize"
+```
+
+### Rust Backend Integration
+
+| Module | Purpose |
+|--------|---------|
+| Source Mapper | Parse source maps, map line numbers |
+| File Index | Track component locations in files |
+| File Watcher | Update line numbers on file change |
+
+**Key Challenge:** Line Number Accuracy
+- Must parse source maps to find original line numbers
+- File watcher must trigger re-indexing on save
+- Sub-second updates required for good UX
+
+**Commands Needed:**
+- `get_element_source(component_name, file_path)` → Line number
+- `parse_source_map(path)` → Mapping data
+- `index_components(project_path)` → Component location index
+
+### Technical Challenges
+1. **React Fiber Access** — Need to access React internals to find component names
+2. **Source Map Complexity** — Vite/Next.js source maps can be complex
+3. **Real-time Updates** — Line numbers must stay accurate as user edits
+
+### Reference Implementations
+- React DevTools extension (open source)
+- Figma's inspect feature
+- Chrome DevTools Elements panel
+
+### Open Questions
+- Use React DevTools protocol or custom implementation?
+- Source maps: parse in Rust or JavaScript?
+- How to handle minified/production builds?

@@ -270,3 +270,65 @@ Drag SVG onto panel to add new icon. Auto-names from filename.
 
 ### Preview in Context
 Show icon in a mini component preview (button, nav item, etc.)
+
+---
+
+## Research Notes
+
+### Complexity Assessment
+**Low** — Simple file browsing with standard UI patterns.
+
+### Research Required
+
+**Native File Operations**
+- "Reveal in Finder" / "Show in Explorer" via Tauri
+- File system watching for asset directory
+- Drag-and-drop file handling
+
+**Context Menu Implementation**
+- Right-click context menus in Tauri
+- Native vs web-based context menu styling
+- Keyboard accessibility for context menus
+
+**SVG Handling**
+- SVG metadata extraction (viewBox, dimensions)
+- SVG sprite generation (optional optimization)
+- Icon component patterns (React)
+
+### Search Terms
+```
+"tauri reveal in finder"
+"tauri shell open"
+"tauri context menu"
+"react right click context menu"
+"svg viewbox parsing"
+"react icon component pattern"
+```
+
+### Rust Backend Integration
+
+| Module | Purpose |
+|--------|---------|
+| File System | Scan asset directories, watch for changes |
+| Shell Commands | Open Finder/Explorer at path |
+| SVG Parser | Extract metadata from SVG files (optional) |
+
+**Key Tauri APIs:**
+- `tauri::api::shell::open` — Open file in default app
+- `tauri::api::path` — Resolve asset paths
+
+**Commands Needed:**
+- `list_icons(theme_path)` → Icon names and metadata
+- `list_logos(theme_path)` → Logo variants
+- `reveal_in_finder(path)` → Open native file browser
+- `get_icon_sizes(theme_path)` → Configured size scale
+
+### Implementation Notes
+- Asset discovery is file-based (scan directories)
+- No database needed — filesystem is source of truth
+- File watcher updates UI when assets added/removed
+
+### Open Questions
+- Support animated SVGs (Lottie)?
+- Icon search: by filename only, or parse SVG content for keywords?
+- Batch operations: rename multiple icons at once?

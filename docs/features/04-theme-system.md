@@ -423,3 +423,63 @@ Automatically switch themes based on time, season, or events. Support for tempor
 
 ### Multi-Brand Support
 Manage multiple brand themes in one project. Share base components, differ in theme values. White-label support.
+
+---
+
+## Research Notes
+
+### Complexity Assessment
+**Medium** — Mostly file operations and configuration management.
+
+### Research Required
+
+**Theme Package Structure**
+- Standard patterns for design system packages
+- How Tailwind, Chakra, Radix structure their themes
+- Component library packaging best practices
+
+**Theme Switching Mechanisms**
+- CSS custom property scoping
+- Runtime theme switching without page reload
+- CSS layer ordering for theme precedence
+
+**Token Export Formats**
+- Design Tokens Community Group (DTCG) format
+- Figma Tokens plugin format
+- Style Dictionary format
+- Tailwind config generation
+
+### Search Terms
+```
+"design tokens community group format"
+"css custom properties theme switching"
+"figma tokens export format"
+"style dictionary config"
+"tailwind config from design tokens"
+"theme package structure npm"
+```
+
+### Rust Backend Integration
+
+| Module | Purpose |
+|--------|---------|
+| Theme Scanner | Discover installed themes |
+| Theme Config | Read/write theme metadata |
+| Theme Switcher | Update active theme references |
+| Export Module | Convert tokens to various formats |
+
+**Commands Needed:**
+- `list_themes()` → Available themes with metadata
+- `switch_theme(id)` → Update active theme
+- `export_theme(id, format)` → Tokens in requested format
+- `create_theme(template, name)` → New theme from template
+
+### Existing Standards to Review
+- **DTCG Spec**: https://design-tokens.github.io/community-group/format/
+- **Style Dictionary**: https://amzn.github.io/style-dictionary/
+- **Figma Tokens**: Plugin format and schema
+
+### Open Questions
+- Follow DTCG format or create RadFlow-specific format?
+- Theme inheritance: allow themes to extend other themes?
+- How to handle theme-specific components vs shared components?

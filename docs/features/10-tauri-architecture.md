@@ -524,3 +524,100 @@ radflow/
 - No runtime dependencies
 - Auto-update support
 - Code signing ready
+
+---
+
+## Research Notes
+
+### Complexity Assessment
+**Reference Document** — This spec defines the technical foundation. Research is for implementation.
+
+### Research Required
+
+**Tauri 2.0**
+- Tauri 2.0 stable release status
+- Migration from Tauri 1.x patterns
+- Plugin ecosystem
+- IPC patterns and best practices
+
+**CSS Parsing (lightningcss)**
+- API for parsing CSS custom properties
+- AST modification and serialization
+- Error handling for malformed CSS
+- Performance characteristics
+
+**TSX Parsing (SWC)**
+- swc_ecma_parser API
+- TypeScript interface extraction
+- JSX traversal patterns
+- Props default value extraction
+
+**Git Operations (git2)**
+- Repository initialization and detection
+- Staging and committing files
+- Status and diff operations
+- Branch management
+
+**File Watching (notify)**
+- Debouncing file events
+- Recursive directory watching
+- Cross-platform behavior differences
+- Performance with large directories
+
+**Search (tantivy)**
+- Schema definition for design system content
+- Index building and updating
+- Fuzzy search configuration
+- Query syntax
+
+### Search Terms
+```
+"tauri 2.0 tutorial"
+"tauri 2.0 migration guide"
+"lightningcss rust api"
+"lightningcss parse custom properties"
+"swc_ecma_parser typescript example"
+"swc extract interface rust"
+"git2-rs tutorial"
+"git2 commit example rust"
+"notify-rs debounce"
+"tantivy tutorial"
+"tantivy fuzzy search"
+```
+
+### Crate Documentation Links
+
+| Crate | Docs |
+|-------|------|
+| Tauri | https://tauri.app/v2/guides/ |
+| lightningcss | https://docs.rs/lightningcss/ |
+| swc_ecma_parser | https://rustdoc.swc.rs/swc_ecma_parser/ |
+| git2 | https://docs.rs/git2/ |
+| notify | https://docs.rs/notify/ |
+| tantivy | https://docs.rs/tantivy/ |
+
+### Proof-of-Concept Priority
+
+Before full implementation, build small POCs for:
+
+1. **CSS Parsing** — Parse @theme block, extract tokens, modify, serialize
+2. **TSX Parsing** — Extract props interface from component file
+3. **Git Commit** — Stage files, create commit, get status
+4. **File Watcher** — Watch directory, debounce events, trigger callbacks
+5. **Search Index** — Index components, fuzzy search, rank results
+
+### Technical Risks
+
+| Risk | Mitigation |
+|------|------------|
+| lightningcss doesn't support @theme | Use regex fallback or custom parser |
+| SWC API complexity | Start with simple cases, expand |
+| git2 cross-platform issues | Test on macOS, Windows, Linux early |
+| Tantivy memory usage | Benchmark with large projects |
+
+### Open Questions
+- Tauri 2.0: stable enough for production?
+- Vite vs other bundlers for frontend?
+- Monorepo structure: separate crates or single src-tauri?
+- Auto-update: Tauri built-in or custom?
+- Code signing: Apple notarization process?

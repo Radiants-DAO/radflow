@@ -441,3 +441,112 @@ Shortcuts reserved for future features:
 | Cmd+T | TBD |
 | Cmd+P | TBD (print? publish?) |
 | Cmd+R | TBD (refresh? run?) |
+
+---
+
+## Research Notes
+
+### Complexity Assessment
+**Medium-High** — Figma-quality zoom/pan and search indexing are substantial features.
+
+### Research Required
+
+**Content Search (Cmd+F)**
+
+*Fuzzy Search*
+- Fuzzy matching algorithms (Levenshtein, trigram)
+- Search result ranking
+- Tantivy search engine integration
+
+*Search UX*
+- Search overlay patterns (Spotlight, Alfred, Raycast)
+- Result categorization and grouping
+- Keyboard navigation in results
+
+**Canvas Navigation**
+
+*Figma-Quality Zoom/Pan*
+- Smooth pinch-to-zoom implementation
+- Momentum scrolling
+- Zoom anchoring (zoom toward cursor)
+- Performance optimization for large canvases
+
+*Canvas Libraries*
+- React-based canvas options (react-konva, fabric.js, custom)
+- GPU-accelerated rendering
+- Virtual rendering for large component counts
+
+**Git Integration**
+
+*Git as Save*
+- git2-rs commit workflow
+- Smart commit message generation
+- Staging specific files
+- Pre-commit hooks
+
+*Snapshot System*
+- In-memory file state snapshots
+- Efficient diff for discard
+- Multi-file snapshot management
+
+**Keyboard Shortcuts**
+
+*Native Mac Shortcuts*
+- Tauri keyboard shortcut registration
+- Global vs local shortcuts
+- Menu bar integration
+
+*Vim Mode*
+- Vim keybinding libraries
+- Mode state management
+- Command parsing
+
+### Search Terms
+```
+"tantivy fuzzy search rust"
+"fuzzy search algorithm javascript"
+"react infinite canvas zoom pan"
+"pinch to zoom javascript"
+"figma zoom implementation"
+"canvas zoom toward cursor"
+"git2-rs commit example"
+"tauri keyboard shortcuts"
+"vim keybindings javascript"
+"raycast search ui"
+```
+
+### Rust Backend Integration
+
+| Module | Purpose |
+|--------|---------|
+| Search Index | Tantivy-based full-text search |
+| Git Module | Commit, status, diff operations |
+| Snapshot Store | In-memory file state for discard |
+| Keyboard | Global shortcut registration |
+
+**Key Crates:**
+- `tantivy` — Full-text search engine
+- `git2` — Git operations
+- `tauri` — Keyboard shortcut APIs
+
+**Commands Needed:**
+- `search(query)` → Ranked search results
+- `index_project(path)` → Build search index
+- `git_commit(message, files)` → Create commit
+- `snapshot_create(files)` → Store current state
+- `snapshot_restore(id)` → Restore to snapshot
+
+### Technical Challenges
+1. **Zoom Quality** — Must match Figma smoothness (60fps, no jank)
+2. **Search Speed** — Results must appear as user types (<50ms)
+3. **Git UX** — Commit flow must feel seamless, not like CLI
+
+### Reference Implementations
+- Figma (zoom/pan gold standard)
+- Raycast/Alfred (search UI)
+- VS Code (keyboard shortcuts, command palette)
+
+### Open Questions
+- Canvas library: use existing or build custom?
+- Search: index on startup or incrementally?
+- Vim mode: how complete? (basic navigation vs full vim)
