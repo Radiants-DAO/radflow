@@ -236,6 +236,179 @@ Leaving Text Edit Mode handles changes.
 
 ---
 
+## Inspect Mode
+
+### Purpose
+Visualize spacing, layout, and measurements — like Figma's inspect tools. Understand how elements relate spatially without editing.
+
+### Activation
+Enter Inspect Mode through toolbar or keyboard shortcut.
+
+**Indicators:**
+- Mode indicator in toolbar
+- Cursor changes to inspect cursor
+- Selected element shows spacing overlay
+
+---
+
+### Spacing Visualization
+See padding, margin, and gap values for selected element.
+
+**On Selection:**
+```
+          ┌─ margin-top: 16px ─┐
+     ┌────┬────────────────────┬────┐
+     │    │   padding: 24px    │    │
+     │ m  │  ┌────────────┐    │ m  │
+     │ a  │  │  Content   │    │ a  │
+     │ r  │  └────────────┘    │ r  │
+     │ g  │                    │ g  │
+     │ i  │                    │ i  │
+     │ n  │                    │ n  │
+     └────┴────────────────────┴────┘
+          └─ margin-bottom: 16px ─┘
+```
+
+**Display:**
+- Padding shown as inner overlay (one color)
+- Margin shown as outer overlay (different color)
+- Values displayed in pixels
+- Gap values shown between flex/grid children
+
+---
+
+### Measurement Tool (Alt+Hover)
+Hold Alt and hover to see distances between elements.
+
+**Behavior:**
+- Hold Alt key
+- Hover over any element
+- Red measurement lines appear showing distance to:
+  - Parent edges
+  - Sibling elements
+  - Canvas/viewport edges
+
+**Display:**
+```
+┌─────────┐
+│ Button  │
+└─────────┘
+     │
+     │ 24px    ← measurement line with value
+     │
+┌─────────┐
+│  Card   │
+└─────────┘
+```
+
+**Like Figma:** Same interaction pattern. Alt+hover = instant measurements.
+
+---
+
+### Layout Visualization
+See flexbox and grid structure.
+
+**For Flex Containers:**
+- Arrow showing flex-direction
+- Gap values between children
+- Alignment indicators (justify, align)
+
+**For Grid Containers:**
+- Grid lines overlay
+- Column/row sizes
+- Gap values
+
+**Display:**
+```
+┌──────────────────────────────────┐
+│  flex-direction: row             │
+│  gap: 16px                       │
+│  ┌────┐ ← 16px → ┌────┐ ← 16px → ┌────┐
+│  │ A  │          │ B  │          │ C  │
+│  └────┘          └────┘          └────┘
+└──────────────────────────────────┘
+```
+
+---
+
+### Token Reference
+Show which design tokens are applied.
+
+**On Selection:**
+- Background: `var(--color-surface-primary)`
+- Border: `var(--color-edge-default)`
+- Shadow: `var(--shadow-card)`
+- Radius: `var(--radius-md)`
+
+Click token name → navigate to Variables Editor.
+
+---
+
+### Exit Behavior
+
+**Exit Methods:**
+- Press Escape key
+- Click toolbar toggle
+- Activate different mode
+
+**On Exit:**
+- All overlays removed
+- Measurements cleared
+
+---
+
+## Responsive Preview
+
+### Purpose
+View the design at different viewport sizes. Not editing — just viewing.
+
+### Device Frames
+Quick toggles for common sizes.
+
+**Presets:**
+- 📱 Phone (375px)
+- 📱 Phone Large (428px)
+- 📱 Tablet (768px)
+- 🖥 Desktop (1280px)
+- 🖥 Wide (1536px)
+
+### Preview Behavior
+Canvas wraps in device frame.
+
+**Display:**
+```
+┌─────────────────────────────────┐
+│  [📱] [📱] [📱] [🖥] [🖥] [Custom: ____]
+├─────────────────────────────────┤
+│                                 │
+│      ┌─────────────┐            │
+│      │             │            │
+│      │   Preview   │  375px     │
+│      │   at size   │            │
+│      │             │            │
+│      └─────────────┘            │
+│                                 │
+└─────────────────────────────────┘
+```
+
+### Custom Size
+Enter custom width for specific testing.
+
+**Behavior:**
+- Input field for pixel width
+- Height follows content (or set explicitly)
+- Remembers recent custom sizes
+
+### Breakpoint Indicator
+Show which CSS breakpoint is active.
+
+**Display:**
+- Current breakpoint name (sm, md, lg, xl)
+- Pixel value
+- Visual marker at breakpoint boundaries
+
+---
+
 ## Help Mode
 
 ### Purpose
