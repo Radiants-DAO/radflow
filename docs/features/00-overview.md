@@ -24,16 +24,24 @@ RadFlow understands the structure of design systems. It knows the difference bet
 
 ---
 
+## Architecture
+
+**The editor is the console. The theme is the game.**
+
+RadFlow Editor is a tool for working with themes. Themes contain everything — components, tokens, typography, visual identity. The editor discovers and presents what themes provide.
+
+---
+
 ## Feature Areas
 
 | Area | Description |
 |------|-------------|
 | [Variables Editor](./01-variables-editor.md) | Design tokens: colors, shadows, spacing, border radius |
 | [Typography Editor](./02-typography-editor.md) | Font management, text styles, fluid scaling |
-| [Component System](./03-component-system.md) | Component discovery, preview, variant management |
-| [Theme System](./04-theme-system.md) | Multi-theme support, theme switching, theme configuration |
+| [Component Browser](./03-component-browser.md) | Discover, preview, and edit theme components |
+| [Theme System](./04-theme-system.md) | Theme structure, component library, tokens, switching |
 | [Assets Manager](./05-assets-manager.md) | Icons, logos, images, media file management |
-| [Tools & Modes](./06-tools-and-modes.md) | Component inspection, text editing, help system |
+| [Tools & Modes](./06-tools-and-modes.md) | Component ID, text editing, help system |
 | [Search & Navigation](./07-search-and-navigation.md) | Global search, keyboard shortcuts, navigation |
 | [Canvas Editor](./08-canvas-editor.md) | System-level view, multi-select, layers panel (future) |
 

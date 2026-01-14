@@ -2,22 +2,37 @@
 
 ## Purpose
 
-The Theme System enables multi-theme support for design systems. It manages theme definitions, provides theme switching, and ensures components adapt correctly across different visual identities while sharing structural patterns.
+The Theme System defines what a theme IS and what it PROVIDES. A theme is the complete visual identity and component library for a project. The editor discovers and presents themes — it doesn't define them.
+
+**The editor is the console. The theme is the game.**
 
 ---
 
 ## Theme Concept
 
 ### What is a Theme?
-A theme is a complete visual identity configuration.
+A theme is a complete, self-contained design system package.
 
-**A theme defines:**
-- Color palette (base colors)
-- Semantic token mappings
-- Typography selections
-- Shadow definitions
-- Border radius scale
-- Component style overrides
+**A theme provides:**
+- Component library (Button, Card, Input, etc.)
+- Design tokens (colors, spacing, shadows, radius)
+- Typography system (fonts, scales, styles)
+- Visual identity (the "look and feel")
+
+### Theme as Product
+The theme IS the product. The editor is just a tool to work with it.
+
+**Theme Contains:**
+- Everything needed to build UIs
+- All components with their variants
+- All styling decisions
+- All visual patterns
+
+**Editor Provides:**
+- Discovery of what's in the theme
+- Preview and inspection
+- Visual editing interface
+- Persistence to theme files
 
 ### Theme Independence
 Each theme is self-contained.
@@ -65,11 +80,92 @@ Information describing the theme.
 Standard file structure within a theme.
 
 **Typical Structure:**
-- Token definitions file
-- Typography definitions file
-- Font declarations file
-- Dark mode overrides file
-- Component overrides (optional)
+```
+@radflow/theme-example/
+├── components/           # Component library
+│   ├── Button.tsx
+│   ├── Card.tsx
+│   ├── Input.tsx
+│   └── ...
+├── tokens.css           # Design tokens
+├── typography.css       # Typography system
+├── fonts.css            # Font declarations
+├── dark.css             # Dark mode overrides
+├── base.css             # Base HTML styles
+└── manifest.json        # Theme metadata + component info
+```
+
+---
+
+## Component Library
+
+### Theme Owns Components
+Components are part of the theme, not the editor.
+
+**Principle:**
+- Each theme provides its own component implementations
+- Components express the theme's visual identity
+- Same component interface, different visual treatment
+- Theme is responsible for component quality
+
+### Component Requirements
+What every theme component must have.
+
+**Required:**
+- Default export (named exports ignored)
+- TypeScript props interface
+- Default values for visual props
+- Semantic token usage (no hardcoded colors)
+
+**Recommended:**
+- Variant prop (primary, secondary, etc.)
+- Size prop (sm, md, lg)
+- Consistent prop naming across components
+
+### Variant System
+Components support visual variants.
+
+**Pattern:**
+- `variant` prop controls visual style
+- Each variant is a complete visual treatment
+- Variants share structure, differ in appearance
+- Theme defines which variants exist
+
+**Example Variants:**
+- Button: primary, secondary, ghost, destructive
+- Card: default, elevated, outlined
+- Input: default, filled, underlined
+
+### Size System
+Components support size scaling.
+
+**Pattern:**
+- `size` prop controls dimensions
+- Sizes are relative, not absolute
+- Theme defines the size scale
+- Consistent sizing across components
+
+**Typical Sizes:**
+- sm — Compact, dense UIs
+- md — Default, standard usage
+- lg — Emphasized, touch-friendly
+
+### Component Manifest
+Optional metadata file for richer editor integration.
+
+**Manifest Provides:**
+- Component categorization (buttons, inputs, layout)
+- Explicit variant enumeration
+- Size options
+- Compound component relationships
+- Preview configuration
+- Documentation hints
+
+**Without Manifest:**
+- Editor discovers via file scanning
+- Infers props from code
+- Groups by folder structure
+- Basic preview only
 
 ---
 
